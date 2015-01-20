@@ -1,0 +1,15 @@
+{
+  "name": "BevelGames.com",
+  "version": "0.0.1",
+  "description": "Bevel Games Web Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:rusticode/bevelgames.com.git"
+  },
+  "author": "Mark Bevels",
+  "license": "ISC"
+}
