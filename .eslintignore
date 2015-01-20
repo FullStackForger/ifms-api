@@ -1,0 +1,3 @@
+#https://github.com/hapijs/lab#ignoring-files-in-linting
+node_modules/*
+**/vendor/*.js
