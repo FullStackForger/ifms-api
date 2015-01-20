@@ -11,5 +11,8 @@
     "url": "git@bitbucket.org:rusticode/bevelgames.com.git"
   },
   "author": "Mark Bevels",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^8.1.0"
+  }
 }
