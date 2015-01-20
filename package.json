@@ -4,7 +4,7 @@
   "description": "Bevel Games Web Application",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/lab -v -l -c ./test"
+    "test": "make test-cov"
   },
   "repository": {
     "type": "git",
