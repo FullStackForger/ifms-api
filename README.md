@@ -1,5 +1,14 @@
 # Bevel Games services
 
+
+## Logging
+
+Currently only logging to console is supported 
+*todo:* logging to a file.
+
+Resource: 
+- [Hapi good](https://github.com/hapijs/good)
+
 ## Testing
 
 Run `npm test` to test code with code coverage and preview results in the browser.
