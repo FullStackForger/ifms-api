@@ -1,6 +1,7 @@
 var Hapi = require('hapi'),
 	Good = require('good'),
     Routes = require('./app/routes'),
+	plugins = [],
     server;
 
 
@@ -11,7 +12,7 @@ server.connection({
     port: 8080
 });
 
-server.register({
+plugins.push({
 	register: require('good'),
 	options: {
 		reporters: [{
@@ -19,7 +20,11 @@ server.register({
 			args:[{ log: '*', response: '*' }]
 		}]
 	}
-}, function (err) {
+});
+
+plugins.push({ register: require('lout') });
+
+server.register(plugins, function (err) {
 
 	if (err) {
 		console.error(err);
