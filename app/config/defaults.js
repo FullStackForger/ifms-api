@@ -23,13 +23,13 @@ var defaults = {
 	env : env,
 	host : host,
 	port : port,
-	url : "http://localhost",
+	url : port === 80 
+		? "http://" + host 
+		: "http://" + host + ":" + port,
 	facebook : {
 		clientId: null,
 		clientSecret: null
 	}
 };
 
-defaults.url = 'http://' + defaults.host + ':' + defaults.port;
-defaults.url = "127.0.0.1";
 module.exports = defaults;
