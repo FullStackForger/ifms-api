@@ -1,19 +1,17 @@
 var Hapi = require('hapi'),
 	Good = require('good'),
     Routes = require('./app/routes'),
+	Config = require('./app/config'),
 	plugins = [],
-    server;
-
-
-server = new Hapi.Server();
+    server = new Hapi.Server();
 
 server.connection({
-    host: 'localhost',
-    port: 8000
+    host: Config.host,
+    port: Config.port
 });
 
 plugins.push({
-	register: require('good'),
+	register: Good,
 	options: {
 		reporters: [{
 			reporter: require('good-console'),
@@ -36,5 +34,3 @@ server.register(plugins, function (err) {
 		});
 	}
 });
-
-//server.start();

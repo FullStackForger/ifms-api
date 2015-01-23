@@ -1,0 +1,12 @@
+Joi = require('joi');
+
+module.exports = Joi.object().keys({
+	env : Joi.string().valid('development', 'testing', 'production'),
+	host : Joi.string().hostname().required().raw(),
+	port : Joi.number().min(80).max(9999).required(),
+	url: Joi.string().hostname().required(),
+	facebook : {
+		clientId: Joi.string().length(15).regex(/^.[0-9]*$/).required(),
+		clientSecret: Joi.string().alphanum().length(32).required()
+	}
+});

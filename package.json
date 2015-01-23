@@ -4,7 +4,7 @@
   "description": "Bevel Games Web Application",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "NODE_ENV=development nodemon index.js",
     "test": "make test-cov"
   },
   "repository": {
@@ -14,9 +14,11 @@
   "author": "Mark Bevels",
   "license": "ISC",
   "dependencies": {
+    "bell": "^2.0.0",
     "good": "^5.1.1",
     "good-console": "^4.1.0",
     "hapi": "^8.1.0",
+    "hoek": "^2.11.0",
     "joi": "^5.1.0",
     "lout": "^6.1.0"
   },
