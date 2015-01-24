@@ -3,12 +3,11 @@ var Boom = require('boom'),
 	Hoek = require('hoek'),
 	Wreck = require('wreck'),
 	Querystring = require('querystring'),
-	Config = require('../config');
+	Config = require('../../config');
 
 function authorisationHandler(request, reply) {
 	//todo: check which authorisation strategy is used and redirect to the right method
 	facebookAuthorisationHandler(request, reply);
-	
 }
 
 function basicAuthorisationHandler(request, reply) {

@@ -1,6 +1,6 @@
 var routes = [],
     handlerConfig,
-	userCtrl = require('./controllers/user.js');
+	userCtrl = require('./controllers/user/authorise.js');
 
 handlerConfig = {
     description: 'test config for new endpoints',
