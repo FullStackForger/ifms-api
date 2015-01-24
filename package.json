@@ -15,12 +15,15 @@
   "license": "ISC",
   "dependencies": {
     "bell": "^2.0.0",
+    "boom": "^2.6.1",
     "good": "^5.1.1",
     "good-console": "^4.1.0",
     "hapi": "^8.1.0",
     "hoek": "^2.11.0",
     "joi": "^5.1.0",
-    "lout": "^6.1.0"
+    "lout": "^6.1.0",
+    "querystring": "^0.2.0",
+    "wreck": "^5.1.0"
   },
   "devDependencies": {
     "code": "^1.2.1",

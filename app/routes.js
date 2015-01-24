@@ -1,16 +1,34 @@
 var routes = [],
-    handlerConfig;
+    handlerConfig,
+	userCtrl = require('./controllers/user.js');
 
 handlerConfig = {
-    description: "test config for new endpoints",
+    description: 'test config for new endpoints',
     handler: function handleOK(response, reply) {
-        reply("end-point created but doesn't have code yet");
+        reply('end-point created but doesn\'t have code yet');
     }
 };
 
-routes.push({ path: "/", method: "GET", config: handlerConfig });
-routes.push({ path: "/auth", method: "GET", config: handlerConfig });
-routes.push({ path: "/me", method: "GET", config: handlerConfig });
-routes.push({ path: "/score", method: "GET, POST", config: handlerConfig });
+routes = [{
+		path: '/', 
+		method: 'GET', 
+		config: handlerConfig 
+	},{ 		
+		path: '/auth', 
+		method: 'GET', 
+		config: {
+			auth: 'facebook',
+			description: 'Authorises user via authentication and/or registration',
+			handler: userCtrl.authorisationHandler
+		}
+	},{ 
+		path: '/me', 
+		method: 'GET', 
+		config: handlerConfig 
+	},{ 
+		path: '/score', 
+		method: 'GET, POST', 
+		config: handlerConfig 
+}];
 
 module.exports = routes;
