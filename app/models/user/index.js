@@ -1,6 +1,3 @@
-var app = require('../../hapiapp'),
-	Model;
+var App = require('../../hapiapp');
 
-Model = app.createModel("UserModel", __dirname);
-
-module.exports = Model;
+module.exports = App.Model.generate("UserModel", __dirname);
