@@ -1,6 +1,6 @@
 var routes = [],
     handlerConfig,
-	userCtrl = require('./controllers/user/authorise.js');
+	userCtrl = require('./controllers/user');
 
 handlerConfig = {
     description: 'test config for new endpoints',
@@ -10,16 +10,23 @@ handlerConfig = {
 };
 
 routes = [{
-		path: '/', 
-		method: 'GET', 
-		config: handlerConfig 
-	},{ 		
-		path: '/auth', 
-		method: 'GET', 
+		path: '/',
+		method: 'GET',
+		config: handlerConfig
+	},{
+		path: '/auth',
+		method: 'GET',
 		config: {
 			auth: 'facebook',
 			description: 'Authorises user via authentication and/or registration',
 			handler: userCtrl.authorisationHandler
+		}
+	},{
+		path: '/user',
+		method: 'GET',
+		config: {
+			description: 'Provides registered user data',
+			handler: userCtrl.detailsHandler
 		}
 	},{ 
 		path: '/me', 

@@ -5,11 +5,6 @@ var Boom = require('boom'),
 	Querystring = require('querystring'),
 	Config = require('../../config');
 
-function authorisationHandler(request, reply) {
-	//todo: check which authorisation strategy is used and redirect to the right method
-	facebookAuthorisationHandler(request, reply);
-}
-
 function basicAuthorisationHandler(request, reply) {
 
 }
@@ -64,5 +59,5 @@ function facebookAuthorisationHandler(request, reply) {
 }
 
 module.exports = {
-	authorisationHandler : authorisationHandler
+	facebookAuthorisationHandler : facebookAuthorisationHandler
 };
