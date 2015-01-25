@@ -1,35 +1,32 @@
 var Hoek = require('hoek'),
 	Joi = require('joi'),
 	Promise = require('promise'),
-	Model = {};
+	Model = {},
+	modelHelpers;
 
-/**
- * @private
- */
-function validate() {
-	var promise = new Promise();
 
-	Joi.validate(this, this.schema, function(error, value) {
-		if (error != null) {
-			reject(error);
-		}
-		promise.resolve(value);
-	});
-	promise.resolve();
-}
-
-/**
- * @private
- */
-function toJSON() {
-	return JSON.parse(JSON.stringify(JSON.stringify(Hoek.applyToDefaults({}, this))));
-}
-
-/**
- * @private
- */ 
-function toString () {
-	return JSON.stringify(JSON.stringify(Hoek.applyToDefaults({}, this)), null, 4);
+modelHelpers = {
+	validate : function () {
+		var model = this,
+			schema = this.schema;
+		
+		return new Promise(function(resolve, reject) {
+			Joi.validate(model, schema, function(error, value) {
+				if (error != null) {
+					reject(error.message);
+				}
+				resolve(value);
+			});
+		});
+	},
+	
+	toJSON : function () {
+		return JSON.parse(JSON.stringify(JSON.stringify(Hoek.applyToDefaults({}, this))));
+	},
+	
+	toString : function () {
+		return JSON.stringify(JSON.stringify(Hoek.applyToDefaults({}, this)), null, 4);
+	}
 }
 
 /**
@@ -56,49 +53,35 @@ function generateModel(modelName, path) {
 	}
 
 	dao = require(path + '/dao'),
-		helpers = require(path + '/helpers'),
-		schema = require(path + '/schema');
+	helpers = require(path + '/helpers'),
+	schema = require(path + '/schema');
 
 	Model = function (data) {
 		if (Joi.validate(data, Joi.object()).error != null) {
 			throw new Error('data parameter must be an object. Check schema definition.');
 		}
 
-		for (key in data) {
-			if (data.hasOwnProperty(key)) {
-				this[key] = data[key];
-			}
-		}
+		Hoek.merge(this, data);
 	};
 
+	// Hoek.merge can't be used on constructor function
 	for (key in dao) {
 		if (dao.hasOwnProperty(key)) {
 			Model[key] = dao[key];
 		}
 	}
-	Hoek.merge(helpers, {
-		validate: validate,
-		toJSON: toJSON,
-		toString: toString
-	});
+	
+	Hoek.merge(Model.prototype, modelHelpers);
+	Hoek.merge(Model.prototype, helpers);
 
-	for (key in helpers) {
-		if (helpers.hasOwnProperty(key)) {
-			Model.prototype[key] = function(action) {
-				helpers.validate(action)
-				helpers[key];
-			}
-		}
-	}
-
-	Model.name = modelName;
-	Model.schema = schema;
-	Model.new = function (data) {
-		return new Model(data);
-	}
-
-	Model.prototype.constructor = Model;
-
+	// exposed on Model and available from model object
+	Model.name = Model.prototype.name = modelName;
+	Model.schema = Model.prototype.schema = schema;
+	
+	Model.create = function (data) {
+		return new Model(data); 
+	};
+	
 	return Model;
 };
 

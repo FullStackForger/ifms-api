@@ -1,6 +1,6 @@
 var routes = [],
     handlerConfig,
-	userCtrl = require('./controllers/user');
+	userController = require('./controllers/user');
 
 handlerConfig = {
     description: 'test config for new endpoints',
@@ -19,17 +19,17 @@ routes = [{
 		config: {
 			auth: 'facebook',
 			description: 'Authorises user via authentication and/or registration',
-			handler: userCtrl.authorisationHandler
+			handler: userController.authorisationHandler
 		}
 	},{
 		path: '/user',
 		method: 'GET',
 		config: {
 			description: 'Provides registered user data',
-			handler: userCtrl.detailsHandler
+			handler: userController.infoHandler
 		}
 	},{ 
-		path: '/me', 
+		path: '/user/register',
 		method: 'GET', 
 		config: handlerConfig 
 	},{ 
