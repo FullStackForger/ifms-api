@@ -45,7 +45,7 @@ routes = [{
 		method: 'GET, POST',
 		config: handlerConfig
 	},{
-		path: '/game/{id}/all}', //todo: retrieves all or saves bulk scores, payload: array of pairs: key, score
+		path: '/game/{id}/all', //todo: retrieves all or saves bulk scores, payload: array of pairs: key, score
 		method: 'GET, POST',
 		config: handlerConfig
 }];
