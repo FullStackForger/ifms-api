@@ -29,6 +29,10 @@ var defaults = {
 	facebook : {
 		clientId: null,
 		clientSecret: null
+	},
+	mongodb : {
+		url : "mongodb://localhost:27017/test_app",
+		settings : {}
 	}
 };
 

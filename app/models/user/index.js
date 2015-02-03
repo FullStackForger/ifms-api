@@ -1,6 +1,6 @@
-var App = require('../../hapi-app'),
+var App = require('../../app-index'),
 	User = App.Model.generate({
-		collection: 'userModel',
+		collection: "users",
 		path: __dirname
 	});
 

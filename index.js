@@ -1,6 +1,7 @@
 var Hapi = require('hapi'),
     Routes = require('./app/routes'),
-	Config = require('./app/config'),	
+	Config = require('./app/config'),
+	App = require('./app/app-index'),
     server = new Hapi.Server(),
 	plugins;
 
@@ -17,7 +18,13 @@ plugins = [{
 				args: [{ log: '*', response: '*' }]
 			}]
 		}
-	}, {
+	},{
+	register: App.Model,
+	options: {
+			"url": Config.mongodb.url,
+			"settings": Config.mongodb.settings
+		}
+	},{
 		register: require('bell')
 	}, {
 		register: require('lout') 

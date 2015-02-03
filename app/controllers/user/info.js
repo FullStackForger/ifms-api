@@ -2,13 +2,12 @@ var Boom = require('boom'),
 	User = require('../../models/user');
 
 function userDetailsHandler (request, reply) {
-	var user = new User({id: "123", email: 'marek@something.com'});
-
-	user
-		.validate()
-		.then(function() {
-			reply(user.toJSON());
-		}, function(error) {
+	
+	User.findOne(request.query)
+		.then(function(data) {
+			reply(data);
+		})
+		.onReject(function(data) {
 			reply(Boom.badImplementation(error));
 		});
 }
