@@ -1,4 +1,7 @@
 var App = require('../../hapi-app'),
-	User = App.Model.generate("UserModel", __dirname);
+	User = App.Model.generate({
+		collection: 'userModel',
+		path: __dirname
+	});
 
 module.exports = User;
