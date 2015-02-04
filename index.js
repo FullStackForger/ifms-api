@@ -11,7 +11,7 @@ server.register(App.plugins, function (err) {
 
 		// register authorisation strategies
 		App.authStrategies.forEach(function(strategy) {
-			server.auth.strategy(strategy.name, strategy.schema, strategy.options);
+			server.auth.strategy(strategy.name, strategy.schema, strategy.default, strategy.options);
 		});
 
 		// register routes

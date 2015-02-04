@@ -14,7 +14,7 @@ routes = [{
 		method: 'GET',
 		config: handlerConfig
 	},{
-		path: '/auth',  //todo: authenticates and/or registers (internal redirection) and sends back game token
+		path: '/bell',  // facebook authentication route
 		method: 'GET',
 		config: {
 			auth: 'facebook',
