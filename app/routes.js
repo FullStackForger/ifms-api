@@ -33,19 +33,19 @@ routes = [{
 		method: 'GET', 
 		config: handlerConfig 
 	},{
-		path: '/game/{id}', //todo: retrieves game info (namve,description, version) for registered with latest news
+		path: '/game/{pkey}', //todo: retrieves game info (namve,description, version) for registered with latest news
 		method: 'GET',
 		config: handlerConfig
 	},{
-		path: '/game/{id}/meta', //todo: retrieves game metadata (score keys & achievenents) for registered
+		path: '/game/{pkey}/meta', //todo: retrieves game metadata (score keys & achievenents) for registered
 		method: 'GET',
 		config: handlerConfig
 	},{
-		path: '/game/{id}/score/{key}', //todo: saves and loads game score by defined id
+		path: '/game/{pkey}/score/{key}', //todo: saves and loads game score by defined id
 		method: 'GET, POST',
 		config: handlerConfig
 	},{
-		path: '/game/{id}/all', //todo: retrieves all or saves bulk scores, payload: array of pairs: key, score
+		path: '/game/{pkey}/score', //todo: retrieves all or saves bulk scores, payload: array of pairs: key, score
 		method: 'GET, POST',
 		config: handlerConfig
 }];

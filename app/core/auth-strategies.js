@@ -33,7 +33,7 @@ authStrategies.push({
 		validateFunc: function( token, callback ) {
 			var request = this;
 
-			// todo: verify token against IP and expiration
+			// todo: verify token against IP and expiration and user
 			if(token === "1234") {
 				callback(null, true, { token: token })
 			} else {
