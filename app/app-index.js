@@ -1,7 +1,13 @@
 /**
- * todo: export local node_modules as packages for hapi app
+ * Application top level namespace
  * @type {{Model: exports}}
  */
-module.exports = {
-	Model : require('hapi-app-mongo-model')
+var App = {
+	Model: require('hapi-app-mongo-model'),
+	Config: require('./config'),
+	plugins: require('./core/plugins'),
+	authStrategies: require('./core/auth-strategies'),
+	server: null
 };
+
+module.exports = App;

@@ -1,6 +1,6 @@
-var routes = [],
+var routes,
     handlerConfig,
-	userController = require('./controllers/user');
+	userController = require('./controllers/user/index');
 
 handlerConfig = {
     description: 'test config for new endpoints',
@@ -22,7 +22,7 @@ routes = [{
 			handler: userController.authorisationHandler
 		}
 	},{
-		path: '/user',  //todo: sends back user data retrieved from database
+		path: '/user/profile',
 		method: 'GET',
 		config: {
 			description: 'Provides registered user data',

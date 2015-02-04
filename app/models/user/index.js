@@ -1,5 +1,5 @@
-var App = require('../../app-index'),
-	User = App.Model.generate({
+var App = require('../../app-index');
+var	User = App.Model.generate({
 		collection: "users",
 		path: __dirname
 	});

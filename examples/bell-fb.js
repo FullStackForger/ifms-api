@@ -26,7 +26,7 @@ plugins.push(Bell, {
 		}]
 	}
 });
-
+console.log("server.info.uri: " + server.info.uri);
 server.register(plugins, function (err) {
 
 	server.auth.strategy('facebook', 'bell', {

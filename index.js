@@ -1,54 +1,23 @@
 var Hapi = require('hapi'),
-    Routes = require('./app/routes'),
-	Config = require('./app/config'),
 	App = require('./app/app-index'),
-    server = new Hapi.Server(),
-	plugins;
+	routes = require('./app/routes'),
+    server = App.server = new Hapi.Server();
 
-server.connection({
-    host: Config.host,
-    port: Config.port
-});
-
-plugins = [{
-		register: require('good'),
-		options: {
-			reporters: [{
-				reporter: require('good-console'),
-				args: [{ log: '*', response: '*' }]
-			}]
-		}
-	},{
-	register: App.Model,
-	options: {
-			"url": Config.mongodb.url,
-			"settings": Config.mongodb.settings
-		}
-	},{
-		register: require('bell')
-	}, {
-		register: require('lout') 
-}];
-
-server.register(plugins, function (err) {
-	
+server.connection({ host: App.Config.host, port: App.Config.port});
+server.register(App.plugins, function (err) {
 	if (err) {
-		console.error(err);
+		throw new Error(err);
 	} else {
 
-		// todo: edd login password based strategy
-		server.auth.strategy('facebook', 'bell', {
-			provider: 'facebook',
-			password: 'password',
-			isSecure: false,
-			clientId: Config.facebook.clientId,
-			clientSecret: Config.facebook.clientSecret,
-			providerParams: {
-				redirect_uri: server.info.uri + '/auth' // todo: test for wrong end-point
-			}
+		// register authorisation strategies
+		App.authStrategies.forEach(function(strategy) {
+			server.auth.strategy(strategy.name, strategy.schema, strategy.options);
 		});
+
+		// register routes
+		server.route(routes);
 		
-		server.route(Routes);
+		// start server
 		server.start(function () {
 			console.info('Server started at ' + server.info.uri);
 		});
