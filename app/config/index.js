@@ -3,7 +3,7 @@ var Hoek = require('hoek'),
 	defaults = require('./defaults'),
 	schema = require('./schema'),
 	options = [],
-	config;
+	config = defaults;
 
 // todo: extract options to individual files
 // todo: add files to dev/ folder with appropriate notes in README and bash script
@@ -32,12 +32,15 @@ options["production"] = {
 	}
 };
 
-config = Hoek.applyToDefaults(defaults, options[defaults.env]);
+if (options[defaults.env]) {
+	config = Hoek.applyToDefaults(defaults, options[defaults.env]);
+	Joi.validate(config, schema, function (err, validConfig) {
+		if (err !== null) {
+			throw new Error(err);
+		}
+		config = validConfig;
+	});
+}
 
-Joi.validate(config, schema, function (err, value) {
-	if (err !== null) {
-		throw new Error(err);
-	}
-});
 console.log(JSON.stringify(config, null, 2));
 module.exports = config;
