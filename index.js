@@ -1,7 +1,6 @@
 var Hapi = require('hapi'),
 	Config = require('./app/config'),
 	plugins = require('./app/app-plugins'),
-	strategies = require('./app/strategies'),
     server = new Hapi.Server();
 
 server.connection({ host: Config.host, port: Config.port});
