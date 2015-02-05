@@ -1,19 +1,7 @@
-var UserModel = require('../models/user'),
-	internals = {};
-
-// hapi-app-mix-auth strategy for oath, basic and guest authentication
-// https://github.com/johnbrett/hapi-auth-bearer-token
-module.exports = {
-	name: 'mix-auth', 
-	schema: 'hapi-app-mix-auth',
-	default: false,
-	options: {
-		validateFunc : internals.validateFunction
-	}
-};
-
-internals.validateFunction = function (method, authObject, callback) {
-	switch (method) {
+function validateFunction (method, authObject, callback) {
+	return callback(null, false);
+	/**
+	 switch (method) {
 		case 'basic':
 			Bcrypt.compare(authObject.password, user.password, function (err, isValid) {
 				callback(err, isValid, { id: user.id, name: user.name });
@@ -33,4 +21,10 @@ internals.validateFunction = function (method, authObject, callback) {
 			return callback(null, false);
 			break;
 	}
+	 **/
+};
+
+// hapi-app-mix-auth strategy for oath, basic and guest authentication
+module.exports = {
+	validateFunc : validateFunction
 };

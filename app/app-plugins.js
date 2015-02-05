@@ -17,7 +17,7 @@ plugins.push({
 	options: {
 		reporters: [{
 			reporter: require('good-console'),
-			args: [{ log: '*', response: '*' }]
+			args: [{ log: '*', response: '*', error: '*' }]
 		}]
 	}
 });
@@ -25,6 +25,11 @@ plugins.push({
 // JWT authorisation, schema: bearer-access-token
 plugins.push({
 	register: require('hapi-auth-bearer-token')
+});
+
+// Mix Auth, schema: mix-auth
+plugins.push({
+	register: require('hapi-app-mix-auth')
 });
 
 // Hapi Models

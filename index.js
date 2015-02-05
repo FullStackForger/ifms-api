@@ -11,9 +11,9 @@ server.register(plugins, function (err) {
 		throw new Error(err);
 	} else {
 
-		for(var strategy in strategies) {
-			server.auth.strategy(strategy.name, strategy.schema, strategy.default === true, strategy.options);
-		}
+		server.auth.strategy("facebook", "bell", false, require('./app/strategies/fb-auth'));
+		server.auth.strategy("mix", "mix-auth", false, require('./app/strategies/mix-auth'));
+		server.auth.strategy("jwt", "bearer-access-token", false, require('./app/strategies/jwt-auth'));
 
 		server.route(require('./app/routes/user-routes'));
 		
