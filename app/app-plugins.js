@@ -1,4 +1,4 @@
-var Config = require('../config'),
+var Config = require('./config/index'),
 	plugins = [];
 
 // Facebook authentication
@@ -22,7 +22,7 @@ plugins.push({
 	}
 });
 
-// JWT authorisation (bearer token)
+// JWT authorisation, schema: bearer-access-token
 plugins.push({
 	register: require('hapi-auth-bearer-token')
 });

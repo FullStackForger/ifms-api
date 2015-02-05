@@ -2,14 +2,13 @@ var Boom = require('boom'),
 	Crypto = require('crypto'),
 	Hoek = require('hoek'),
 	Wreck = require('wreck'),
-	Querystring = require('querystring'),
-	Config = require('../../config');
+	QueryString = require('querystring'),
+	Config = require('app/config'),
+	Ctrl;
 
-function basicAuthorisationHandler(request, reply) {
+module.exports = Ctrl = {};
 
-}
-
-function facebookAuthorisationHandler(request, reply) {
+Ctrl.facebookAuthorisationHandler = function (request, reply) {
 	var getOptions,
 		appSecretProof,
 		query = {},
@@ -42,7 +41,7 @@ function facebookAuthorisationHandler(request, reply) {
 		json: true
 	};
 
-	url += '?' + Querystring.encode(query);
+	url += '?' + QueryString.encode(query);
 
 	Wreck.get(url, getOptions, function (err, res, payload) {
 
@@ -55,9 +54,5 @@ function facebookAuthorisationHandler(request, reply) {
 
 		reply('<pre>' + JSON.stringify(auth, null, 4) + '</pre>');
 	});
-
-}
-
-module.exports = {
-	facebookAuthorisationHandler : facebookAuthorisationHandler
+	
 };

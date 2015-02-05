@@ -1,5 +1,5 @@
-var App = require('../../app-index');
-var	Client = App.Model.generate({
+var Model = require('hapi-app-mongo-model'),
+	Client = Model.generate({
 		collection: "users",
 		path: __dirname
 	});

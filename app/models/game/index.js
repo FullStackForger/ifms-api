@@ -1,7 +1,7 @@
-var App = require('../../app-index');
-var	Client = App.Model.generate({
-		collection: "users",
+var Model = require('hapi-app-mongo-model'),
+	Game = Model.generate({
+		collection: "games",
 		path: __dirname
 	});
 
-module.exports = Client;
+module.exports = Game;
