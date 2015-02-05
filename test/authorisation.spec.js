@@ -8,7 +8,7 @@ var Hapi = require('hapi'),
     before = lab.before,
     beforeEach = lab.before,
     after = lab.after,
-	routes = require('../app/routes');
+	routes = require('../app/routes/user-routes');
 
 describe('Route \/user\/auth', function () {
 	var server;
@@ -24,14 +24,14 @@ describe('Route \/user\/auth', function () {
 	    server.inject({method: 'GET', url: '/'}, function (response) {
 
 	    });
-        done();
+	    done('fail');
     });
 
 	it('should reply with token on successful oauth authorisation', function (done) {
 		server.inject({method: 'GET', url: '/'}, function (response) {
 
 		});
-		done();
+		done('fail');
 	});
 
 
@@ -39,7 +39,7 @@ describe('Route \/user\/auth', function () {
 		server.inject({method: 'GET', url: '/'}, function (response) {
 			
 		});
-		done();
+		done('fail');
 	});
 	
 });
