@@ -15,8 +15,9 @@ lib-cov
 [Cc]overage/
 coverage.*
 
-# Dependency directory
+# Node specific
 node_modules
+npm-debug.log
 
 # IntelliJ IDEA files
 .idea/
@@ -28,3 +29,7 @@ node_modules
 *.DS_Store
 *.swp
 *.out
+._*
+*.swp
+*.swo
+*.swn
