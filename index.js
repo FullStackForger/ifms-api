@@ -12,7 +12,7 @@ server.register(plugins, function (err) {
 
 		server.auth.strategy("facebook", "bell", false, require('./app/strategies/fb-auth'));
 		server.auth.strategy("mix", "mix-auth", false, require('./app/strategies/mix-auth'));
-		server.auth.strategy("jwt", "bearer-access-token", false, require('./app/strategies/jwt-auth'));
+		server.auth.strategy("jwt", "bearer-access-token", true, require('./app/strategies/jwt-auth'));
 
 		server.route(require('./app/routes/user-routes'));
 		
