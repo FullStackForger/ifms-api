@@ -19,12 +19,11 @@ var Hapi = require('hapi'),
 	JWTAuth = require('../app/strategies/jwt-auth'),
 	UserModel = require('../app/models/user'),
 	ClientModel = require('../app/models/client'),
-	//plugins = require('../app/app-plugins'), // only bearer-access-token is needed
-	plugins = [];
-	routes = require('../app/routes/user-routes'),
+	profileRoute = require('../app/routes/user-routes').profile,
+	plugins = [],
+	
 
 	// helpers
-	internals = {},
 	mocks = {};
 
 describe('Request to \/user\/profile', function () {
@@ -56,8 +55,8 @@ describe('Request to \/user\/profile', function () {
 				throw new Error(err);
 			} else {
 
-				server.auth.strategy("jwt", "bearer-access-token", true, JWTAuth);
-				server.route(routes);
+				server.auth.strategy("jwt-auth", "bearer-access-token", true, JWTAuth);
+				server.route(profileRoute);
 
 				server.start(function (error) {
 					if (error) { throw new Error(error); }

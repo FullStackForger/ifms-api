@@ -15,7 +15,10 @@ server.register(plugins, function (err) {
 		server.auth.strategy("jwt-auth", "bearer-access-token", true, require('./app/strategies/jwt-auth'));
 
 		try {
-			server.route(require('./app/routes/user-routes'));
+			
+			server.route(require('./app/routes/user-routes').auth);
+			server.route(require('./app/routes/user-routes').profile);
+			
 			server.start(function (error) {
 				if (error) {
 					throw new Error(error);
