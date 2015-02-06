@@ -116,7 +116,7 @@ describe('Request to \/user\/profile', function () {
 
 	});
 	
-	it('should respond without am error when authorised', function (done) {
+	it('should respond without an error when authorised', function (done) {
 
 		var request = { method: 'GET', url: '/user/profile', headers: { authorization: 'Bearer 1234' } };
 		server.inject(request, function(response) {
