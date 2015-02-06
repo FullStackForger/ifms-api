@@ -37,10 +37,12 @@ function validateFunction (method, authObject, callback) {
 						udid: authObject.udid						
 					}).then(function(client) {
 						callback(null, true, client);
+					}).onReject(function(error) {
+						callback(error, false, client);
 					})
 				} else {
 					callback(null, true, client);
-				}
+				} 
 
 			}, function(error) {
 				callback(error, false, authObject);
