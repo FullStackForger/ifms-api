@@ -17,7 +17,7 @@ plugins.push({
 	options: {
 		reporters: [{
 			reporter: require('good-console'),
-			args: [{ log: '*', response: '*', error: '*' }]
+			args: [{ log: '*', response: '*', request: '*', error: '*' }]
 		}]
 	}
 });
