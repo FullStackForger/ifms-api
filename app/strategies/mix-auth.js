@@ -22,6 +22,7 @@ function validateFunction (method, authObject, callback) {
 		case 'oauth':
 
 			// todo: work in progress (find or create user first then update data from FB then callback)
+			// use wreck to call FB, good example -> https://github.com/yoitsro/hapi-access-token
 			callback(null, true, credentials);
 
 			break;
