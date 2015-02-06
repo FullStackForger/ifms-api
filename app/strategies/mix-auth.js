@@ -1,28 +1,58 @@
+var User = require('../models/user'),
+	Client = require('../models/client');
+
+
 function validateFunction (method, authObject, callback) {
-	return callback(null, false);
-	/**
-	 switch (method) {
+	switch (method) {
+		
 		case 'basic':
-			Bcrypt.compare(authObject.password, user.password, function (err, isValid) {
-				callback(err, isValid, { id: user.id, name: user.name });
+
+			User.findOne({
+				uname: authObject.login,
+				email: authObject.login,
+				password: authObject.password
+			}).then(function(user) {
+				callback(null, true, user);
+			}, function(error){
+				callback(error, false, authObject);
 			});
+			
 			break;
+
 		case 'oauth':
-			if (authObject.token === user.token) {
-				callback(null, true, { id: user.id, name: user.name });
-			}
+
+			// todo: work in progress (find or create user first then update data from FB then callback)
+			callback(null, true, credentials);
+
 			break;
+
 		case 'guest':
-			if (authObject.udid) {
-				callback(null, true, { guest: true, udid: authObject.udid });
-			}
+
+			//todo: replace findOne() with findOrInsertOne
+			Client.findOne({
+				udid: authObject.udid
+			}).then(function(client) {
+				if (!client) {
+					Client.insert({
+						udid: authObject.udid						
+					}).then(function(client) {
+						callback(null, true, client);
+					})
+				} else {
+					callback(null, true, client);
+				}
+
+			}, function(error) {
+				callback(error, false, authObject);
+			});
+			
 			break;
+		
 		default:
-			return callback(null, false);
+			callback(null, false);
 			break;
 	}
-	 **/
-};
+}
 
 // hapi-app-mix-auth strategy for oath, basic and guest authentication
 module.exports = {

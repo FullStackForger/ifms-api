@@ -5,11 +5,7 @@ var Boom = require('boom'),
 module.exports = Ctrl = {};
 
 Ctrl.authorise = function (request, reply) {
-
-	reply({
-		token: "123asd123"
-	});
-
+	reply(request.auth.credentials);
 };
 
 Ctrl.getProfile = function(request, reply) {
@@ -18,7 +14,7 @@ Ctrl.getProfile = function(request, reply) {
 		.then(function(data) {
 			reply(data);
 		})
-		.onReject(function(data) {
+		.onReject(function(error) {
 			reply(Boom.badImplementation(error));
 		});
 };
