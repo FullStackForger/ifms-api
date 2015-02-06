@@ -29,7 +29,6 @@ function validateFunction (method, authObject, callback) {
 
 		case 'guest':
 
-			//todo: replace findOne() with findOrInsertOne
 			Client.findOne({
 				udid: authObject.udid
 			}).then(function(client) {
@@ -57,7 +56,6 @@ function validateFunction (method, authObject, callback) {
 	}
 }
 
-// hapi-app-mix-auth strategy for oath, basic and guest authentication
 module.exports = {
 	validateFunc : validateFunction
 };
