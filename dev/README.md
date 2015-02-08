@@ -1,8 +1,12 @@
-Bevel Games Environment Configuration
-=====================================
+# Bevel Games Environment Configuration
 
-Local Dev Environment: dev.bevelgames.com (Mac OS) 
---------------------------------------------------
+## Local Dev Environment: dev.bevelgames.com (Mac OS) 
+
+### App configuration
+
+```
+cp configs/config-dev.json ../app/config/config.json
+```
 
 ### Nginx.conf configuration
 

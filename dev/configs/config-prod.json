@@ -1,0 +1,10 @@
+{
+	"url": "http://uat.bevelgames.com",
+	"facebook": {
+		"clientId": "",
+		"clientSecret": ""
+	},
+	"auth": {
+		"secret": "uat&prod-secret"
+	}
+}

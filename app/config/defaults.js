@@ -20,19 +20,23 @@ if (warnings.length > 0) {
 }
 
 var defaults = {
-	env : env,
-	host : host,
-	port : port,
-	url : port === 80 
+	env: env,
+	host: host,
+	port: port,
+	url: port === 80
 		? "http://" + host 
 		: "http://" + host + ":" + port,
 	facebook : {
 		clientId: null,
 		clientSecret: null
 	},
-	mongodb : {
-		url : "mongodb://localhost:27017/test_app",
+	mongodb: {
+		url: "mongodb://localhost:27017/test_app",
 		settings : {}
+	},
+	auth: {
+		secret: "secret",
+		algorithm: "HS256" // on of: https://github.com/brianloveswords/node-jws
 	}
 };
 
