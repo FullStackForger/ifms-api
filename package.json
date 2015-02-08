@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=development nodemon index.js",
-    "test": "make test-cov"
+    "test": "NODE_ENV=development make test-cov"
   },
   "repository": {
     "type": "git",
@@ -22,12 +22,15 @@
     "hapi": "^8.1.0",
     "hoek": "^2.11.0",
     "joi": "^5.1.0",
+    "jws": "^2.0.0",
+    "jwt-simple": "^0.2.0",
     "lout": "^6.1.0",
     "promise": "^6.1.0",
     "querystring": "^0.2.0",
     "wreck": "^5.1.0"
   },
   "devDependencies": {
+    "circular-json": "^0.1.6",
     "code": "^1.2.1",
     "lab": "^5.2.0",
     "mpromise": "^0.5.5",
