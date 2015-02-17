@@ -37,7 +37,7 @@ plugins.push({
 	register: require('hapi-app-mongo-model').plugin,
 	options: {
 		"url": Config.mongodb.url,
-		"settings": Config.mongodb.settings
+		"opts": Config.mongodb.opts
 	}
 });
 

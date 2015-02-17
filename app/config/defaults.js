@@ -32,7 +32,7 @@ var defaults = {
 	},
 	mongodb: {
 		url: "mongodb://localhost:27017/test_app",
-		settings : {}
+		opts : {}
 	},
 	auth: {
 		secret: "secret",

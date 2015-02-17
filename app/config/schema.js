@@ -11,7 +11,7 @@ module.exports = Joi.object().keys({
 	},
 	mongodb : {
 		url : Joi.string(),
-		settings : Joi.object()
+		opts : Joi.object()
 	},
 	"auth": {
 		"secret": Joi.string(),
