@@ -22,6 +22,15 @@ plugins.push({
 	}
 });
 
+// Hapi Models
+plugins.push({
+	register: require('hapi-app-mongo-model').plugin,
+	options: {
+		"url": Config.mongodb.url,
+		"opts": Config.mongodb.opts
+	}
+});
+
 // JWT authorisation, schema: bearer-access-token
 plugins.push({
 	register: require('hapi-auth-bearer-token')
@@ -32,13 +41,5 @@ plugins.push({
 	register: require('hapi-app-mix-auth')
 });
 
-// Hapi Models
-plugins.push({
-	register: require('hapi-app-mongo-model').plugin,
-	options: {
-		"url": Config.mongodb.url,
-		"opts": Config.mongodb.opts
-	}
-});
 
 module.exports = plugins;

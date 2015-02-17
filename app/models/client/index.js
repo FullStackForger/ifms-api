@@ -1,5 +1,5 @@
 var Model = require('hapi-app-mongo-model'),
-	Client = Model.generate({
+	Client = Model.register({
 		collection: "clients",
 		path: __dirname
 	});
