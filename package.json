@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:rusticode/bevelgames.com.git"
+    "url": "git@bitbucket.org:innocentio/innocentio.com.git"
   },
   "author": "Mark Bevels",
   "license": "ISC",
@@ -20,6 +20,9 @@
     "good": "^5.1.1",
     "good-console": "^4.1.0",
     "hapi": "^8.1.0",
+    "hapi-app-mix-auth": "^2.0.1",
+    "hapi-app-mongo-model": "^0.1.1",
+    "hapi-auth-bearer-token": "^3.1.0",
     "hoek": "^2.11.0",
     "joi": "^5.1.0",
     "jws": "^2.0.0",
