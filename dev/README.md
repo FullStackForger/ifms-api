@@ -25,10 +25,10 @@ Copy the files in the dev/nginx directory to the nginx config directory.
 sudo cp -r nginx/* /opt/local/etc/nginx/
 ```
 
-Enable bevelgames.com
+Enable innocentio.com
 ```
 cd /opt/local/etc/nginx/sites-enabled/
-sudo ln -s ../sites-available/bevelgames.com
+sudo ln -s ../sites-available/innocentio.com
 ```
 
 Reload nginx
@@ -37,8 +37,7 @@ sudo port unload nginx && sudo port load nginx
 ```
 ### /etc/hosts entry
 
-Define the dev.bevelgames.com host
-sudo vim 
+Define the dev.innocentio.com host
 ```bash
-sudo sh -c 'printf "\n127.0.0.1\tdev.bevelgames.com" >> /private/etc/hosts'
+sudo sh -c 'printf "\n127.0.0.1\tdev.innocentio.com" >> /private/etc/hosts'
 ```
