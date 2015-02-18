@@ -36,6 +36,7 @@
     "circular-json": "^0.1.6",
     "code": "^1.2.1",
     "lab": "^5.2.0",
+    "mongodb": "^1.4.31",
     "mpromise": "^0.5.5",
     "request": "^2.53.0",
     "sinon": "^1.12.2"

@@ -1,7 +1,7 @@
 var Joi = require('joi'),
-	schema;
+	userSchema;
 
-schema = {
+userSchema = {
 	id: Joi.string().regex(/.[0-9]*/),
 	login: Joi.string(),
 	password: Joi.string(),
@@ -9,6 +9,8 @@ schema = {
 	fname: Joi.string(),
 	lname: Joi.string(),
 	locale: Joi.string(), // can be extracted from facebook
+	registered: Joi.date().raw,
+	updated: Joi.date().raw,
 	facebook: {
 		id: Joi.string(),
 		token: Joi.string(), // token for application
@@ -32,4 +34,4 @@ schema = {
 	}))
 };
 
-module.exports = schema;
+module.exports = userSchema;

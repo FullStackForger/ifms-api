@@ -1,11 +1,11 @@
 var Joi = require('joi'),
-	schema;
+	clientSchema;
 
-schema = {
+clientSchema = {
 	id: Joi.string().regex(/.[0-9]*/),
 	udid: Joi.string(),	
-	registered: Joi.date().format('YYYYMMDD').raw(),
-	updated: Joi.date().format('YYYYMMDD').raw(),
+	registered: Joi.date().raw(),
+	updated: Joi.date().raw(),
 	games: Joi.array().includes(Joi.object().keys({
 		id: Joi.string(),
 		title: Joi.string()		
@@ -16,4 +16,4 @@ schema = {
 	})
 };
 
-module.exports = schema;
+module.exports = clientSchema;
