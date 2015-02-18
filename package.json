@@ -14,7 +14,6 @@
   "author": "Mark Bevels",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^0.8.1",
     "bell": "^2.0.0",
     "boom": "^2.6.1",
     "good": "^5.1.1",
