@@ -1,7 +1,7 @@
 var Joi = require('joi'),
-	schema;
+	gameSchema;
 
-schema = {
+gameSchema = {
 	id: Joi.string().regex(/.[0-9]*/),
 	title: Joi.string(),
 	description: Joi.string(),
@@ -18,9 +18,9 @@ schema = {
 		banner600x200: Joi.string(),
 		banner1200x300: Joi.string()
 	},
-	public_key: Joi.string(),
-	registered: Joi.number(), //timestamp
-	updated: Joi.number(), //timestamp
+	pkey: Joi.string(),
+	created: Joi.date().raw(),
+	updated: Joi.date().raw(),
 	author: {
 		id: Joi.string(),
 		name: Joi.string(),
@@ -28,4 +28,4 @@ schema = {
 	}
 };
 
-module.exports = schema;
+module.exports = gameSchema;

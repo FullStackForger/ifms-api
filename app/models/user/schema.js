@@ -3,11 +3,11 @@ var Joi = require('joi'),
 
 userSchema = {
 	id: Joi.string().regex(/.[0-9]*/),
-	login: Joi.string(),
-	password: Joi.string(),
-	email: Joi.string(),
+	uname: Joi.string(),
 	fname: Joi.string(),
 	lname: Joi.string(),
+	password: Joi.string(),
+	email: Joi.string(),	
 	locale: Joi.string(), // can be extracted from facebook
 	registered: Joi.date().raw,
 	updated: Joi.date().raw,
