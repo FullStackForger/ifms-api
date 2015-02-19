@@ -30,47 +30,60 @@ var Hapi = require('hapi'),
 describe('Route \/user\/auth', function () {
 
 	before(function (done) {
+		
 		internals.server = new Hapi.Server();
-
+		internals.server.connection();
 		internals.server.register(internals.getPlugins(), function (err) {
-			internals
-				.prepData()
-				.then(internals.startServer)
-				.then(done);
+
+			internals.startServer()
+				.then(internals.prepUsers)
+				.then(internals.prepClients)
+				.then(internals.prepGames)
+				.then(function () {
+					done();
+				});
 		});
 
 	});
 
-    it('should reply with token on successful Basic authorisation', {skip: true}, function (done) {
-	    internals.server.inject({method: 'GET', url: '/user/auth'}, function (response) {
+    it('should reply with token for Basic authorisation', {skip: true}, function (done) {
+	    var credentials = 'KillerMachine:password123',
+		    authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
+		    request = { method: 'GET', url: '/usr/auth', headers: { authorization: authString }};
+	    
+	    //authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
+	    internals.server.inject(request, function (response) {
 		    expect(response.statusCode).to.equal(200);
 		    done();
 	    });
     });
 
-	it('should reply with token on successful Oauth authorisation', {skip: true}, function (done) {
-		internals.server.inject({method: 'GET', url: '/user/auth'}, function (response) {
-			expect(response.statusCode).to.equal(200);
-			done();
-		});
-	});
+	it('should reply with token for Guest authorisation (registered)', function (done) {
+		var authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
+			request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
 
-	it('should reply with token on successful Guest authorisation (registered)', function (done) {
-		var request = { method: 'GET', url: '/user/auth', headers: { 
-			authorization: 'Guest ' + (new Buffer('udid:registered11111', 'utf8').toString('base64'))
-		}};
-		
+		//authString = 'Guest dWRpZDphYWFiYmJjY2M='
 		internals.server.inject(request, function(response) {
 			expect(response.statusCode).to.equal(200);
 			done();
 		});
 	});
 
-	it('should reply with token on successful Guest authorisation (new)', function (done) {
-		var request = { method: 'GET', url: '/user/auth', headers: {
-			authorization: 'Guest ' + (new Buffer('udid:firsttime000000', 'utf8').toString('base64'))
-		}};
+	it('should reply with token for Guest authorisation (new)', function (done) {
+		var authString = 'Guest ' + (new Buffer('udid:zzz-xxx-ccc', 'utf8').toString('base64')),
+			request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
+		
+		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
+		internals.server.inject(request, function(response) {
+			expect(response.statusCode).to.equal(200);
+			done();
+		});
+	});
 
+	it('should reply with token on successful Social authorisation (new)', {skip: true}, function (done) {
+		var authString = 'Oauth ' + (new Buffer('facebook:zz-xx-cc', 'utf8').toString('base64')),
+			request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
+		console.log(authString);
 		internals.server.inject(request, function(response) {
 			expect(response.statusCode).to.equal(200);
 			done();
@@ -82,6 +95,7 @@ describe('Route \/user\/auth', function () {
 internals.getPlugins = function () {
 	var plugins = [];
 
+	/*
 	plugins.push({
 		register: require('good'),
 		options: {
@@ -91,7 +105,8 @@ internals.getPlugins = function () {
 			}]
 		}
 	});
-
+	*/
+	
 	plugins.push({
 		register: require('hapi-app-mongo-model').plugin,
 		options: {
@@ -107,39 +122,49 @@ internals.getPlugins = function () {
 	return plugins;
 };
 
-internals.prepData = function () {	
+internals.prepUsers = function () {
 	var promise = new Promise(),
-		Users = Model.db.get('users'),
-		Clients = Model.db.get('clients'),
-		callCount = 0;
+		Users = Model.db.get('users');
 
-	function tryResolve() {
-		callCount ++;
-		if (callCount == 2) {
-			promise.resolve();
-		}
-	}
-	
 	Users.remove({}, function (error, result) {
-		Users.insert(mockData.userData, function (error) {
-			tryResolve();
-		});
-	});
-
-
-	Clients.remove({}, function () {
-		Clients.insert(mockData.clientData, function () {
-			tryResolve();
+		Users.insert(mockData.users, function (error) {
+			promise.resolve();
 		});
 	});
 	
 	return promise;
 };
 
+internals.prepClients = function () {
+	var promise = new Promise(),
+		Clients = Model.db.get('clients');
+	
+	Clients.remove({}, function () {
+		Clients.insert(mockData.clients, function () {
+			promise.resolve(); 
+		});
+	});
+	
+	return promise;
+};
+
+internals.prepGames = function () {
+	var promise = new Promise(),
+		Games = Model.db.get('games');
+
+	Games.remove({}, function () {
+		Games.insert(mockData.games, function () {
+			promise.resolve();
+		});
+	});
+
+	return promise;
+};
+
 internals.startServer = function () {
 	var promise = new Promise();
-	internals.server.connection();
-	internals.server.auth.strategy("mix-auth", "mix-auth", true, MixAuth);
+
+	internals.server.auth.strategy("mix-auth", "mix-auth", MixAuth);
 	internals.server.route(authRoute);
 	internals.server.start(function () {
 		promise.resolve();
@@ -147,4 +172,3 @@ internals.startServer = function () {
 	
 	return promise;
 };
-	
