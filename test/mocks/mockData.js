@@ -6,12 +6,12 @@ var data = {},
 data.users = [];
 data.users.push({
 	_id: oid('54e50dd551631fc64f6c2fe9'),
-	uname: 'Killer Machine',
+	uname: 'KillerMachine',
 	fname: 'John',
 	lname: 'Smith',
 	locale: 'en-gb',
 	email: 'killer.machine@gmail.com',
-	password: bcrypt.hashSync('password', 10),
+	password: bcrypt.hashSync('password123', 10),
 	created: date,
 	updated: date,
 	facebook: {
@@ -26,13 +26,12 @@ data.users.push({
 data.clients = [];
 data.clients.push({
 	_id: oid('54e50dd551631fc64f6c2fea'),
-	udid: 'aaabbbccc',
-	created: date,
-	updated: date,
+	user_id: oid('54e50dd551631fc64f6c2fe9'),
+
 	games: [{
 		_id: oid('54e50dd551631fc64f6c2fea'),
 		title: 'Killer Blood',
-		token: ''
+		token: 'killler-blood-token'
 	}]
 });
 data.clients.push({
