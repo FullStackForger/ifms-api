@@ -20,16 +20,16 @@ module.exports = {
 		
 		if (!string) return null;
 
-		string = Buffer(string, 'base64').toString();
 		chunks = string.split(' ');
 		
 		if (chunks.length != 2 || chunks[0].toLowerCase() !== 'ident') {
-			throw new Error('Signature format is invalid');
+			return null;
 		}
 		
-		chunks = chunks.split(':');
+		string = Buffer(chunks[1], 'base64').toString();
+		chunks = string.split(':');
 		if (chunks.length != 2) {
-			throw new Error('Signature format is invalid');
+			return null;
 		}
 		
 		return {
