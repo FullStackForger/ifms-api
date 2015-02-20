@@ -17,13 +17,13 @@ internals.init = function () {
 	internals.connect()
 		.then(internals.cleanup)
 		.then(function () {
-			return internals.populateUsers(1000, 2, 2);
+			return internals.populateUsers(1000 * 1000, 2, 2);
 		})
 		.then(function () {
-			return internals.populateClients(1000, 2);
+			return internals.populateClients(1500 * 1000, 2);
 		})
 		.then(function () {
-			return internals.populateSessions(1000000, 2);
+			return internals.populateSessions(1000 * 1000, 2);
 		})
 		.then(function () {
 			internals.db.close();
@@ -52,15 +52,12 @@ internals.cleanup = function () {
 
 	debug('cleanup');
 	Async.map(internals.collectionNames, function (name, next ) {
-		var collection = internals.db.collection(name);
-		collection.remove({}, function(error) {
+		internals.db.dropCollection(name, function(error, result) {
 			debug('collection cleaned: %s', name);
 			next(error);
 		});
-	}, function (error, results) {
-		if (error) {
-			promise.reject(error);
-		}
+	}, function () {
+		// ignore errors and continue
 		promise.resolve();
 	});
 	return promise;
@@ -72,11 +69,10 @@ internals.populateUsers = function (numUsers, numClients, numGames) {
 		users;
 	debug('preparing user data set');
 	users = internals.dataset.getObjectArray('users', numUsers, {
-		/*
 		clients: internals.dataset.getObjectArray('clients', numClients, {
 			games: internals.dataset.getObjectArray('games', numGames)
-		})*/
-		clients: internals.dataset.getStringArray('udid', numClients)
+		}),
+		udids: internals.dataset.getStringArray('udid', numClients)
 	});
 	debug('user data set ready');
 	collection.users = internals.db.collection('users');
@@ -84,6 +80,15 @@ internals.populateUsers = function (numUsers, numClients, numGames) {
 	collection.users.insert(users, function (error, result) {
 		if (error) promise.reject(error);
 		debug('inserted %s users', numUsers);
+		debug('creating indexes', numClients);
+		collection.users.ensureIndex({name:1}, function (error, indexName) {
+			if (error) {
+				promise.reject(error);
+				return;
+			}
+			debug('users index %s created', indexName);
+			promise.fulfill(result);
+		});
 		promise.fulfill(result);
 	});
 	
@@ -106,7 +111,16 @@ internals.populateClients = function (numClients, numGames) {
 	collection.clients.insert(clients, function (error, result) {
 		if (error) promise.reject(error);
 		debug('inserted %s clients', numClients);
-		promise.fulfill(result);
+		debug('creating indexes', numClients);
+		collection.clients.ensureIndex({name:1}, function (error, indexName) {
+			if (error) {
+				promise.reject(error);
+				return;
+			}
+			debug('client index %s created', indexName);
+			promise.fulfill(result);	
+		});
+		
 	});
 
 	return promise;
@@ -157,6 +171,5 @@ internals.dataset.getStringArray = function (name, qty) {
 	return data;
 	
 };
-
 
 internals.init();
