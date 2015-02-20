@@ -15,24 +15,26 @@ internals.init = function () {
 
 	debug('init');
 	internals.connect()
-		.then(internals.cleanup, internals.handleError)
 		.then(function () {
-			return internals.populateUsers(1000 * 1000, 2, 2);
-		}, internals.handleError)
+			return internals.cleanup();
+		})
 		.then(function () {
-			return internals.populateClients(1500 * 1000, 2);
-		}, internals.handleError)
+			return internals.populateUsers(100 * 1000, 2, 2);
+		})
 		.then(function () {
-			return internals.populateSessions(1000 * 1000, 2);
-		}, internals.handleError)
+			return internals.populateClients(150 * 1000, 2);
+		})
+		.then(function () {
+			return internals.populateSessions(100 * 1000, 2);
+		})
 		.then(function () {
 			internals.db.close();
 			debug('all done!');
-		}, internals.handleError);
+		});
 };
 
 internals.handleError = function (error) {
-	throw error;	
+	throw new Error(error);
 };
 
 internals.connect = function () {
@@ -40,7 +42,7 @@ internals.connect = function () {
 	debug('connecting to mongo');
 	MongoDB.connect(mongoUrl, function(error, db) {
 		if (error)  {
-			promise.reject(error);
+			throw new Error(error);
 		}
 		internals.db = db;
 		debug('connected to mongo');
@@ -51,15 +53,14 @@ internals.connect = function () {
 
 internals.cleanup = function () {
 	var promise = new Promise();
-
+	
 	debug('cleanup');
 	Async.map(internals.collectionNames, function (name, next ) {
 		internals.db.dropCollection(name, function(error, result) {
 			debug('collection cleaned: %s', name);
 			next(error);
 		});
-	}, function () {
-		// ignore errors and continue
+	}, function (error, results) {
 		promise.resolve();
 	});
 	return promise;
@@ -84,9 +85,8 @@ internals.populateUsers = function (numUsers, numClients, numGames) {
 		debug('inserted %s users', numUsers);
 		debug('creating indexes', numClients);
 		collection.users.ensureIndex({name:1}, function (error, indexName) {
-			if (error) {
-				promise.reject(error);
-				return;
+			if (error)  {
+				throw new Error(error);
 			}
 			debug('users index %s created', indexName);
 			promise.fulfill(result);
@@ -115,9 +115,8 @@ internals.populateClients = function (numClients, numGames) {
 		debug('inserted %s clients', numClients);
 		debug('creating indexes', numClients);
 		collection.clients.ensureIndex({name:1}, function (error, indexName) {
-			if (error) {
-				promise.reject(error);
-				return;
+			if (error)  {
+				throw new Error(error);
 			}
 			debug('client index %s created', indexName);
 			promise.fulfill(result);	
@@ -140,7 +139,9 @@ internals.populateSessions = function (numClients, numGames) {
 	collection.sessions = internals.db.collection('sessions');
 	debug('inserting sessions');
 	collection.sessions.insert(sessions, function (error, result) {
-		if (error) promise.reject(error);
+		if (error)  {
+			throw new Error(error);
+		}
 		debug('inserted %s sessions', numClients);
 		promise.fulfill(result);
 	});
