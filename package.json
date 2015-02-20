@@ -33,8 +33,10 @@
     "wreck": "^5.1.0"
   },
   "devDependencies": {
+    "async": "^0.9.0",
     "circular-json": "^0.1.6",
     "code": "^1.2.1",
+    "debug": "^2.1.1",
     "lab": "^5.2.0",
     "mongodb": "^1.4.31",
     "mpromise": "^0.5.5",

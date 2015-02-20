@@ -1,18 +1,27 @@
 var User = require('../models/user'),
-	Client = require('../models/client');
+	Client = require('../models/client'),
+	bcrypt = require('bcrypt'),
+	identParse = require('../helpers/ident').parse;
 
 
 function validateFunction (method, authObject, callback) {
+	var request = this,
+		ident = identParse(request.headers.identificator);
+	
 	switch (method) {
 		
 		case 'basic':
-
-			User.findOne({
-				uname: authObject.login,
-				email: authObject.login,
-				password: authObject.password
-			}).then(function(user) {
-				callback(null, true, user);
+			var query = { 
+				$or: [
+					{ uname: authObject.username},
+					{ email: authObject.username}
+				]};
+			
+			User.findOneAndParse(query).then(function(user) {
+				user.client()
+				bcrypt.compare(authObject.password, user.password, function (err, match) {
+					callback(err, match, user);
+				});
 			}, function(error){
 				callback(error, false, authObject);
 			});
@@ -23,7 +32,7 @@ function validateFunction (method, authObject, callback) {
 
 			// todo: work in progress (find or create user first then update data from FB then callback)
 			// use wreck to call FB, good example -> https://github.com/yoitsro/hapi-access-token
-			callback(null, true, credentials);
+			callback(null, true, {});
 
 			break;
 

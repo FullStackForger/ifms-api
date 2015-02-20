@@ -46,10 +46,10 @@ describe('Route \/user\/auth', function () {
 
 	});
 
-    it('should reply with token for Basic authorisation', {skip: true}, function (done) {
+    it('should reply with token for Basic authorisation', {only: true}, function (done) {
 	    var credentials = 'KillerMachine:password123',
 		    authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
-		    request = { method: 'GET', url: '/usr/auth', headers: { authorization: authString }};
+		    request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
 	    
 	    //authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
 	    internals.server.inject(request, function (response) {

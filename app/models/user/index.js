@@ -1,6 +1,6 @@
 var Model = require('hapi-app-mongo-model'),
 	User = Model.register({
-		collection: "users",
+		collections: "users",
 		path: __dirname
 	});
 
