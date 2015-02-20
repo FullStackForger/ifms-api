@@ -15,22 +15,24 @@ internals.init = function () {
 
 	debug('init');
 	internals.connect()
-		.then(internals.cleanup)
+		.then(internals.cleanup, internals.handleError)
 		.then(function () {
 			return internals.populateUsers(1000 * 1000, 2, 2);
-		})
+		}, internals.handleError)
 		.then(function () {
 			return internals.populateClients(1500 * 1000, 2);
-		})
+		}, internals.handleError)
 		.then(function () {
 			return internals.populateSessions(1000 * 1000, 2);
-		})
+		}, internals.handleError)
 		.then(function () {
 			internals.db.close();
 			debug('all done!');
-		}).onReject(function (err) {
-			throw err;
-		});
+		}, internals.handleError);
+};
+
+internals.handleError = function (error) {
+	throw error;	
 };
 
 internals.connect = function () {
