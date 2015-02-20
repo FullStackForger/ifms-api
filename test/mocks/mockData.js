@@ -22,28 +22,31 @@ data.users.push({
 
 data.clients = [];
 data.clients.push({
-	_id: oid('54e50dd551631fc64f6c2fea'),
 	user_id: oid('54e50dd551631fc64f6c2fe9'),
 	udid: 'aaabbbccc',
 	games: [{
 		pkey: 'gid01234',
 		title: 'Killer Blood',
-		token: 'aaabbbccc-token'
+		token: {
+			signature: 'aaabbbccc-token',
+			expiry: date
+		}
 	}]
 });
 data.clients.push({
-	_id: oid('54e50dd551631fc64f6c2fea'),
 	udid: 'xxxyyyzzz',
 	games: [{
 		pkey: 'gid01234',
 		title: 'Killer Blood',
-		token: 'xxxyyyzzz-token'
+		token: {
+			signature: 'zzzxxxyyy-token',
+			expiry: date
+		}
 	}]
 });
 
 data.games = [];
 data.games.push({
-	_id: oid('54e50dd551631fc64f6c2fea'),
 	title: 'Killer Blood',
 	pkey: 'gid01234',
 	description: 'super killer gangsta game',
