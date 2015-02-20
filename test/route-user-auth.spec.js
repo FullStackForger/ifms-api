@@ -27,29 +27,37 @@ var Hapi = require('hapi'),
 	//ClientModel = require('../app/models/client'),
 	authRoute = require('../app/routes/user-routes').auth;
 
+
 describe('Route \/user\/auth', function () {
 
 	before(function (done) {
-		
-		internals.server = new Hapi.Server();
-		internals.server.connection();
-		internals.server.register(internals.getPlugins(), function (err) {
-
-			internals.startServer()
-				.then(internals.prepUsers)
-				.then(internals.prepClients)
-				.then(internals.prepGames)
-				.then(function () {
-					done();
-				});
-		});
-
+		internals.initServer(done);
 	});
 
-    it('should reply with token for Basic authorisation', {only: true}, function (done) {
+	it('should not authorise without credentials', function (done) {
+		var request = { method: 'GET', url: '/user/auth' };
+
+		internals.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(401);
+			done();
+		});
+	});
+	
+});
+	
+describe('Route \/user\/auth - basic authorisation', function () {
+
+	before(function (done) {
+		internals.initServer(done);
+	});
+
+    it('should reply with token for Basic authorisation', function (done) {
 	    var credentials = 'KillerMachine:password123',
+		    signature = 'aaabbbccc:gid01234',
 		    authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
-		    request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
+		    identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+		    headers = { authorization: authString, identification: identString },
+		    request = { method: 'GET', url: '/user/auth', headers: headers };
 	    
 	    //authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
 	    internals.server.inject(request, function (response) {
@@ -58,9 +66,50 @@ describe('Route \/user\/auth', function () {
 	    });
     });
 
+
+	it('should not authorise with bad identification signature', function (done) {
+		var credentials = 'KillerMachine:password123',
+			signature = 'BAD SIGNATURE',
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+		//authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
+		internals.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(500);
+			done();
+		});
+	});
+	
+	it('should not authorise request without identification signature', function (done) {
+		var credentials = 'KillerMachine:password123',
+			authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
+			headers = { authorization: authString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+		//authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
+		internals.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(500);
+			done();
+		});
+	});
+	
+});
+
+describe('Route \/user\/auth - token authorisation', function () {
+
+	before(function (done) {
+		internals.initServer(done);
+	});
+	
 	it('should reply with token for Guest authorisation (registered)', function (done) {
-		var authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
-			request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
+
+		var signature = 'aaabbbccc:gid01234',
+			authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
 
 		//authString = 'Guest dWRpZDphYWFiYmJjY2M='
 		internals.server.inject(request, function(response) {
@@ -70,8 +119,11 @@ describe('Route \/user\/auth', function () {
 	});
 
 	it('should reply with token for Guest authorisation (new)', function (done) {
-		var authString = 'Guest ' + (new Buffer('udid:zzz-xxx-ccc', 'utf8').toString('base64')),
-			request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
+		var signature = 'aaabbbccc:gid01234',
+			authString = 'Guest ' + (new Buffer('udid:zzz-xxx-yyy', 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
 		
 		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
 		internals.server.inject(request, function(response) {
@@ -80,6 +132,14 @@ describe('Route \/user\/auth', function () {
 		});
 	});
 
+});
+
+describe('Route \/user\/auth - social authorisation', function () {
+
+	before(function (done) {
+		internals.initServer(done);
+	});
+	
 	it('should reply with token on successful Social authorisation (new)', {skip: true}, function (done) {
 		var authString = 'Oauth ' + (new Buffer('facebook:zz-xx-cc', 'utf8').toString('base64')),
 			request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
@@ -91,6 +151,21 @@ describe('Route \/user\/auth', function () {
 	});
 	
 });
+
+internals.initServer = function (cb) {
+	internals.server = new Hapi.Server();
+	internals.server.connection();
+	internals.server.register(internals.getPlugins(), function (err) {
+
+		internals.startServer()
+			.then(internals.prepUsers)
+			.then(internals.prepClients)
+			.then(internals.prepGames)
+			.then(function () {
+				cb();
+			});
+	});	
+};
 
 internals.getPlugins = function () {
 	var plugins = [];
