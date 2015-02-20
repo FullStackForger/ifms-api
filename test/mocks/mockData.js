@@ -26,15 +26,19 @@ data.clients.push({
 	user_id: oid('54e50dd551631fc64f6c2fe9'),
 	udid: 'aaabbbccc',
 	games: [{
-		_id: oid('54e50dd551631fc64f6c2fea'),
+		pkey: 'gid01234',
 		title: 'Killer Blood',
-		token: 'killler-blood-token'
+		token: 'aaabbbccc-token'
 	}]
 });
 data.clients.push({
-	udid: 'qweasdzxc',
-	updated: date,
-	registered: date
+	_id: oid('54e50dd551631fc64f6c2fea'),
+	udid: 'xxxyyyzzz',
+	games: [{
+		pkey: 'gid01234',
+		title: 'Killer Blood',
+		token: 'xxxyyyzzz-token'
+	}]
 });
 
 data.games = [];

@@ -11,27 +11,7 @@ userSchema = {
 	locale: Joi.string(), // can be extracted from facebook
 	registered: Joi.date().raw,
 	updated: Joi.date().raw,
-	facebook: {
-		id: Joi.string(),
-		token: Joi.string(), // token for application
-		token_for_business: Joi.string(),
-		email: Joi.string()		
-	},
-	clients: Joi.array().includes(Joi.object().keys({
-		id: Joi.string(),
-		udid: Joi.string()
-	})),
-	games: Joi.array().includes(Joi.object().keys({
-		id: Joi.string(),
-		title: Joi.string(),
-		facebook: {
-			id: Joi.string(),
-			token: Joi.string(), // token for game can be reused across devices
-			token_for_business: Joi.string(),
-			email: Joi.string()
-		},
-		store_id: Joi.string() // ObjectId
-	}))
+	clients: Joi.array().includes(Joi.string())
 };
 
 module.exports = userSchema;
