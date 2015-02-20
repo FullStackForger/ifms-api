@@ -2,7 +2,7 @@ var Joi = require('joi'),
 	clientSchema;
 
 clientSchema = {
-	id: Joi.string().regex(/.[0-9]*/),
+	user_id: Joi.object(),
 	udid: Joi.string(),	
 	registered: Joi.date().raw(),
 	updated: Joi.date().raw(),
