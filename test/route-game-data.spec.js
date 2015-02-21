@@ -59,6 +59,14 @@ describe('Route \/game\/data', function () {
 	    });
     });
 
+	it('should not authorise with illegal token', function (done) {
+		var request = internals.request.illegalToken;
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(401);
+			done();
+		});
+	});
+
 	it('should not authorise without identification signature', function (done) {
 		var request = internals.request.missingIdent;
 		helpers.server.inject(request, function (response) {
@@ -74,7 +82,16 @@ describe('Route \/game\/data', function () {
 			done();
 		})
 	});
-	
+
+	it('should not authorise with illegal identification signature', function (done) {
+		var request = internals.request.illegalIndent;
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(401);
+			done();
+		})
+	});
+
+
 });
 
 internals.url = '/game/data';
@@ -86,13 +103,23 @@ internals.getInvalidAuth = function () {
 	return 'Bearer invalid-token';
 };
 
+internals.getIllegaAuth= function () {
+	return 'illegal-token';
+};
+
 internals.getValidIdent = function () {
 	return 'Ident ' + (new Buffer('aaabbbccc:gid01234', 'utf8').toString('base64'));
 };
 
 internals.getInvalidIdent = function () {
-	return 'Ident ' + (new Buffer('invalid:ident', 'utf8').toString('base64'));
+	return 'Ident ' + (new Buffer('aaaZZZ:aaaZZZZ', 'utf8').toString('base64'));
 };
+
+internals.getIllegalIndent= function () {
+	return 'Ident ' + (new Buffer('illegal-indent', 'utf8').toString('base64'));
+};
+
+
 
 internals.request = {};
 internals.request.validRequest = {
@@ -103,12 +130,28 @@ internals.request.validRequest = {
 		identification: internals.getValidIdent()			
 	}
 };
+internals.request.illegalIndent = {
+	method: 'GET',
+	url: internals.url,
+	headers: {
+		authorization: internals.getValidAuth(),
+		identification: internals.getIllegalIndent()
+	}
+};
+internals.request.illegalToken = {
+	method: 'GET',
+	url: internals.url,
+	headers: {
+		authorization: internals.getIllegaAuth(),
+		identification: internals.getValidIdent()
+	}
+};
 internals.request.invalidIdent = {
 	method: 'GET',
 	url: internals.url,
 	headers: {
 		authorization: internals.getValidAuth(),
-		identification: internals.getValidIdent()
+		identification: internals.getInvalidIdent()
 	}
 };
 internals.request.invalidToken = {
@@ -119,6 +162,7 @@ internals.request.invalidToken = {
 		identification: internals.getInvalidIdent()
 	}
 };
+
 internals.request.missingIdent = {
 	method: 'GET',
 	url: internals.url,

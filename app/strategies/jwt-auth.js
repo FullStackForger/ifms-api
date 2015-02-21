@@ -14,7 +14,8 @@ function validateFunc (token, callback) {
 
 	credentials.ident = identParse(request.headers.identification);
 	if (!credentials.ident) {
-		callback(new Error('bad identification signature'), false, credentials);
+		// unauthorised
+		callback(null, false, credentials);
 		return;
 	}
 	
