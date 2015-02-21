@@ -34,6 +34,7 @@ data.clients.push({
 	}]
 });
 data.clients.push({
+	_id: oid('54e8cb6fa42352702569eba4'),
 	udid: 'xxxyyyzzz',
 	games: [{
 		game_id: oid('54e7f0ab4885ebe47ce15605'),
@@ -58,7 +59,7 @@ data.games.push({
 data.games_data = [];
 data.games_data.push({
 	game_id: oid('54e7f0ab4885ebe47ce15605'),
-	user_id: oid('54e50dd551631fc64f6c2fe9'),
+	client_id: oid('54e8cb6fa42352702569eba4'),
 	key: 'save_001',
 	value: 'sample saved data string'
 });

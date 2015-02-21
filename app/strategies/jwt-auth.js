@@ -1,4 +1,5 @@
 var Client = require('../models/client'),
+	Game = require('../models/game'),
 	Promise = require('mpromise'),
 	identParse = require('../helpers/ident').parse,
 	internals = {};
@@ -20,7 +21,10 @@ function validateFunc (token, callback) {
 	}
 	
 	internals
-		.confirmClientAndToken(credentials)
+		.confirmGame(credentials)
+		.then(function(credentials) {
+			return internals.confirmClientAndToken(credentials)
+		})
 		.then(function(credentials) {
 			callback(null, true, credentials);
 		})
@@ -38,13 +42,27 @@ module.exports = {
 	validateFunc : validateFunc
 };
 
+internals.confirmGame = function (credentials) {
+	var promise = new Promise();
+	
+	Game.findOneAndParse({
+		pkey: credentials.ident.pkey		
+	}).then(function (game) {
+		credentials.game = game;
+		promise.fulfill(credentials);
+	}).onReject(function (error) {
+		promise.reject(error);
+	});
+	return promise;
+};
+
 internals.confirmClientAndToken = function (credentials) {
 	var promise = new Promise();
 
 	Client.findOneAndParse({
 		udid: credentials.ident.udid,
 		games: { $elemMatch : {
-			pkey: credentials.ident.pkey,
+			game_id: credentials.game._id,
 			'token.signature': credentials.token
 		}}
 	}).then(function (client) {

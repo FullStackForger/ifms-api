@@ -43,6 +43,14 @@ describe('Route \/game\/data', function () {
 		});
 	});
 
+	it('should not authorise without valid game public key', function (done) {
+		var request = internals.request.missingToken;
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(401);
+			done();
+		});
+	});
+	
 	it('should not authorise without token', function (done) {
 		var request = internals.request.missingToken;
 		helpers.server.inject(request, function (response) {
@@ -50,14 +58,6 @@ describe('Route \/game\/data', function () {
 			done();
 		});
 	});
-
-    it('should not authorise with invalid token', function (done) {
-	    var request = internals.request.invalidToken;
-	    helpers.server.inject(request, function (response) {
-		    expect(response.statusCode).to.equal(401);
-		    done();
-	    });
-    });
 
 	it('should not authorise with illegal token', function (done) {
 		var request = internals.request.illegalToken;
@@ -75,8 +75,16 @@ describe('Route \/game\/data', function () {
 		});
 	});
 	
-	it('should not authorise with invalid identification signature', function (done) {
-		var request = internals.request.invalidIdent;
+	it('should not authorise with invalid identification udid', function (done) {
+		var request = internals.request.invalidIdentUDID;
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(401);
+			done();
+		})
+	});
+
+	it('should not authorise with invalid identification pkey', function (done) {
+		var request = internals.request.invalidIdentPKey;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
 			done();
@@ -111,8 +119,12 @@ internals.getValidIdent = function () {
 	return 'Ident ' + (new Buffer('aaabbbccc:gid01234', 'utf8').toString('base64'));
 };
 
-internals.getInvalidIdent = function () {
-	return 'Ident ' + (new Buffer('aaaZZZ:aaaZZZZ', 'utf8').toString('base64'));
+internals.getInvalidIdentUDID = function () {
+	return 'Ident ' + (new Buffer('bad_udid:gid01234', 'utf8').toString('base64'));
+};
+
+internals.getInvalidIdentPKey = function () {
+	return 'Ident ' + (new Buffer('aaabbbccc:bad_pkey', 'utf8').toString('base64'));
 };
 
 internals.getIllegalIndent= function () {
@@ -146,20 +158,21 @@ internals.request.illegalToken = {
 		identification: internals.getValidIdent()
 	}
 };
-internals.request.invalidIdent = {
+internals.request.invalidIdentUDID = {
 	method: 'GET',
 	url: internals.url,
 	headers: {
 		authorization: internals.getValidAuth(),
-		identification: internals.getInvalidIdent()
+		identification: internals.getInvalidIdentUDID()
 	}
 };
-internals.request.invalidToken = {
+
+internals.request.invalidIdentPKey = {
 	method: 'GET',
 	url: internals.url,
 	headers: {
 		authorization: internals.getValidAuth(),
-		identification: internals.getInvalidIdent()
+		identification: internals.getInvalidIdentPKey()
 	}
 };
 
@@ -173,5 +186,5 @@ internals.request.missingIdent = {
 internals.request.missingToken = {
 	method: 'GET',
 	url: internals.url,
-	identification: internals.getInvalidIdent()
+	identification: internals.getValidIdent()
 };
