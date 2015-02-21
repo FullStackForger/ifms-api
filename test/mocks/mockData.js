@@ -22,6 +22,7 @@ data.users.push({
 
 data.clients = [];
 data.clients.push({
+	_id: oid('54e8cb6fa42352702569eba4'),
 	user_id: oid('54e50dd551631fc64f6c2fe9'),
 	udid: 'aaabbbccc',
 	games: [{
@@ -33,8 +34,7 @@ data.clients.push({
 		}
 	}]
 });
-data.clients.push({
-	_id: oid('54e8cb6fa42352702569eba4'),
+data.clients.push({	
 	udid: 'xxxyyyzzz',
 	games: [{
 		game_id: oid('54e7f0ab4885ebe47ce15605'),

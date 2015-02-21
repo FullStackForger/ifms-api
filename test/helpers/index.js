@@ -26,6 +26,7 @@ externals.initServer = function (serverData, cb) {
 			.then(internals.prepUsers)
 			.then(internals.prepClients)
 			.then(internals.prepGames)
+			.then(internals.prepGamesData)
 			.then(function () {
 				cb();
 			});
@@ -107,6 +108,20 @@ internals.prepGames = function () {
 
 	return promise;
 };
+
+internals.prepGamesData = function () {
+	var promise = new Promise(),
+		GamesData = Model.db.get('games_data');
+
+	GamesData.remove({}, function () {
+		GamesData.insert(mockData.games_data, function () {
+			promise.resolve();
+		});
+	});
+
+	return promise;
+};
+
 
 internals.startServer = function (serverData) {
 	var promise = new Promise();
