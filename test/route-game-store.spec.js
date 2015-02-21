@@ -19,13 +19,13 @@ var Code = require('code'),
 
 
 describe('Route \/game\/data', function () {
-	
+
 	before(function (done) {
 		helpers.initServer({
 			strategies : [{
 				name: 'jwt-auth',
 				scheme: 'bearer-access-token',
-				mode: false,
+				//mode: false,
 				options: JWTAuth
 			}],
 			routes : [
@@ -98,25 +98,33 @@ internals.request = {};
 internals.request.validRequest = {
 	method: 'GET', 
 	url: internals.url,
-	authorization: internals.getValidAuth(),
-	identification: internals.getValidIdent()
+	headers: {
+		authorization: internals.getValidAuth(),
+		identification: internals.getValidIdent()			
+	}
 };
 internals.request.invalidIdent = {
 	method: 'GET',
 	url: internals.url,
-	authorization: internals.getValidAuth(),
-	identification: internals.getValidIdent()
+	headers: {
+		authorization: internals.getValidAuth(),
+		identification: internals.getValidIdent()
+	}
 };
 internals.request.invalidToken = {
 	method: 'GET',
 	url: internals.url,
-	authorization: internals.getValidAuth(),
-	identification: internals.getInvalidIdent()
+	headers: {
+		authorization: internals.getValidAuth(),
+		identification: internals.getInvalidIdent()
+	}
 };
 internals.request.missingIdent = {
 	method: 'GET',
 	url: internals.url,
-	authorization: internals.getValidAuth()
+	headers: {
+		authorization: internals.getValidAuth()
+	}
 };
 internals.request.missingToken = {
 	method: 'GET',
