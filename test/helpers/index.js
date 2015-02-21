@@ -54,10 +54,17 @@ internals.getPlugins = function () {
 			"opts": Config.mongodb.opts
 		}
 	});
-
+	
+	// mix-auth
 	plugins.push({
 		register: MixSchema
 	});
+
+	// JWT authorisation, schema: bearer-access-token
+	plugins.push({
+		register: require('hapi-auth-bearer-token')
+	});
+
 
 	return plugins;
 };
