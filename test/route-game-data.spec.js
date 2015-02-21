@@ -8,7 +8,7 @@ var Code = require('code'),
 	lab = exports.lab = Lab.script(),
 	describe = lab.describe,
 	it = lab.it,
-	before = lab.before;
+	before = lab.before,
 
 	helpers = require('./helpers/index'),
 	internals = {},
