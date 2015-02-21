@@ -25,7 +25,7 @@ data.clients.push({
 	user_id: oid('54e50dd551631fc64f6c2fe9'),
 	udid: 'aaabbbccc',
 	games: [{
-		pkey: 'gid01234',
+		game_id: oid('54e7f0ab4885ebe47ce15605'),
 		title: 'Killer Blood',
 		token: {
 			signature: 'aaabbbccc-token',
@@ -36,7 +36,7 @@ data.clients.push({
 data.clients.push({
 	udid: 'xxxyyyzzz',
 	games: [{
-		pkey: 'gid01234',
+		game_id: oid('54e7f0ab4885ebe47ce15605'),
 		title: 'Killer Blood',
 		token: {
 			signature: 'zzzxxxyyy-token',
@@ -47,6 +47,7 @@ data.clients.push({
 
 data.games = [];
 data.games.push({
+	_id: oid('54e7f0ab4885ebe47ce15605'),
 	title: 'Killer Blood',
 	pkey: 'gid01234',
 	description: 'super killer gangsta game',
@@ -54,6 +55,12 @@ data.games.push({
 	updated: date
 });
 
-
+data.games_data = [];
+data.games_data.push({
+	game_id: oid('54e7f0ab4885ebe47ce15605'),
+	user_id: oid('54e50dd551631fc64f6c2fe9'),
+	key: 'save_001',
+	value: 'sample saved data string'
+});
 
 module.exports = data;

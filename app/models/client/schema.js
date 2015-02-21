@@ -8,7 +8,7 @@ clientSchema = {
 	updated: Joi.date().raw(),
 	agent: Joi.string(),
 	games: Joi.array().includes(Joi.object().keys({
-		pkey: Joi.string(),
+		game_id: Joi.object(),
 		title: Joi.string(),
 		token: Joi.object().keys({
 			signature: Joi.string(),
