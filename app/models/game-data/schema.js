@@ -3,7 +3,7 @@ var Joi = require('joi'),
 
 gameDataSchema = {
 	game_id: Joi.object(),
-	user_id: Joi.object(),
+	client_id: Joi.object(),
 	key: Joi.string(),
 	value: Joi.string()
 };

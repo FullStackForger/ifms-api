@@ -17,7 +17,7 @@ GameRoutes.dataPOST = {
 	config: {
 		auth: 'jwt-auth',
 		description: 'Authenticates user or client returning Access Token',
-		handler: GameCtrl.setData
+		handler: GameCtrl.saveData
 	}
 };
 

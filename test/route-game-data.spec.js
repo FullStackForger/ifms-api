@@ -15,7 +15,8 @@ var Code = require('code'),
 
 	// test actors
 	dataRoutes = require('../app/routes/game-routes'),
-	JWTAuth = require('../app/strategies/jwt-auth');
+	JWTAuth = require('../app/strategies/jwt-auth'),
+	GameData = require('../app/models/game-data');
 
 
 describe('Route \/game\/data', function () {
@@ -82,7 +83,7 @@ describe('Route \/game\/data', function () {
 
 });
 
-describe('Route \/game\/data - reading data with game key', function () {
+describe('Route \/game\/data - reading data', function () {
 
 	before(function (done) {
 		internals.before(done);
@@ -132,6 +133,48 @@ describe('Route \/game\/data - reading data with game key', function () {
 	});
 });
 
+
+describe('Route \/game\/data - saving data', function () {
+
+	it('should insert new data', function (done) {
+		
+		var request = internals.request.getValidRequest(),
+			dataToSave = { value: 'lorem ipsum'};
+		// key param is optional
+
+		request.url = '/game/data/save_003';
+		request.method = 'POST';
+		request.payload = dataToSave;
+		
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload)).to.deep.include({
+				success: true
+			});
+			done();
+		});
+	});
+
+	it('should update existing data', function (done) {
+		
+		var request = internals.request.getValidRequest(),
+			dataToSave = { value: 'lorem ipsum'};
+		// key param is optional
+
+		request.url = '/game/data/save_002';
+		request.method = 'POST';
+		request.payload = dataToSave;
+
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload)).to.deep.include({
+				success: true
+			});
+			done();
+		});
+	});
+
+});
 
 internals.before = function (done) {
 	helpers.initServer({

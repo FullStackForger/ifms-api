@@ -49,6 +49,42 @@ Ctrl.getData = function (request, reply) {
 };
 
 
-Ctrl.setData = function (request, reply) {
-	return reply({});
+Ctrl.saveData = function (request, reply) {
+	var credentials = request.auth.credentials;
+	
+	GameData.findOneAndParse({
+		game_id: credentials.game._id,
+		client_id: credentials.client._id,
+		key: request.params.key
+	}).then(function (data) {
+		
+		if (data) {
+			
+			// update
+			data.value = request.payload.value;
+			data.save()
+				.then(function () {
+					reply({success: true, error: null});					
+				}).onReject(function (error) {
+					return reply(Boom.badImplementation(error), null, 'game-ctrl');
+				});
+			
+		} else {
+			
+			// insert new
+			GameData.insert({
+				game_id: credentials.game._id,
+				client_id: credentials.client._id,
+				key: request.params.key,
+				value: request.payload.value
+			}).then(function () {
+				reply({success: true, error: null});
+			}).onReject(function (error) {
+				return reply(Boom.badImplementation(error), null, 'game-ctrl');
+			});
+			
+		}				
+	}).onReject(function (error) {
+		return reply(Boom.badImplementation(error), null, 'game-ctrl');
+	});
 };
