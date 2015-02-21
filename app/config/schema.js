@@ -1,4 +1,4 @@
-Joi = require('joi');
+var Joi = require('joi');
 
 module.exports = Joi.object().keys({
 	env : Joi.string().valid('development', 'testing', 'production', 'dev', 'test', 'uat', 'prod'),
