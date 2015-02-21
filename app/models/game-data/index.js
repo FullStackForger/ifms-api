@@ -1,6 +1,6 @@
 var Model = require('hapi-app-mongo-model'),
 	GameStore = Model.register({
-		collection: "game_stores",
+		collection: "games_data",
 		path: __dirname
 	});
 

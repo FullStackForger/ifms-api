@@ -82,6 +82,51 @@ describe('Route \/game\/data', function () {
 
 });
 
+describe('Route \/game\/data - reading data with game key', function () {
+
+	before(function (done) {
+		internals.before(done);
+	});
+
+	it('should throw 404 if game key is missing', function (done) {
+		var request = internals.request.getValidRequest();
+		request.url = '/game/data'; // missing key
+
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(404);
+			done();
+		});
+	});
+
+	it('should return empty for invalid game key', function (done) {
+		var request = internals.request.getValidRequest();
+		request.url = '/game/data/non_existent_game_key';
+
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload)).to.deep.include({
+				key: 'non_existent_game_key',
+				value: ''
+			});
+			done();
+		});
+	});
+
+	it('should retrieve existing data', function (done) {
+		var request = internals.request.getValidRequest();
+
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload)).to.deep.include({
+				key: 'save_001',
+				value: 'sample saved data string'
+			});
+			done();
+		});
+
+	});
+});
+
 
 internals.before = function (done) {
 	helpers.initServer({
