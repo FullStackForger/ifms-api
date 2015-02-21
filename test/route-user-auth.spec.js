@@ -8,7 +8,7 @@ var Code = require('code'),
 	lab = exports.lab = Lab.script(),
 	describe = lab.describe,
 	it = lab.it,
-	before = lab.before;
+	before = lab.before,
 
 	helpers = require('./helpers/index'),
 	internals = {},
@@ -68,7 +68,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 
 		//authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
 		helpers.server.inject(request, function (response) {
-			expect(response.statusCode).to.equal(500);
+			expect(response.statusCode).to.equal(401);
 			done();
 		});
 	});
@@ -81,7 +81,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 
 		//authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
 		helpers.server.inject(request, function (response) {
-			expect(response.statusCode).to.equal(500);
+			expect(response.statusCode).to.equal(401);
 			done();
 		});
 	});
@@ -94,7 +94,7 @@ describe('Route \/user\/auth - guest authorisation', function () {
 		internals.before(done);
 	});
 	
-	it('should reply with token for Guest authorisation (registered)', function (done) {
+	it('should reply with token for registered Guest client', function (done) {
 
 		var signature = 'aaabbbccc:gid01234',
 			authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
@@ -109,13 +109,13 @@ describe('Route \/user\/auth - guest authorisation', function () {
 		});
 	});
 
-	it('should reply with token for Guest authorisation (new)', function (done) {
-		var signature = 'aaabbbccc:gid01234',
+	it('should reply with token for new Guest client', function (done) {
+		var signature = 'zzz-xxx-yyy:gid01234',
 			authString = 'Guest ' + (new Buffer('udid:zzz-xxx-yyy', 'utf8').toString('base64')),
 			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
 			headers = { authorization: authString, identification: identString },
 			request = { method: 'GET', url: '/user/auth', headers: headers };
-		
+
 		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
 		helpers.server.inject(request, function(response) {
 			expect(response.statusCode).to.equal(200);
@@ -123,8 +123,36 @@ describe('Route \/user\/auth - guest authorisation', function () {
 		});
 	});
 
+	it('should not authorise for inconsistent signatures', function (done) {
+		var authSignature = 'udid:zzz-xxx-yyy',
+			identSignature = 'aaabbbccc:gid01234',
+			authString = 'Guest ' + (new Buffer(authSignature, 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(identSignature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
 
-	it('should not authorise with bad identification signature', function (done) {
+		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
+		helpers.server.inject(request, function(response) {
+			expect(response.statusCode).to.equal(401);
+			done();
+		});
+	});
+
+	it('should not authorise for invalid signature', function (done) {
+		var signature = 'zzz-xxx-yyy:INVALID_GAME_ID',
+			authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(401);
+			done();
+		});
+	});
+	
+	it('should not authorise for illegal signature', function (done) {
 		var signature = 'BAD SIGNATURE',
 			authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
 			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
@@ -133,7 +161,7 @@ describe('Route \/user\/auth - guest authorisation', function () {
 
 		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
 		helpers.server.inject(request, function (response) {
-			expect(response.statusCode).to.equal(500);
+			expect(response.statusCode).to.equal(401);
 			done();
 		});
 	});
@@ -145,7 +173,7 @@ describe('Route \/user\/auth - guest authorisation', function () {
 
 		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
 		helpers.server.inject(request, function (response) {
-			expect(response.statusCode).to.equal(500);
+			expect(response.statusCode).to.equal(401);
 			done();
 		});
 	});

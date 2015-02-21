@@ -21,8 +21,12 @@ function validateFunction (method, authData, callback) {
 	
 	credentials.ident = identParse(request.headers.identification);
 	if (!credentials.ident) {
-		callback(new Error('bad identification signature'), false, credentials);
-		return;
+		// unauthorised
+		return callback(null, false, credentials);
+	}
+	if (authData.udid && authData.udid != credentials.ident.udid) {
+		// unauthorised guest (inconsistent signatures)
+		return callback(null, false, credentials);
 	}
 	
 	switch (method) {

@@ -42,7 +42,7 @@ Ctrl.getProfile = function(request, reply) {
 internals.verifyGame = function (credentials) {
 	var promise = new Promise();
 
-	Game.findAndParse({
+	Game.findOneAndParse({
 		pkey: credentials.ident.pkey
 	}).then(function (game) {
 		credentials.game = game;
@@ -57,15 +57,25 @@ internals.verifyGame = function (credentials) {
 internals.verifyClientGame = function (credentials) {
 	var client = credentials.client,
 		promise = new Promise(),
-		gameIndex;
+		gameIndex = -1;
 	
 	process.nextTick(function () {
-		gameIndex = client.games.indexOf(credentials.ident.pkey);		
-		
+		var i = 0, game;
+
 		if (!client.games) {
 			client.games = [];
 		}
-		
+
+		// check if game exist
+		while (i < client.games.length && gameIndex === -1) {
+			game = client.games[i];
+			if (game.game_id === credentials.game._id) {
+				gameIndex = i;
+			}
+			i++;
+		}
+
+		// remove from the list if found
 		if (gameIndex > -1) {
 			client.games.splice(gameIndex, 1);
 		}
@@ -78,21 +88,23 @@ internals.verifyClientGame = function (credentials) {
 internals.generateToken = function (credentials) {
 	var promise = new Promise(),
 		client = credentials.client,
-		signature, token;
+		signature, expiry, token;
+
+	expiry = Moment().add(60, 'minutes').toDate();
 	
 	signature = JWS.sign({
 		header: { alg: Config.auth.algorithm },
-		payload: credentials.client.udid,
+		payload: credentials.client.udid + ':' + expiry.getTime(),
 		secret: Config.auth.secret
 	});
 
 	token = {
 		signature: signature,
-		expiry: Moment().add(60, 'minutes').toDate()
+		expiry: expiry
 	};
 	
 	client.games.push({
-		pkey: credentials.ident.pkey,
+		game_id: credentials.game._id,
 		title: credentials.game.title,
 		token: token	
 	});
