@@ -11,15 +11,18 @@ var Code = require('code'),
 	before = lab.before;
 
 	helpers = require('./helpers/index'),
-	
+	internals = {},
+		
 	// test actors
+	MixAuth = require('../app/strategies/mix-auth'),
 	authRoute = require('../app/routes/user-routes').auth;
+
 
 
 describe('Route \/user\/auth', function () {
 
 	before(function (done) {
-		helpers.initServer(authRoute, done);
+		internals.before(done);
 	});
 
 	it('should not authorise without credentials', function (done) {
@@ -36,7 +39,7 @@ describe('Route \/user\/auth', function () {
 describe('Route \/user\/auth - basic authorisation', function () {
 
 	before(function (done) {
-		helpers.initServer(authRoute, done);
+		internals.before(done);
 	});
 
     it('should reply with token for Basic authorisation', function (done) {
@@ -88,7 +91,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 describe('Route \/user\/auth - guest authorisation', function () {
 
 	before(function (done) {
-		helpers.initServer(authRoute, done);
+		internals.before(done);
 	});
 	
 	it('should reply with token for Guest authorisation (registered)', function (done) {
@@ -152,7 +155,7 @@ describe('Route \/user\/auth - guest authorisation', function () {
 describe('Route \/user\/auth - social authorisation', function () {
 
 	before(function (done) {
-		helpers.initServer(authRoute, done);
+		internals.before(done);
 	});
 	
 	it('should reply with token on successful Social authorisation (new)', {skip: true}, function (done) {
@@ -166,3 +169,15 @@ describe('Route \/user\/auth - social authorisation', function () {
 	});
 	
 });
+
+internals.before = function (done) {
+	helpers.initServer({
+		strategies : [{
+			name: 'mix-auth',
+			scheme: 'mix-auth',
+			mode: false,
+			options: MixAuth
+		}],
+		routes : authRoute
+	}, done);
+};

@@ -3,7 +3,6 @@ var Hapi = require('hapi'),
 	Model = require('hapi-app-mongo-model'),
 	MixSchema = require('hapi-app-mix-auth'),
 	Config = require('../../app/config'),
-	MixAuth = require('../../app/strategies/mix-auth'),
 
 	mockData = require('../mocks/mockData'),
 	mockConfig = require('../mocks/mockConfig'),
@@ -11,16 +10,19 @@ var Hapi = require('hapi'),
 	externals = module.exports = {},
 	internals = {};
 
-externals.initServer = function (routes, cb) {
+externals.initServer = function (serverData, cb) {
 	externals.server = new Hapi.Server();
 	externals.server.connection();
 	externals.server.register(internals.getPlugins(), function (err) {
 
-		if (!Array.isArray(routes)) {
-			routes = [routes];
+		if (!Array.isArray(serverData.routes)) {
+			serverData.routes = [serverData.routes];
+		}
+		if (!Array.isArray(serverData.strategies)) {
+			serverData.strategies = [serverData.strategies];
 		}
 
-		internals.startServer(routes)
+		internals.startServer(serverData)
 			.then(internals.prepUsers)
 			.then(internals.prepClients)
 			.then(internals.prepGames)
@@ -99,12 +101,15 @@ internals.prepGames = function () {
 	return promise;
 };
 
-internals.startServer = function (routes) {
+internals.startServer = function (serverData) {
 	var promise = new Promise();
 
-	externals.server.auth.strategy("mix-auth", "mix-auth", MixAuth);
+	serverData.strategies.forEach(function(strategy) {
+		var mode = strategy.mode || false;
+		externals.server.auth.strategy(strategy.name, strategy.scheme, mode, strategy.options);
+	});
 	
-	routes.forEach(function (route) {
+	serverData.routes.forEach(function (route) {
 		externals.server.route(route);
 	});
 
