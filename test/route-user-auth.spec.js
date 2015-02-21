@@ -97,7 +97,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 	
 });
 
-describe('Route \/user\/auth - token authorisation', function () {
+describe('Route \/user\/auth - guest authorisation', function () {
 
 	before(function (done) {
 		internals.initServer(done);
@@ -128,6 +128,33 @@ describe('Route \/user\/auth - token authorisation', function () {
 		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
 		internals.server.inject(request, function(response) {
 			expect(response.statusCode).to.equal(200);
+			done();
+		});
+	});
+
+
+	it('should not authorise with bad identification signature', function (done) {
+		var signature = 'BAD SIGNATURE',
+			authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
+		internals.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(500);
+			done();
+		});
+	});
+
+	it('should not authorise request without identification signature', function (done) {
+		var authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
+			headers = { authorization: authString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
+		internals.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(500);
 			done();
 		});
 	});
