@@ -2,7 +2,7 @@ var GameCtrl = require('../controllers/game-ctrl'),
 	GameRoutes = {};
 
 GameRoutes.dataGET = {
-	path: '/game/data/{key}',
+	path: '/game/data/{key?}',
 	method: ['GET'],
 	config: {
 		auth: 'jwt-auth',

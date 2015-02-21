@@ -62,6 +62,11 @@ data.games_data.push({
 	client_id: oid('54e8cb6fa42352702569eba4'),
 	key: 'save_001',
 	value: 'sample saved data string'
+},{
+	game_id: oid('54e7f0ab4885ebe47ce15605'),
+	client_id: oid('54e8cb6fa42352702569eba4'),
+	key: 'save_002',
+	value: 'second sample saved data string'
 });
 
 module.exports = data;

@@ -88,17 +88,20 @@ describe('Route \/game\/data - reading data with game key', function () {
 		internals.before(done);
 	});
 
-	it('should throw 404 if game key is missing', function (done) {
+	it('should retrieve existing data', function (done) {
 		var request = internals.request.getValidRequest();
-		request.url = '/game/data'; // missing key
 
 		helpers.server.inject(request, function (response) {
-			expect(response.statusCode).to.equal(404);
+			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload)).to.deep.include({
+				key: 'save_001',
+				value: 'sample saved data string'
+			});
 			done();
 		});
 	});
-
-	it('should return empty for invalid game key', function (done) {
+	
+	it('should return empty for invalid data key', function (done) {
 		var request = internals.request.getValidRequest();
 		request.url = '/game/data/non_existent_game_key';
 
@@ -112,18 +115,20 @@ describe('Route \/game\/data - reading data with game key', function () {
 		});
 	});
 
-	it('should retrieve existing data', function (done) {
+	it('should reply with all saved game data', function (done) {
 		var request = internals.request.getValidRequest();
+		request.url = '/game/data';
 
 		helpers.server.inject(request, function (response) {
+			var payload = JSON.parse(response.payload);
 			expect(response.statusCode).to.equal(200);
-			expect(JSON.parse(response.payload)).to.deep.include({
-				key: 'save_001',
-				value: 'sample saved data string'
-			});
+			expect(payload).to.be.an.array().length(2);
+			expect(payload[0].key).to.equal('save_001');
+			expect(payload[0].value).to.equal('sample saved data string');
+			expect(payload[1].key).to.equal('save_002');
+			expect(payload[1].value).to.equal('second sample saved data string');
 			done();
 		});
-
 	});
 });
 
