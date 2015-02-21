@@ -2,7 +2,7 @@ var GameCtrl = require('../controllers/game-ctrl'),
 	GameRoutes = {};
 
 GameRoutes.dataGET = {
-	path: '/user/data',
+	path: '/game/data',
 	method: ['GET'],
 	config: {
 		auth: 'jwt-auth',
@@ -12,7 +12,7 @@ GameRoutes.dataGET = {
 };
 
 GameRoutes.dataPOST = {
-	path: '/user/data',
+	path: '/game/data',
 	method: ['POST'],
 	config: {
 		auth: 'jwt-auth',

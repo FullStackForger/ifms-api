@@ -2,7 +2,7 @@ function validateFunc (token, callback) {
 	var request = this;
 
 	// todo: verify token against IP and expiration and user
-	if (token === "1234") {
+	if (token === "aaabbbccc-token") {
 		callback(null, true, { token: token })
 	} else {
 		callback(null, false, { token: token })
