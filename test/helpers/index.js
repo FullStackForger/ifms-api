@@ -27,6 +27,7 @@ externals.initServer = function (serverData, cb) {
 			.then(internals.prepClients)
 			.then(internals.prepGames)
 			.then(internals.prepGamesData)
+			.then(internals.prepGamesScores)
 			.then(function () {
 				cb();
 			});
@@ -115,6 +116,19 @@ internals.prepGamesData = function () {
 
 	GamesData.remove({}, function () {
 		GamesData.insert(mockData.game_data, function () {
+			promise.resolve();
+		});
+	});
+
+	return promise;
+};
+
+internals.prepGamesScores = function () {
+	var promise = new Promise(),
+		GamesData = Model.db.get('game_scores');
+
+	GamesData.remove({}, function () {
+		GamesData.insert(mockData.game_scores, function () {
 			promise.resolve();
 		});
 	});
