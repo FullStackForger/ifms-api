@@ -1,4 +1,5 @@
-var GameCtrl = require('../controllers/game-ctrl'),
+var GameDataCtrl = require('../controllers/game-data-ctrl'),
+	GameScoreCtrl = require('../controllers/game-score-ctrl'),
 	GameRoutes = {};
 
 GameRoutes.dataGET = {
@@ -7,7 +8,7 @@ GameRoutes.dataGET = {
 	config: {
 		auth: 'jwt-auth',
 		description: 'Authenticates user or client returning Access Token',
-		handler: GameCtrl.getData
+		handler: GameDataCtrl.getData
 	}
 };
 
@@ -17,8 +18,28 @@ GameRoutes.dataPOST = {
 	config: {
 		auth: 'jwt-auth',
 		description: 'Authenticates user or client returning Access Token',
-		handler: GameCtrl.saveData
+		handler: GameDataCtrl.saveData
 	}
 };
 
+
+GameRoutes.scoreGET = {
+	path: '/game/score/{key?}',
+	method: ['GET'],
+	config: {
+		auth: 'jwt-auth',
+		description: 'Authenticates user or client returning Access Token',
+		handler: GameScoreCtrl.getScore
+	}
+};
+
+GameRoutes.scorePOST = {
+	path: '/game/score/',
+	method: ['POST'],
+	config: {
+		auth: 'jwt-auth',
+		description: 'Authenticates user or client returning Access Token',
+		handler: GameScoreCtrl.saveScore
+	}
+};
 module.exports = GameRoutes;

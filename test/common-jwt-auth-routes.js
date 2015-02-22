@@ -19,6 +19,14 @@ var Code = require('code'),
 				dataRoutes.dataGET,
 				dataRoutes.dataPOST
 			]
+		},
+		{
+			scope: 'Route \/game\/score',
+			url: '/game/score/',
+			routes: [
+				dataRoutes.scoreGET,
+				dataRoutes.scorePOST
+			]
 		}
 	];
 
