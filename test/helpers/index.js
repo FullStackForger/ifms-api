@@ -111,10 +111,10 @@ internals.prepGames = function () {
 
 internals.prepGamesData = function () {
 	var promise = new Promise(),
-		GamesData = Model.db.get('games_data');
+		GamesData = Model.db.get('game_data');
 
 	GamesData.remove({}, function () {
-		GamesData.insert(mockData.games_data, function () {
+		GamesData.insert(mockData.game_data, function () {
 			promise.resolve();
 		});
 	});

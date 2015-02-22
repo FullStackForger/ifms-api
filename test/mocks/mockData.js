@@ -56,8 +56,8 @@ data.games.push({
 	updated: date
 });
 
-data.games_data = [];
-data.games_data.push({
+data.game_data = [];
+data.game_data.push({
 	game_id: oid('54e7f0ab4885ebe47ce15605'),
 	client_id: oid('54e8cb6fa42352702569eba4'),
 	key: 'save_001',
