@@ -1,0 +1,109 @@
+var Code = require('code'),
+	expect = Code.expect,
+	Lab = require('lab'),
+	lab = exports.lab = Lab.script(),
+	describe = lab.describe,
+	it = lab.it,
+	before = lab.before,
+
+	helpers = require('./helpers/index'),
+
+	// test actors
+	dataRoutes = require('../app/routes/game-routes'),
+	JWTAuth = require('../app/strategies/jwt-auth'),
+	testGroups = [
+		{
+			scope: 'Route \/game\/data',
+			url: '/game/data/',
+			routes: [
+				dataRoutes.dataGET,
+				dataRoutes.dataPOST
+			]
+		}
+	];
+
+
+testGroups.forEach(function (testGroup) {
+
+	var requestUrl = testGroup.url;
+	
+	describe(testGroup.scope, function () {
+	
+		before(function (done) {
+			helpers.initServer({
+				strategies : [{
+					name: 'jwt-auth',
+					scheme: 'bearer-access-token',
+					//mode: false,
+					options: JWTAuth
+				}],
+				routes : testGroup.routes
+			}, done);
+		});
+		
+		it('should authorise with valid signature', function (done) {
+			var request = helpers.request.getValidRequest();
+			request.url = requestUrl;
+			helpers.server.inject(request, function (response) {
+				expect(response.statusCode).to.equal(200);
+				done();
+			});
+		});
+	
+		it('should not authorise without token', function (done) {
+			var request = helpers.request.getMissingToken();
+			request.url = requestUrl;
+			helpers.server.inject(request, function (response) {
+				expect(response.statusCode).to.equal(401);
+				done();
+			});
+		});
+	
+		it('should not authorise with illegal token', function (done) {
+			var request = helpers.request.getIllegalToken();
+			request.url = requestUrl;
+			helpers.server.inject(request, function (response) {
+				expect(response.statusCode).to.equal(401);
+				done();
+			});
+		});
+	
+		it('should not authorise without identification signature', function (done) {
+			var request = helpers.request.getMissingIdent();
+			request.url = requestUrl;
+			helpers.server.inject(request, function (response) {
+				expect(response.statusCode).to.equal(401);
+				done();
+			});
+		});
+	
+		it('should not authorise with invalid identification udid', function (done) {
+			var request = helpers.request.getInvalidIdentUDID();
+			request.url = requestUrl;
+			helpers.server.inject(request, function (response) {
+				expect(response.statusCode).to.equal(401);
+				done();
+			})
+		});
+	
+		it('should not authorise with invalid identification pkey', function (done) {
+			var request = helpers.request.getInvalidIdentPKey();
+			request.url = requestUrl;
+			helpers.server.inject(request, function (response) {
+				expect(response.statusCode).to.equal(401);
+				done();
+			})
+		});
+	
+		it('should not authorise with illegal identification signature', function (done) {
+			var request = helpers.request.getIllegalIndent();
+			request.url = requestUrl;
+			helpers.server.inject(request, function (response) {
+				expect(response.statusCode).to.equal(401);
+				done();
+			})
+		});
+	
+	});
+
+});
