@@ -7,8 +7,10 @@ var Hapi = require('hapi'),
 	mockData = require('../mocks/mockData'),
 	mockConfig = require('../mocks/mockConfig'),
 	
-	externals = module.exports = {},
+	externals = module.exports = {},	
 	internals = {};
+
+externals.request = require('./request-helper');
 
 externals.initServer = function (serverData, cb) {
 	externals.server = new Hapi.Server();

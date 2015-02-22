@@ -26,7 +26,8 @@ describe('Route \/game\/data', function () {
 	});
 	
 	it('should authorise with valid signature', function (done) {
-		var request = internals.request.getValidRequest();
+		var request = helpers.request.getValidRequest();
+		request.url = internals.url;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(200);
 			done();
@@ -34,7 +35,8 @@ describe('Route \/game\/data', function () {
 	});
 	
 	it('should not authorise without token', function (done) {
-		var request = internals.request.getMissingToken();
+		var request = helpers.request.getMissingToken();
+		request.url = internals.url;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
 			done();
@@ -42,7 +44,8 @@ describe('Route \/game\/data', function () {
 	});
 
 	it('should not authorise with illegal token', function (done) {
-		var request = internals.request.getIllegalToken();
+		var request = helpers.request.getIllegalToken();
+		request.url = internals.url;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
 			done();
@@ -50,7 +53,8 @@ describe('Route \/game\/data', function () {
 	});
 
 	it('should not authorise without identification signature', function (done) {
-		var request = internals.request.getMissingIdent();
+		var request = helpers.request.getMissingIdent();
+		request.url = internals.url;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
 			done();
@@ -58,7 +62,8 @@ describe('Route \/game\/data', function () {
 	});
 	
 	it('should not authorise with invalid identification udid', function (done) {
-		var request = internals.request.getInvalidIdentUDID();
+		var request = helpers.request.getInvalidIdentUDID();
+		request.url = internals.url;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
 			done();
@@ -66,7 +71,8 @@ describe('Route \/game\/data', function () {
 	});
 
 	it('should not authorise with invalid identification pkey', function (done) {
-		var request = internals.request.getInvalidIdentPKey();
+		var request = helpers.request.getInvalidIdentPKey();
+		request.url = internals.url;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
 			done();
@@ -74,7 +80,8 @@ describe('Route \/game\/data', function () {
 	});
 
 	it('should not authorise with illegal identification signature', function (done) {
-		var request = internals.request.getIllegalIndent();
+		var request = helpers.request.getIllegalIndent();
+		request.url = internals.url;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
 			done();
@@ -90,8 +97,8 @@ describe('Route \/game\/data - reading data', function () {
 	});
 
 	it('should retrieve existing data', function (done) {
-		var request = internals.request.getValidRequest();
-
+		var request = helpers.request.getValidRequest();
+		request.url = internals.url;
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(200);
 			expect(JSON.parse(response.payload)).to.deep.include({
@@ -103,7 +110,7 @@ describe('Route \/game\/data - reading data', function () {
 	});
 	
 	it('should return empty for invalid data key', function (done) {
-		var request = internals.request.getValidRequest();
+		var request = helpers.request.getValidRequest();
 		request.url = '/game/data/non_existent_game_key';
 
 		helpers.server.inject(request, function (response) {
@@ -117,7 +124,7 @@ describe('Route \/game\/data - reading data', function () {
 	});
 
 	it('should reply with all saved game data', function (done) {
-		var request = internals.request.getValidRequest();
+		var request = helpers.request.getValidRequest();
 		request.url = '/game/data';
 
 		helpers.server.inject(request, function (response) {
@@ -136,9 +143,13 @@ describe('Route \/game\/data - reading data', function () {
 
 describe('Route \/game\/data - saving data', function () {
 
+	before(function (done) {
+		internals.before(done);
+	});
+	
 	it('should insert new data', function (done) {
 		
-		var request = internals.request.getValidRequest(),
+		var request = helpers.request.getValidRequest(),
 			dataToSave = { value: 'lorem ipsum'};
 		// key param is optional
 
@@ -157,7 +168,7 @@ describe('Route \/game\/data - saving data', function () {
 
 	it('should update existing data', function (done) {
 		
-		var request = internals.request.getValidRequest(),
+		var request = helpers.request.getValidRequest(),
 			dataToSave = { value: 'lorem ipsum'};
 		// key param is optional
 
@@ -176,6 +187,8 @@ describe('Route \/game\/data - saving data', function () {
 
 });
 
+internals.url = '/game/data/save_001';
+
 internals.before = function (done) {
 	helpers.initServer({
 		strategies : [{
@@ -190,89 +203,4 @@ internals.before = function (done) {
 		]
 	}, done);
 };
-internals.toBase64 = function (string) {
-	return new Buffer(string, 'utf8').toString('base64');	
-};
 
-internals.url = '/game/data/save_001';
-internals.validAuth = 'Bearer aaabbbccc-token';
-internals.invalidAuth = 'Bearer invalid-token';
-internals.illegaAuth = 'illegal-token';
-internals.validIdent = 'Ident ' + internals.toBase64('aaabbbccc:gid01234', 'utf8');
-internals.invalidIdentUDID = 'Ident ' + internals.toBase64('bad_udid:gid01234', 'utf8');
-internals.invalidIdentPKey = 'Ident ' + internals.toBase64('aaabbbccc:bad_pkey', 'utf8');
-internals.illegalIndent = 'Ident ' + internals.toBase64('illegal-indent', 'utf8');
-
-internals.request = {};
-internals.request.getValidRequest = function () { 
-	return {
-		method: 'GET', 
-		url: internals.url,
-		headers: {
-			authorization: internals.validAuth,
-			identification: internals.validIdent			
-		}
-	};
-};
-
-internals.request.getIllegalIndent = function () {
-	return {
-		method: 'GET',
-		url: internals.url,
-		headers: {
-			authorization: internals.validAuth,
-			identification: internals.illegalIndent
-		}
-	};
-};
-
-internals.request.getIllegalToken = function () {
-	return {
-		method: 'GET',
-		url: internals.url,
-		headers: {
-			authorization: internals.illegaAuth,
-			identification: internals.validIdent
-		}
-	};
-};
-
-internals.request.getInvalidIdentUDID = function () {
-	return {
-		method: 'GET',
-		url: internals.url,
-		headers: {
-			authorization: internals.validAuth,
-			identification: internals.invalidIdentUDID
-		}
-	};
-};
-
-internals.request.getInvalidIdentPKey = function () {
-	return {
-		method: 'GET',
-		url: internals.url,
-		headers: {
-			authorization: internals.validAuth,
-			identification: internals.invalidIdentPKey
-		}
-	};
-};
-
-internals.request.getMissingIdent = function () {
-	return {
-		method: 'GET',
-		url: internals.url,
-		headers: {
-			authorization: internals.validAuth
-		}
-	}
-};
-
-internals.request.getMissingToken = function () {
-	return {
-		method: 'GET',
-		url: internals.url,
-		identification: internals.validIdent
-	}
-};
