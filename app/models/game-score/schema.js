@@ -17,8 +17,8 @@ gameDataSchema = {
 	ms: Joi.number(),
 	// monthly date scope
 	md: Joi.number().min(20150201).max(20500000),
-	// total score
-	ts: Joi.number()
+	// best overall score
+	bos: Joi.number()
 };
 
 module.exports = gameDataSchema;

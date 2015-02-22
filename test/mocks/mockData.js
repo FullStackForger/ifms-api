@@ -75,12 +75,12 @@ data.game_scores.push({
 	client_id: oid('54e8cb6fa42352702569eba4'),
 	key: 'level_1_1',
 	ds: 123,
-	dd: '20150222',
+	dd: 20150222,
 	ws: 222,
-	wd: '20150216',
+	wd: 20150216,
 	ms: 222,
-	md: '20150201',
-	ts: 245
+	md: 20150201,
+	bos: 245
 },{
 	game_id: oid('54e7f0ab4885ebe47ce15605'),
 	client_id: oid('54e8cb6fa42352702569eba4'),
@@ -91,7 +91,7 @@ data.game_scores.push({
 	wd: 150216,
 	ms: 200,
 	md: 150201,
-	ts: 200
+	bos: 200
 });
 
 module.exports = data;

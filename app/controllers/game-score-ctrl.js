@@ -11,7 +11,7 @@ var Promise = require('mpromise'),
 
 Ctrl.getScore = function (request, reply) {
 	var credentials = request.auth.credentials;
-	
+
 	if (request.params.key) {
 
 		GameScore.findOneAndParse({
@@ -21,11 +21,10 @@ Ctrl.getScore = function (request, reply) {
 		}).then(function (data) {
 			return reply({
 				key: request.params.key,
-				value: data ? data.value || '' : '',
-				daily: data.ds || 0,
-				weekly: data.ws || 0,
-				monthly: data.ms || 0,
-				total: data.ts || 0
+				daily: data ? data.ds : 0 || 0,
+				weekly: data ? data.ws : 0 || 0,
+				monthly: data ? data.ms : 0 || 0,
+				best: data ? data.bos : 0 || 0
 			});
 		}).onReject(function (error) {
 			return reply(Boom.badImplementation(error), null, 'game-score-ctrl');
@@ -38,9 +37,14 @@ Ctrl.getScore = function (request, reply) {
 			client_id: credentials.client._id			
 		}).then(function (dataArr) {
 			var replyArr = [];
-			dataArr.forEach(function (gamedata) {
-				replyArr.push(gamedata);
-				// todo: parse it to { daily: weakly: monthly: total }
+			dataArr.forEach(function (data) {
+				replyArr.push({
+					key: data.key,
+					daily: data ? data.ds : 0 || 0,
+					weekly: data ? data.ws : 0 || 0,
+					monthly: data ? data.ms : 0 || 0,
+					best: data ? data.bos : 0 || 0
+				});
 			});
 			return reply(replyArr);
 		}).onReject(function (error) {
