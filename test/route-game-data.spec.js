@@ -18,7 +18,7 @@ var Code = require('code'),
 	JWTAuth = require('../app/strategies/jwt-auth'),
 	GameData = require('../app/models/game-data');
 
-describe('Route \/game\/data - reading data', function () {
+describe('Route \/game\/data\/{key?} - reading data', function () {
 
 	before(function (done) {
 		internals.before(done);
@@ -69,7 +69,7 @@ describe('Route \/game\/data - reading data', function () {
 });
 
 
-describe('Route \/game\/data - saving data', function () {
+describe('Route \/game\/data\/{key?} - saving data', function () {
 
 	before(function (done) {
 		internals.before(done);
