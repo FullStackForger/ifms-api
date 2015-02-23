@@ -7,8 +7,8 @@ module.exports = {
 	 * @returns {String}
 	 */
 	toBase64: function (ident) {
-		var chain = 'Ident ' + ident.udid + ':' + ident.pkey;
-		return (new Buffer(chain, 'utf8')).toString('base64');
+		var chain = ident.udid + ':' + ident.pkey;
+		return 'Ident ' + (new Buffer(chain, 'utf8')).toString('base64');
 	},
 
 	/**
