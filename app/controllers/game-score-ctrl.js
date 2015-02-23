@@ -10,6 +10,11 @@ var Moment = require('moment'),
 	Ctrl = module.exports = {},
 	internals = {};
 
+Ctrl.getScoreRank = function (request, reply) {
+	Boom.badRequest('not implemented yet');
+};
+
+
 Ctrl.getScore = function (request, reply) {
 	var credentials = request.auth.credentials;
 

@@ -23,22 +23,32 @@ GameRoutes.dataPOST = {
 };
 
 
+GameRoutes.scoreRankGET = {
+	path: '/game/score/{key}/rank/{period?}',
+	method: ['GET'],
+	config: {
+		auth: 'jwt-auth',
+		description: 'Retrieves game score rank for an authorised user',
+		handler: GameScoreCtrl.getScoreRank
+	}
+};
+
 GameRoutes.scoreGET = {
 	path: '/game/score/{key?}',
 	method: ['GET'],
 	config: {
 		auth: 'jwt-auth',
-		description: 'Authenticates user or client returning Access Token',
+		description: 'Retrieves game single score or all scores for an authorised user',
 		handler: GameScoreCtrl.getScore
 	}
-};
+}
 
 GameRoutes.scorePOST = {
 	path: '/game/score',
 	method: ['POST'],
 	config: {
 		auth: 'jwt-auth',
-		description: 'Authenticates user or client returning Access Token',
+		description: 'Saves game single score of an authorised user',
 		handler: GameScoreCtrl.saveScore
 	}
 };
