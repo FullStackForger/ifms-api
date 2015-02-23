@@ -11,6 +11,7 @@ userSchema = {
 	locale: Joi.string(), // can be extracted from facebook
 	registered: Joi.date().raw,
 	updated: Joi.date().raw,
+	// array of UDIDs
 	clients: Joi.array().includes(Joi.string())
 };
 

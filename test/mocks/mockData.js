@@ -4,9 +4,11 @@ var moment = require('moment'),
 	oid = require('mongodb').ObjectID.createFromHexString,
 	bcrypt = require('bcrypt');
 
+/* ---------[ users ]-------------------- */
+
 data.users = [];
 data.users.push({
-	_id: oid('54e50dd551631fc64f6c2fe9'),
+	_id: oid('2e7eeeeeeeeeeeeeeeeeeee1'),
 	uname: 'KillerMachine',
 	fname: 'John',
 	lname: 'Smith',
@@ -21,13 +23,15 @@ data.users.push({
 	clients: ['aaabbbccc']
 });
 
+/* ---------[ clients ]-------------------- */
+
 data.clients = [];
 data.clients.push({
-	_id: oid('54e8cb6fa42352702569eba4'),
-	user_id: oid('54e50dd551631fc64f6c2fe9'),
+	_id: oid('ccccccccccccccccccccccc1'),
+	user_id: oid('2e7eeeeeeeeeeeeeeeeeeee1'),
 	udid: 'aaabbbccc',
 	games: [{
-		game_id: oid('54e7f0ab4885ebe47ce15605'),
+		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
 		title: 'Killer Blood',
 		token: {
 			signature: 'aaabbbccc-token',
@@ -35,21 +39,57 @@ data.clients.push({
 		}
 	}]
 });
-data.clients.push({	
-	udid: 'xxxyyyzzz',
+data.clients.push({
+	_id: oid('ccccccccccccccccccccccc2'),
+	udid: 'zzzxxxyyy-2',
 	games: [{
-		game_id: oid('54e7f0ab4885ebe47ce15605'),
+		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
 		title: 'Killer Blood',
 		token: {
-			signature: 'zzzxxxyyy-token',
+			signature: 'zzzxxxyyy-token-2',
+			expiry: date
+		}
+	}]
+},{
+	_id: oid('ccccccccccccccccccccccc3'),
+	udid: 'zzzxxxyyy-3',
+	games: [{
+		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+		title: 'Killer Blood',
+		token: {
+			signature: 'zzzxxxyyy-token-3',
+			expiry: date
+		}
+	}]
+},{
+	_id: oid('ccccccccccccccccccccccc4'),
+	udid: 'zzzxxxyyy-4',
+	games: [{
+		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+		title: 'Killer Blood',
+		token: {
+			signature: 'zzzxxxyyy-token-4',
+			expiry: date
+		}
+	}]
+},{
+	_id: oid('ccccccccccccccccccccccc5'),
+	udid: 'xxxyyyzzz',
+	games: [{
+		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+		title: 'Killer Blood',
+		token: {
+			signature: 'zzzxxxyyy-token-5',
 			expiry: date
 		}
 	}]
 });
 
+/* ---------[ games ]-------------------- */
+
 data.games = [];
 data.games.push({
-	_id: oid('54e7f0ab4885ebe47ce15605'),
+	_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
 	title: 'Killer Blood',
 	pkey: 'gid01234',
 	description: 'super killer gangsta game',
@@ -57,23 +97,28 @@ data.games.push({
 	updated: date
 });
 
+/* ---------[ game data ]-------------------- */
+
 data.game_data = [];
 data.game_data.push({
-	game_id: oid('54e7f0ab4885ebe47ce15605'),
-	client_id: oid('54e8cb6fa42352702569eba4'),
+	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+	client_id: oid('ccccccccccccccccccccccc1'),
 	key: 'save_001',
 	value: 'sample saved data string'
 },{
-	game_id: oid('54e7f0ab4885ebe47ce15605'),
-	client_id: oid('54e8cb6fa42352702569eba4'),
+	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+	client_id: oid('ccccccccccccccccccccccc1'),
 	key: 'save_002',
 	value: 'second sample saved data string'
 });
 
+/* ---------[ game score ]-------------------- */
+
+//client 1
 data.game_scores = [];
 data.game_scores.push({
-	game_id: oid('54e7f0ab4885ebe47ce15605'),
-	client_id: oid('54e8cb6fa42352702569eba4'),
+	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+	client_id: oid('ccccccccccccccccccccccc1'),
 	key: 'level_1_1',
 	ds: 111,
 	// yesterday
@@ -85,8 +130,8 @@ data.game_scores.push({
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
 	bos: 444
 },{
-	game_id: oid('54e7f0ab4885ebe47ce15605'),
-	client_id: oid('54e8cb6fa42352702569eba4'),
+	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+	client_id: oid('ccccccccccccccccccccccc1'),
 	key: 'level_1_2',
 	ds: 2010,
 	dd: parseInt(moment().startOf('day').format('YYMMDD')),
@@ -97,4 +142,60 @@ data.game_scores.push({
 	bos: 2040
 });
 
+//more clients with level_1_1
+data.game_scores.push({
+	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+	client_id: oid('ccccccccccccccccccccccc2'),
+	key: 'level_1_1',
+	ds: 10,
+	// yesterday
+	dd: parseInt(moment().startOf('today').format('YYMMDD')),
+	ws: 10,
+	// week starts form Monday!
+	wd: parseInt(moment().startOf('week').subtract(6, 'days').format('YYMMDD')),
+	ms: 10,
+	md: parseInt(moment().startOf('month').format('YYMMDD')),
+	bos: 10
+},{
+	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+	client_id: oid('ccccccccccccccccccccccc3'),
+	key: 'level_1_1',
+	ds: 20,
+	// yesterday
+	dd: parseInt(moment().startOf('today').format('YYMMDD')),
+	ws: 20,
+	// week starts form Monday!
+	wd: parseInt(moment().startOf('week').subtract(6, 'days').format('YYMMDD')),
+	ms: 20,
+	md: parseInt(moment().startOf('month').format('YYMMDD')),
+	bos: 20
+},{
+	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+	client_id: oid('ccccccccccccccccccccccc4'),
+	key: 'level_1_1',
+	ds: 1000,
+	// yesterday
+	dd: parseInt(moment().startOf('today').format('YYMMDD')),
+	ws: 1000,
+	// week starts form Monday!
+	wd: parseInt(moment().startOf('week').format('YYMMDD')),
+	ms: 1000,
+	md: parseInt(moment().startOf('month').format('YYMMDD')),
+	bos: 1000
+},{
+	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
+	client_id: oid('ccccccccccccccccccccccc5'),
+	key: 'level_1_1',
+	ds: 2000,
+	// yesterday
+	dd: parseInt(moment().startOf('today').format('YYMMDD')),
+	ws: 2000,
+	// week starts form Monday!
+	wd: parseInt(moment().startOf('week').format('YYMMDD')),
+	ms: 2000,
+	md: parseInt(moment().startOf('month').format('YYMMDD')),
+	bos: 2000
+});
+
+//client 3
 module.exports = data;
