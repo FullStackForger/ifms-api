@@ -62,7 +62,7 @@ describe('Route \/game\/score\/{key}\/rank\/{scope?}', function () {
 
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
-			expect(parsed.scope).to.be.equal('best');
+			expect(parsed.scope).to.be.equal('monthly');
 			expect(parsed.rank).to.be.equal(2);
 			done();
 		});
@@ -91,7 +91,9 @@ describe('Route \/game\/score\/{key}\/rank\/{scope?}', function () {
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
 			expect(parsed.scope).to.be.equal('daily');
-			expect(parsed.rank).to.be.equal(2);
+			
+			// first mocks score is from yesterday
+			expect(parsed.rank).to.be.equal(4);
 			done();
 		});
 	});
@@ -108,8 +110,7 @@ internals.before = function (done) {
 			options: JWTAuth
 		}],
 		routes : [
-			dataRoutes.scoreGET,
-			dataRoutes.scorePOST
+			dataRoutes.scoreRankGET
 		]
 	}, done);
 };

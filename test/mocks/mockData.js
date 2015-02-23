@@ -125,7 +125,7 @@ data.game_scores.push({
 	dd: parseInt(moment().startOf('today').subtract(1, 'd').format('YYMMDD')),
 	ws: 222,
 	// week starts form Monday!
-	wd: parseInt(moment().startOf('week').subtract(6, 'days').format('YYMMDD')),
+	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 333,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
 	bos: 444
@@ -136,7 +136,7 @@ data.game_scores.push({
 	ds: 2010,
 	dd: parseInt(moment().startOf('day').format('YYMMDD')),
 	ws: 2020,
-	wd: parseInt(moment().startOf('week').subtract(6, 'days').format('YYMMDD')),
+	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 2030,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
 	bos: 2040
@@ -152,7 +152,7 @@ data.game_scores.push({
 	dd: parseInt(moment().startOf('today').format('YYMMDD')),
 	ws: 10,
 	// week starts form Monday!
-	wd: parseInt(moment().startOf('week').subtract(6, 'days').format('YYMMDD')),
+	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 10,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
 	bos: 10
@@ -165,7 +165,7 @@ data.game_scores.push({
 	dd: parseInt(moment().startOf('today').format('YYMMDD')),
 	ws: 20,
 	// week starts form Monday!
-	wd: parseInt(moment().startOf('week').subtract(6, 'days').format('YYMMDD')),
+	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 20,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
 	bos: 20

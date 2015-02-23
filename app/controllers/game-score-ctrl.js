@@ -1,18 +1,11 @@
 var Moment = require('moment'),
 	Promise = require('mpromise'),
 	Boom = require('boom'),
-	User = require('../models/user'),
-	Game = require('../models/game'),
 	GameScore = require('../models/game-score'),
 	Config = require('../config'),
-	JWS = require('jws'),	
 	secret = "environment_scpecific_secret", //todo: move to config
 	Ctrl = module.exports = {},
 	internals = {};
-
-Ctrl.getScoreRank = function (request, reply) {
-	reply(Boom.badRequest('not implemented yet'));
-};
 
 Ctrl.getScore = function (request, reply) {
 	var credentials = request.auth.credentials;
