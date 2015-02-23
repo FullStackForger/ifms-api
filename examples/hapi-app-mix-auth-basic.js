@@ -3,8 +3,8 @@ var Hapi = require('hapi'),
 	Sinon = require('sinon'),
 	Promise = require('mpromise'),
 
-	mockData = require('../test/mocks/mockData'),
-	mockConfig = require('../test/mocks/mockConfig'),
+	mockData = require('../test/test-mocks/mockData'),
+	mockConfig = require('../test/test-mocks/mockConfig'),
 	internals = {},
 
 // test actors

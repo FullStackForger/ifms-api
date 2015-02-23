@@ -10,7 +10,7 @@ var Code = require('code'),
 	it = lab.it,
 	before = lab.before,
 
-	helpers = require('./helpers/index'),
+	helpers = require('./test-helpers/index'),
 	internals = {},
 
 	// test actors

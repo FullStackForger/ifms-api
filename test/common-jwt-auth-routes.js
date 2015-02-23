@@ -6,7 +6,7 @@ var Code = require('code'),
 	it = lab.it,
 	before = lab.before,
 
-	helpers = require('./helpers/index'),
+	helpers = require('./test-helpers/index'),
 
 	// test actors
 	dataRoutes = require('../app/routes/game-routes'),

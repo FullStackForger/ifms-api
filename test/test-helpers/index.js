@@ -4,8 +4,8 @@ var Hapi = require('hapi'),
 	MixSchema = require('hapi-app-mix-auth'),
 	Config = require('../../app/config'),
 
-	mockData = require('../mocks/mockData'),
-	mockConfig = require('../mocks/mockConfig'),
+	mockData = require('../test-mocks/mockData'),
+	mockConfig = require('../test-mocks/mockConfig'),
 	
 	externals = module.exports = {},	
 	internals = {};
