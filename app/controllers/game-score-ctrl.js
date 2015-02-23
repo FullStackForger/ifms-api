@@ -90,7 +90,7 @@ Ctrl.saveScore = function (request, reply) {
 };
 
 internals.startOfToday = parseInt(Moment().startOf('day').format('YYMMDD'));
-internals.startOfTheWeek = parseInt(Moment().startOf('week').subtract(6, 'days').format('YYMMDD'));
+internals.startOfTheWeek = parseInt(Moment().startOf('week').format('YYMMDD'));
 internals.startOfTheMonth = parseInt(Moment().startOf('month').format('YYMMDD'));
 internals.parseScoreToReply = function (key, data) {
 	return {
