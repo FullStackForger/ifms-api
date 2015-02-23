@@ -1,4 +1,5 @@
-var data = {},
+var moment = require('moment'),
+	data = {},
 	date = new Date(),
 	oid = require('mongodb').ObjectID.createFromHexString,
 	bcrypt = require('bcrypt');
@@ -74,24 +75,26 @@ data.game_scores.push({
 	game_id: oid('54e7f0ab4885ebe47ce15605'),
 	client_id: oid('54e8cb6fa42352702569eba4'),
 	key: 'level_1_1',
-	ds: 123,
-	dd: 20150222,
+	ds: 111,
+	// yesterday
+	dd: parseInt(moment().startOf('today').subtract(1, 'd').format('YYMMDD')),
 	ws: 222,
-	wd: 20150216,
-	ms: 222,
-	md: 20150201,
-	bos: 245
+	// week starts form Monday!
+	wd: parseInt(moment().startOf('week').subtract(6, 'days').format('YYMMDD')),
+	ms: 333,
+	md: parseInt(moment().startOf('month').format('YYMMDD')),
+	bos: 444
 },{
 	game_id: oid('54e7f0ab4885ebe47ce15605'),
 	client_id: oid('54e8cb6fa42352702569eba4'),
 	key: 'level_1_2',
-	ds: 111,
-	dd: 150222,
-	ws: 189,
-	wd: 150216,
-	ms: 200,
-	md: 150201,
-	bos: 200
+	ds: 2010,
+	dd: parseInt(moment().startOf('day').format('YYMMDD')),
+	ws: 2020,
+	wd: parseInt(moment().startOf('week').subtract(6, 'days').format('YYMMDD')),
+	ms: 2030,
+	md: parseInt(moment().startOf('month').format('YYMMDD')),
+	bos: 2040
 });
 
 module.exports = data;

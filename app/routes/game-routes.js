@@ -34,7 +34,7 @@ GameRoutes.scoreGET = {
 };
 
 GameRoutes.scorePOST = {
-	path: '/game/score/',
+	path: '/game/score',
 	method: ['POST'],
 	config: {
 		auth: 'jwt-auth',

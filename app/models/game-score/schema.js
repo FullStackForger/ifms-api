@@ -8,15 +8,15 @@ gameDataSchema = {
 	// daily score
 	ds: Joi.number(),   
 	// daily date scope, eg: 20150222
-	dd: Joi.number().min(20150201).max(20500000),
+	dd: Joi.number().min(150201).max(500000),
 	// daily score
 	ws: Joi.number(),
 	// daily date scope
-	wd: Joi.number().min(20150201).max(20500000),
+	wd: Joi.number().min(150201).max(500000),
 	// monthly score
 	ms: Joi.number(),
 	// monthly date scope
-	md: Joi.number().min(20150201).max(20500000),
+	md: Joi.number().min(150201).max(500000),
 	// best overall score
 	bos: Joi.number()
 };
