@@ -24,7 +24,7 @@ GameRoutes.dataPOST = {
 
 
 GameRoutes.scoreRankGET = {
-	path: '/game/score/{key}/rank/{period?}',
+	path: '/game/score/{key}/rank/{scope?}',
 	method: ['GET'],
 	config: {
 		auth: 'jwt-auth',

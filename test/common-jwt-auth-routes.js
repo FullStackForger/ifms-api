@@ -13,16 +13,24 @@ var Code = require('code'),
 	JWTAuth = require('../app/strategies/jwt-auth'),
 	testGroups = [
 		{
-			scope: 'Route \/game\/data',
-			url: '/game/data/',
+			scope: 'Route \/game\/data\/{key?}',
+			url: '/game/data',
 			routes: [
 				dataRoutes.dataGET,
 				dataRoutes.dataPOST
 			]
 		},
 		{
-			scope: 'Route \/game\/score',
-			url: '/game/score/',
+			scope: 'Route \/game\/score\/{key?}',
+			url: '/game/score',
+			routes: [
+				dataRoutes.scoreGET,
+				dataRoutes.scorePOST
+			]
+		},
+		{
+			scope: 'Route \/game\/score\/{key}\/rank\/{scope?}',
+			url: '/game/score/level_1_1/rank/best',
 			routes: [
 				dataRoutes.scoreGET,
 				dataRoutes.scorePOST
