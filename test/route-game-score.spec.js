@@ -1,6 +1,5 @@
 var Hoek = require('hoek'),
 	Code = require('code'),
-	Sinon = require('sinon'),
 	Promise = require('mpromise'),
 
 	// test suite helpers
@@ -16,8 +15,7 @@ var Hoek = require('hoek'),
 
 	// test actors
 	dataRoutes = require('../app/routes/game-routes'),
-	JWTAuth = require('../app/strategies/jwt-auth'),
-	GameData = require('../app/models/game-data');
+	JWTAuth = require('../app/strategies/jwt-auth');
 
 
 describe('Route \/game\/score\/{key?} - reading scores', function () {
