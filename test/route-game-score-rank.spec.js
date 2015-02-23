@@ -20,7 +20,7 @@ var Hoek = require('hoek'),
 	GameData = require('../app/models/game-data');
 
 
-describe('Route \/game\/score\/{key?}\/rank\/{scope?}', function () {
+describe('Route \/game\/score\/{key}\/rank\/{scope?}', function () {
 	
 	before(function (done) {
 		internals.before(done);

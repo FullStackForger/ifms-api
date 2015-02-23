@@ -13,7 +13,7 @@ var Code = require('code'),
 	JWTAuth = require('../app/strategies/jwt-auth'),
 	testGroups = [
 		{
-			scope: 'Route \/game\/data\/{key?}',
+			scope: '\/game\/data\/{key?}',
 			url: '/game/data',
 			routes: [
 				dataRoutes.dataGET,
@@ -21,7 +21,7 @@ var Code = require('code'),
 			]
 		},
 		{
-			scope: 'Route \/game\/score\/{key?}',
+			scope: '\/game\/score\/{key?}',
 			url: '/game/score',
 			routes: [
 				dataRoutes.scoreGET,
@@ -29,11 +29,10 @@ var Code = require('code'),
 			]
 		},
 		{
-			scope: 'Route \/game\/score\/{key}\/rank\/{scope?}',
-			url: '/game/score/level_1_1/rank/best',
+			scope: '\/game\/score\/{key}\/rank\/{scope?}',
+			url: '/game/score/level_1_1/rank',
 			routes: [
-				dataRoutes.scoreGET,
-				dataRoutes.scorePOST
+				dataRoutes.scoreRankGET
 			]
 		}
 	];
@@ -43,7 +42,7 @@ testGroups.forEach(function (testGroup) {
 
 	var requestUrl = testGroup.url;
 	
-	describe(testGroup.scope, function () {
+	describe('Route authorisation: ' + testGroup.scope, function () {
 	
 		before(function (done) {
 			helpers.initServer({
