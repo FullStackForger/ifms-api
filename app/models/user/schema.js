@@ -7,10 +7,11 @@ userSchema = {
 	fname: Joi.string(),
 	lname: Joi.string(),
 	password: Joi.string(),
-	email: Joi.string(),	
+	email: Joi.string(),
 	locale: Joi.string(), // can be extracted from facebook
-	registered: Joi.date().raw,
-	updated: Joi.date().raw,
+	created: Joi.date(),
+	updated: Joi.date(),
+	facebook: Joi.object(),
 	// array of UDIDs
 	clients: Joi.array().includes(Joi.string())
 };

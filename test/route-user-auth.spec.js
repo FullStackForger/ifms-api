@@ -14,6 +14,7 @@ var Code = require('code'),
 	internals = {},
 		
 	// test actors
+	UserModel = require('../app/models/user'),
 	MixAuth = require('../app/strategies/mix-auth'),
 	authRoute = require('../app/routes/user-routes').auth;
 
@@ -35,14 +36,42 @@ describe('Route \/user\/auth', function () {
 	});
 	
 });
-	
+
 describe('Route \/user\/auth - basic authorisation', function () {
 
 	before(function (done) {
 		internals.before(done);
 	});
 
-    it('should reply with token for Basic authorisation', function (done) {
+	// note: this test has been moved outside as it was logging errors
+	it('should reply with bad implementation for new client of registered user', function (done) {
+		var credentials = 'KillerMachine:password123',
+			signature = 'new-user-UDID:gid01234',
+			authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers },
+
+			saveStub = Sinon.stub(UserModel.prototype.__proto__, "save", function () {
+				//throw new Error('something cracked!');
+				return (new Promise()).reject(new Error('kabbooooom'));
+			});
+
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(500);
+			saveStub.restore();
+			done();
+		});
+	});
+});
+
+describe('Route \/user\/auth - basic authorisation', function () {
+
+	before(function (done) {
+		internals.before(done);
+	});
+
+    it('should reply with token for registered user', function (done) {
 	    var credentials = 'KillerMachine:password123',
 		    signature = 'aaabbbccc:gid01234',
 		    authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
@@ -57,7 +86,21 @@ describe('Route \/user\/auth - basic authorisation', function () {
 	    });
     });
 
+	it('should reply with token for new client of registered user', function (done) {
+		var credentials = 'KillerMachine:password123',
+			signature = 'new-user-UDID:gid01234',
+			authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
 
+		//authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(200);
+			done();
+		});
+	});
+	
 	it('should not authorise with bad identification signature', function (done) {
 		var credentials = 'KillerMachine:password123',
 			signature = 'BAD SIGNATURE',
@@ -110,9 +153,10 @@ describe('Route \/user\/auth - guest authorisation', function () {
 	});
 
 	it('should reply with token for new Guest client', function (done) {
-		var signature = 'zzz-xxx-yyy:gid01234',
-			authString = 'Guest ' + (new Buffer('udid:zzz-xxx-yyy', 'utf8').toString('base64')),
-			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+		var authSignature = 'udid:zzz-xxx-yyy',
+			indentSignature = 'zzz-xxx-yyy:gid01234',
+			authString = 'Guest ' + (new Buffer(authSignature, 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(indentSignature, 'utf8').toString('base64')),
 			headers = { authorization: authString, identification: identString },
 			request = { method: 'GET', url: '/user/auth', headers: headers };
 

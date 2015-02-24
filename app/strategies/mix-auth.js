@@ -51,15 +51,14 @@ function validateFunction (method, authData, callback) {
 				});
 			
 			break;
-		
+
+		/*
+		 // todo: work in progress (find or create user first then update data from FB then callback)
+		 // use wreck to call FB, good example -> https://github.com/yoitsro/hapi-access-token
 		case 'oauth':
-
-			// todo: work in progress (find or create user first then update data from FB then callback)
-			// use wreck to call FB, good example -> https://github.com/yoitsro/hapi-access-token
 			callback(null, true, {});
-
 			break;
-
+		*/
 		case 'guest':
 
 			internals
@@ -71,10 +70,6 @@ function validateFunction (method, authData, callback) {
 					callback(error, false, credentials);
 				});
 
-			break;
-		
-		default:
-			callback(null, false);
 			break;
 	}
 }
@@ -131,6 +126,7 @@ internals.confirmUserClient = function(credentials) {
 	} else {
 		user.clients.push(ident.udid);
 		user.save().then(function (user) {
+			credentials.user = user;
 			promise.fulfill(credentials);
 		}).onReject(function (error) {
 			promise.reject(error);
