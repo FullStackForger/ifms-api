@@ -1,16 +1,24 @@
 var Hoek = require('hoek'),
 	Joi = require('joi'),
-	config = require('./defaults'),
+	defaults = require('./defaults'),
+	configJson = require('./config.json'),
 	schema = require('./schema');
 
 
-config = Hoek.applyToDefaults(config, require('./config.json'));
-Joi.validate(config, schema, function (err, validConfig) {
-	if (err !== null) {
-		throw new Error(err);
+// init() is used for testing specs
+function init() {
+	var config = Hoek.applyToDefaults(defaults(), configJson),
+		validated = Joi.validate(config, schema);
+
+	if (validated.error) {
+		throw new Error(validated.error);
 	}
-	config = validConfig;
-});
+
+	config = validated.value;
+	config.init = init;
+
+	return validated.value;
+}
 
 //console.log(JSON.stringify(config, null, 2));
-module.exports = config;
+module.exports = init();

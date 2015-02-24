@@ -16,7 +16,7 @@ var Hoek = require('hoek'),
 	Ident = require('../app/helpers/ident');
 
 
-describe('indent helper', function () {
+describe('Application indent helper', function () {
 
 	var mockIdentObject = {udid: 'device-udid', pkey: 'game-public-key'},
 		mockIdentString = 'Ident ZGV2aWNlLXVkaWQ6Z2FtZS1wdWJsaWMta2V5';
