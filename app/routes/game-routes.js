@@ -1,6 +1,6 @@
 var GameDataCtrl = require('../controllers/game-data-ctrl'),
 	GameScoreCtrl = require('../controllers/game-score-ctrl'),
-	GameScoreRankCtrl = require('../controllers/game-score-rank-ctrl'),
+	GameScoreRankCtrl = require('../controllers/game-rank-ctrl'),
 	GameRoutes = {};
 
 GameRoutes.dataGET = {
@@ -23,14 +23,13 @@ GameRoutes.dataPOST = {
 	}
 };
 
-
-GameRoutes.scoreRankGET = {
-	path: '/game/score/{key}/rank/{scope?}',
+GameRoutes.rankGET = {
+	path: '/game/rank/{scope}/{key?}',
 	method: ['GET'],
 	config: {
 		auth: 'jwt-auth',
 		description: 'Retrieves game score rank for an authorised user',
-		handler: GameScoreRankCtrl.getScoreRank
+		handler: GameScoreRankCtrl.getRank
 	}
 };
 

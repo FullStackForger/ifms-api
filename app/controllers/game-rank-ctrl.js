@@ -8,16 +8,12 @@ var Hoek = require('hoek'),
 	Ctrl = module.exports = {},
 	internals = {};
 
-Ctrl.getScoreRank = function (request, reply) {
+Ctrl.getRank = function (request, reply) {
 	var allowedScopes = ['daily', 'weekly', 'monthly', 'best'],
-		credentials = request.auth.credentials,		
-		scope = 'best', 
+		credentials = request.auth.credentials,
+		scope = request.params.scope,
 		baseQuery, query, replyData = {};
 
-	if (request.params.scope) {
-		scope = request.params.scope;
-	}
-	
 	if (allowedScopes.indexOf(scope) === -1) {
 		return reply(Boom.badRequest('invalid query'), request.params)
 	}
