@@ -29,10 +29,10 @@ var Code = require('code'),
 			]
 		},
 		{
-			scope: '\/game\/score\/{key}\/rank\/{scope?}',
-			url: '/game/score/level_1_1/rank',
+			scope: '\/game\/rank\/{scope}\/{key?}',
+			url: '/game/rank/best/level_1_1',
 			routes: [
-				dataRoutes.scoreRankGET
+				dataRoutes.rankGET
 			]
 		}
 	];
