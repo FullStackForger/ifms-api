@@ -55,7 +55,7 @@ Ctrl.saveData = function (request, reply) {
 	GameData.findOneAndParse({
 		game_id: credentials.game._id,
 		client_id: credentials.client._id,
-		key: request.params.key
+		key: request.payload.key
 	}).then(function (data) {
 		
 		if (data) {

@@ -14,7 +14,7 @@ GameRoutes.dataGET = {
 };
 
 GameRoutes.dataPOST = {
-	path: '/game/data/{key}',
+	path: '/game/data',
 	method: ['POST'],
 	config: {
 		auth: 'jwt-auth',

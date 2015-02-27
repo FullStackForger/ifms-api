@@ -69,7 +69,7 @@ describe('Route \/game\/data\/{key?} - reading data', function () {
 });
 
 
-describe('Route \/game\/data\/{key?} - saving data', function () {
+describe('Route \/game\/data - saving data', function () {
 
 	before(function (done) {
 		internals.before(done);
@@ -78,10 +78,10 @@ describe('Route \/game\/data\/{key?} - saving data', function () {
 	it('should insert new data', function (done) {
 		
 		var request = helpers.request.getValidRequest(),
-			dataToSave = { value: 'lorem ipsum'};
+			dataToSave = { key: 'save_003', value: 'lorem ipsum'};
 		// key param is optional
 
-		request.url = '/game/data/save_003';
+		request.url = '/game/data';
 		request.method = 'POST';
 		request.payload = dataToSave;
 		
@@ -97,10 +97,10 @@ describe('Route \/game\/data\/{key?} - saving data', function () {
 	it('should update existing data', function (done) {
 		
 		var request = helpers.request.getValidRequest(),
-			dataToSave = { value: 'lorem ipsum'};
+			dataToSave = { key: 'save_002', value: 'lorem ipsum'};
 		// key param is optional
 
-		request.url = '/game/data/save_002';
+		request.url = '/game/data';
 		request.method = 'POST';
 		request.payload = dataToSave;
 
