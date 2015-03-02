@@ -29,7 +29,7 @@ function validateFunc (token, callback) {
 			callback(null, true, credentials);
 		})
 		.onReject(function (error) {
-			callback(null, false, credentials);
+			callback(error, false, credentials);
 		});
 }
 
@@ -48,6 +48,10 @@ internals.confirmGame = function (credentials) {
 	Game.findOneAndParse({
 		pkey: credentials.ident.pkey		
 	}).then(function (game) {
+		if (game == null) {
+			return promise.reject(null);
+		}
+
 		credentials.game = game;
 		promise.fulfill(credentials);
 	}).onReject(function (error) {
@@ -66,13 +70,11 @@ internals.confirmClientAndToken = function (credentials) {
 			'token.signature': credentials.token
 		}}
 	}).then(function (client) {
-		credentials.client = client;
-		
 		if (client == null) {
-			promise.reject(credentials);
-			return;			
+			return promise.reject(null);
 		}
 		
+		credentials.client = client;
 		promise.fulfill(credentials);
 	}, function (error) {
 		promise.reject(error);
