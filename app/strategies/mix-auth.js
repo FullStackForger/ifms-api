@@ -80,21 +80,13 @@ module.exports = {
 
 internals.confirmUser = function(credentials) {
 	var promise = new Promise(),
-		password, hash;
-		
-	// extract hash and password
-	try {
-		password = credentials.auth.data.password;
+		password = credentials.auth.data.password,
 		hash = credentials.user.password;
-	} catch (exception) {
-		promise.reject(exception);
-	}
-	
+
 	// verify password
 	bcrypt.compare(password, hash, function (err, match) {
 		if (match === false) {
-			promise.reject(err);
-			return;
+			return promise.reject(err);
 		}
 		promise.fulfill(credentials);
 	});
@@ -107,11 +99,6 @@ internals.confirmUserClient = function(credentials) {
 		user = credentials.user,
 		ident = credentials.ident,
 		confirmed = false;
-
-	// enforce clients
-	if (!user.clients || !Array.isArray(user.clients)) {
-		user.clients = [];
-	}
 
 	// confirm UDID
 	user.clients.forEach(function (udid) {
