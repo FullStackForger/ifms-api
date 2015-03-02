@@ -33,7 +33,6 @@ RankModel.getOneRank = function (queryData) {
 	ScoreModel.findOneAndParse(query).then(function (gameData) {
 		var rankQuery;
 
-		replyData.scope = queryData.scope;
 		replyData.score = internals.getScopedScore(queryData.scope, gameData);
 
 		rankQuery = internals.getScopedRankQuery(queryData.scope, replyData.score);

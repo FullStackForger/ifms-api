@@ -33,7 +33,7 @@ describe('Route \/game\/rank\/{scope}/{key}', function () {
 
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
-			expect(parsed.scope).to.be.equal('best');
+			expect(parsed.score).to.be.equal(444);
 			expect(parsed.rank).to.be.equal(3);
 			done();
 		});
@@ -47,7 +47,7 @@ describe('Route \/game\/rank\/{scope}/{key}', function () {
 
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
-			expect(parsed.scope).to.be.equal('monthly');
+			expect(parsed.score).to.be.equal(333);
 			expect(parsed.rank).to.be.equal(3);
 			done();
 		});
@@ -61,7 +61,7 @@ describe('Route \/game\/rank\/{scope}/{key}', function () {
 
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
-			expect(parsed.scope).to.be.equal('weekly');
+			expect(parsed.score).to.be.equal(222);
 			expect(parsed.rank).to.be.equal(3);
 			done();
 		});
@@ -75,9 +75,8 @@ describe('Route \/game\/rank\/{scope}/{key}', function () {
 
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
-			expect(parsed.scope).to.be.equal('daily');
-
 			// first mocks score is from yesterday
+			expect(parsed.score).to.be.equal(0);			
 			expect(parsed.rank).to.be.equal(4);
 			done();
 		});
