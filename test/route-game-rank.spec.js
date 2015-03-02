@@ -19,7 +19,7 @@ var Hoek = require('hoek'),
 	JWTAuth = require('../app/strategies/jwt-auth');
 
 
-describe('Route \/game\/rank\/{scope}/{key}', {only: true}, function () {
+describe('Route \/game\/rank\/{scope}/{key}', function () {
 
 	before(function (done) {
 		internals.before(done);
@@ -100,15 +100,17 @@ describe('Route \/game\/rank\/{scope}', function () {
 			expect(parsed).to.be.an.array();
 			
 			expect(parsed[0]).to.include({
-				rank: 0,
-				score: 10,
+				key: 'level_1_1',
+				rank: 3,
+				score: 444,
 				leader: 2000
 			});
 
 			expect(parsed[1]).to.include({
+				key: 'level_1_2',
 				rank: 1,
-				score: 2040,
-				leader: 2040
+				leader: 2040,
+				score: 2040
 			});
 			
 			done();
@@ -123,7 +125,21 @@ describe('Route \/game\/rank\/{scope}', function () {
 
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.array();
-			expect(parsed.rank).to.be.equal(2);
+
+			expect(parsed[0]).to.include({
+				key: 'level_1_1',
+				rank: 3,
+				score: 333,
+				leader: 2000
+			});
+
+			expect(parsed[1]).to.include({
+				key: 'level_1_2',
+				rank: 1,
+				leader: 2030,
+				score: 2030
+			});
+			
 			done();
 		});
 	});
@@ -136,20 +152,41 @@ describe('Route \/game\/rank\/{scope}', function () {
 
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.array();
-			expect(parsed.rank).to.be.equal(2);
+
+			expect(parsed[0]).to.include({
+				key: 'level_1_1',
+				rank: 3,
+				score: 222,
+				leader: 2000
+			});
+
+			expect(parsed[1]).to.include({
+				key: 'level_1_2',
+				rank: 1,
+				leader: 2020,
+				score: 2020
+			});
+			
 			done();
 		});
 	});
 
 	it('should reply with array of daily score rankings', function (done) {
 		var request = helpers.request.getValidRequest();
-		request.url = internals.url + '/weekly';
+		request.url = internals.url + '/daily';
 		helpers.server.inject(request, function (response) {
 			var parsed = JSON.parse(response.payload);
 
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.array();
-			expect(parsed.rank).to.be.equal(2);
+
+			expect(parsed[0]).to.include({
+				key: 'level_1_2',
+				rank: 1,
+				score: 2010,
+				leader: 2010
+			});
+			
 			done();
 		});
 	});

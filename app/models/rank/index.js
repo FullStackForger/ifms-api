@@ -27,16 +27,16 @@ RankModel.getOneRank = function (queryData) {
 		key: queryData.key
 	};
 
-	query = Hoek.merge(internals.getScopeFindQuery(queryData.scope), baseQuery);
+	query = Hoek.merge(internals.getScopedFindQuery(queryData.scope), baseQuery);
 
 	// find data by key
 	ScoreModel.findOneAndParse(query).then(function (gameData) {
 		var rankQuery;
 
 		replyData.scope = queryData.scope;
-		replyData.score = internals.getResultScore(queryData.scope, gameData);
+		replyData.score = internals.getScopedScore(queryData.scope, gameData);
 
-		rankQuery = internals.getScopeRankQuery(queryData.scope, replyData.score);
+		rankQuery = internals.getScopedRankQuery(queryData.scope, replyData.score);
 		rankQuery.game_id = queryData.game_id;
 		rankQuery.key = queryData.key;
 
@@ -66,65 +66,73 @@ RankModel.getOneRank = function (queryData) {
 RankModel.getRankSummary = function (queryData) {
 	var scope = queryData.scope,
 		promise = new Promise(),
-		baseQuery, query;
-
-	process.nextTick(function(){
-		promise.fulfill({});
-	});
-	
-	return promise;
-	/*
-	baseQuery = {
-		game_id: credentials.game._id,
-		client_id: credentials.client._id
-	};
+		collectionName = ScoreModel.config.collection,
+		clientScoreQuery = {
+			game_id: queryData.game_id,
+			client_id: queryData.client_id
+		};
 
 	// find data by the key before aggregating
-	query = Hoek.merge(internals.getScopeFindQuery(scope), baseQuery);
-	ScoreModel.findOneAndParse(query).then(function (gameData) {
-		var collectionName = ScoreModel.config.collection,
-			scopeScore = internals.getResultScore(scope, gameData),
-			summaryQuery = [];
+	clientScoreQuery = Hoek.merge(internals.getScopedFindQuery(scope), clientScoreQuery);
+	ScoreModel.find(clientScoreQuery).then(function (scores) {
+		var scopeScores = [],
+			savedScoreData = {},
+			summaryQueryPipeline;
 
-		// todo 1: update current user score to 0 if needed
-
-		// todo 2: move to promises
-
-		// todo 3: move aggregate to static model methods
-
-		summaryQuery.push({
-			$match: { $and : [
-				{ game_id: credentials.game._id },
-				// todo: that should be done for different keys
-				internals.getScopeRankQuery(scope, scopeScore)
-			]}
+		// build scoped scores matrix
+		scores.forEach(function(scoreData) {
+			var score = internals.getScopedScore(scope, scoreData),
+				query = internals.getScopedRankQuery(scope, score);
+				query.key = scoreData.key;
+			
+			// save user data for later merge with aggregated results
+			savedScoreData[scoreData.key] = score;
+			scopeScores.push(query);
 		});
 
-		summaryQuery.push({
-			$group: {
-				_id: "$key",
-				low: { $min: "$" + internals.getScopedField(scope) },
-				high: { $max: "$" + internals.getScopedField(scope) },
-				rank: { $sum: 1 }
+		// build aggregation pipeline
+		summaryQueryPipeline = [
+			{
+				$match: { $and : [
+					{ game_id: queryData.game_id },
+					{ $or: scopeScores }
+				]}
+			},
+			{
+				$group: {
+					_id: "$key",
+					leader: { $max: "$" + internals.getScopedField(scope) },
+					rank: { $sum: 1 }
+				}
+			},{
+				$sort: {
+					_id: 1
+				}
 			}
-		});
+		];
 
-		summaryQuery.push({
-			$sort: {
-				_id: 1
-			}
-		});
-
-		Model.db.driver._native.collection(collectionName, function (error, collection) {
+		// use mongodb driver, hapi-app-mongo-model (monk, mongoskin) doesn't support aggregation
+		Model.db.driver._native.collection(collectionName, function (error, scoreCollection) {
 			if (error) {
 				return promise.reject(error);
 			}
-
-			collection.aggregate(summaryQuery, function (error, resultData) {
+			
+			scoreCollection.aggregate(summaryQueryPipeline, function (error, resultData) {
+				var  finalResult = [];
+				
 				if (error) {
 					return promise.reject(error);
 				}
-				promise.fulfill(resultData);
+
+				// combine data
+				resultData.forEach(function(data) {
+					data.score = savedScoreData[data._id];
+					data.key = data._id;
+					delete data._id;
+					finalResult.push(data);
+				});
+				
+				promise.fulfill(finalResult);
 			});
 		});
 
@@ -133,7 +141,6 @@ RankModel.getRankSummary = function (queryData) {
 	});
 
 	return promise;
-	*/
 };
 
 
@@ -143,7 +150,7 @@ internals.getScopedField = function (scope) {
 			return'ds';
 			break;
 		case 'weekly':
-			return'ds';
+			return'ws';
 		case 'monthly':
 			return 'ms';
 			break;
@@ -154,7 +161,7 @@ internals.getScopedField = function (scope) {
 	}
 };
 
-internals.getScopeFindQuery = function (scope) {
+internals.getScopedFindQuery = function (scope) {
 	var scopeQuery = {};
 
 	switch (scope) {
@@ -176,7 +183,7 @@ internals.getScopeFindQuery = function (scope) {
 	return scopeQuery;
 };
 
-internals.getScopeRankQuery = function (scope, score) {
+internals.getScopedRankQuery = function (scope, score) {
 	var rankQuery = {};
 
 	switch (scope) {
@@ -201,7 +208,7 @@ internals.getScopeRankQuery = function (scope, score) {
 	return rankQuery;
 };
 
-internals.getResultScore = function (scope, gameData) {
+internals.getScopedScore = function (scope, gameData) {
 	var score;
 
 	if (gameData == null) {
@@ -226,38 +233,3 @@ internals.getResultScore = function (scope, gameData) {
 
 	return score;
 };
-/* example aggregate
-db.game_scores.aggregate([
-	{
-		$match: {
-			$and: [
-				{
-					game_id: ObjectId("3e5eeeeeeeeeeeeeeeeeeee1")
-				},
-				{
-					bos: {
-						$gte: 0
-					}
-				}
-			]
-		}
-	},
-	{
-		$group: {
-			_id: "$key",
-			leader: {
-				$max: "$bos"
-			},
-			rank: {
-				$sum: 1
-			}
-		}
-	},
-	{
-		$sort: {
-			value: 1
-		}
-
-	}
-])
- */
