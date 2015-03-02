@@ -29,14 +29,11 @@ Ctrl.authorise = function (request, reply) {
 };
 
 Ctrl.getProfile = function(request, reply) {
-	
-	User.findOne(request.query)
-		.then(function(data) {
-			reply(data);
-		})
-		.onReject(function(error) {
-			reply(Boom.badImplementation(error));
-		});
+	var client = request.auth.credentials.client;
+	reply({
+		uname: client.uname,
+		type: client.user_id ? 'registered' : 'guest'
+	});
 };
 
 internals.verifyGame = function (credentials) {

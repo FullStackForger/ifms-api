@@ -1,7 +1,4 @@
-var Hapi = require('hapi'),
-	Code = require('code'),
-	Sinon = require('sinon'),
-	Promise = require('mpromise'),
+var Code = require('code'),
 	
 	// test suite helpers
 	expect = Code.expect,
@@ -10,135 +7,74 @@ var Hapi = require('hapi'),
 	describe = lab.describe,
 	it = lab.it,
 	before = lab.before,
-	beforeEach = lab.beforeEach,
-	after = lab.after,
-	afterEach = lab.afterEach,
-	 
-	// test actors
-	JWTSchema = require('hapi-auth-bearer-token'),
-	JWTAuth = require('../app/strategies/jwt-auth'),
-	UserModel = require('../app/models/user'),
-	ClientModel = require('../app/models/client'),
-	profileRoute = require('../app/routes/user-routes').profile,
-	plugins = [],
-	
 
-	// helpers
-	mocks = {};
+	internals = {},
+
+	// test actors
+	JWTAuth = require('../app/strategies/jwt-auth'),
+	UserRoutes = require('../app/routes/user-routes'),
+	helpers = require('./test-helpers/index');
 
 describe('Request to \/user\/profile', function () {
-	var stubs = {},
-		server;
-
-	plugins.push({
-		register: require('good'),
-		options: {
-			reporters: [{
-				reporter: require('good-console'),
-				args: [{ log: '*', response: '*', error: '*' }]
-			}]
-		}
-	});
-
-	plugins.push({
-		register: JWTSchema
-	});
-
+	
 	before(function (done) {
-		server = new Hapi.Server();
-		server.connection();
-
-		//server.register(plugins, function (err) {
-		server.register(JWTSchema, function (err) {
-
-			if (err) {
-				throw new Error(err);
-			} else {
-
-				server.auth.strategy("jwt-auth", "bearer-access-token", true, JWTAuth);
-				server.route(profileRoute);
-
-				server.start(function (error) {
-					if (error) { throw new Error(error); }
-					console.log('Server started at ' + server.info.uri);
-					done();
-				});
-			}
-		});
-
+		internals.before(done);
 	});
 
-	beforeEach(function (done) {
-		stubs = {
-			authValidateFunc: Sinon.stub(JWTAuth, "validateFunc", mocks.authValidateFunc),
-			findOneUser : Sinon.stub(UserModel, "findOne", mocks.findOneUser)
-			//todo: Model has to rebuild
-			//findOneClient : Sinon.stub(ClientModel, "findOne", mocks.findOneClient)
-		};
-		done();
-	});
+	it('should respond with registered user profile', function (done) {
+		var request = helpers.request.getValidRequest();
+		request.url = internals.url;
 
-	afterEach(function(done) {
-		stubs.authValidateFunc.restore();
-		stubs.findOneUser.restore();
-		//stubs.findOneClient.restore();
-		done();
-	});
-	
-	it('should respond with error when not authorised (missing authorization header)', function (done) {
-		
-		var request = { method: 'GET', url: '/user/profile'};
-		server.inject(request, function(response) {
-			expect(response.statusCode).to.equal(401);
-			done();
-		});
-		
-	});
-
-	it('should respond with error when not authorised (invalid token)', function (done) {
-
-		var request = { method: 'GET', url: '/user/profile'};
-		server.inject(request, function(response) {
-			expect(response.statusCode).to.equal(401);
-			done();
-		});
-
-	});
-
-	it('should respond with error when not authorised (missing token)', function (done) {
-
-		var request = { method: 'GET', url: '/user/profile', headers: { authorization: 'Bearer' } };
-		server.inject(request, function(response) {
-			expect(response.statusCode).to.equal(401);
-			done();
-		});
-
-	});
-	
-	it('should respond without an error when authorised', function (done) {
-
-		var request = { method: 'GET', url: '/user/profile', headers: { authorization: 'Bearer 1234' } };
-		server.inject(request, function(response) {
+		helpers.server.inject(request, function(response) {
+			var profile = JSON.parse(response.payload);
 			expect(response.statusCode).to.equal(200);
+			expect(profile).to.be.an.object();
+			expect(profile).to.include({
+				uname: 'KillerMachine',
+				type: 'registered'
+			});
 			done();
 		});
 		
 	});
 
+	it('should respond with anonymous user profile', function (done) {
+		var identSignature = (new Buffer('zzzxxxyyy-2:gid01234', 'utf8').toString('base64')),
+			request = {
+				method: 'GET',
+				headers: {
+					authorization: 'Bearer zzzxxxyyy-token-2',
+					identification: 'Ident ' + identSignature					
+				},
+				url: internals.url
+			};
+
+		helpers.server.inject(request, function(response) {
+			var profile = JSON.parse(response.payload);
+			expect(response.statusCode).to.equal(200);
+			expect(profile).to.be.an.object();
+			expect(profile).to.include({
+				uname: 'Guest 1',
+				type: 'guest'
+			});
+			done();
+		});
+
+	});
 });
 
-mocks.authValidateFunc = function (token, callback) {
-	if (token === "1234") {
-		callback(null, true, { token: token })
-	} else {
-		callback(null, false, { token: token })
-	}
-};
+internals.url = '/user/profile';
 
-mocks.findOneUser = function() {
-	return new Promise().fulfill(new UserModel({ _id: 1111, uname: "john", fname: "John", lname: "Smith" }));
-};
-
-mocks.findOneClient = function() {
-	return new Promise().fulfill(new ClientModel({ _id: 2222, udid: "0101010"}));
+internals.before = function (done) {
+	helpers.initServer({
+		strategies : [{
+			name: 'jwt-auth',
+			scheme: 'bearer-access-token',
+			//mode: false,
+			options: JWTAuth
+		}],
+		routes : [
+			UserRoutes.profileGET
+		]
+	}, done);
 };

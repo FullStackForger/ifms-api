@@ -3,7 +3,8 @@ var Joi = require('joi'),
 
 clientSchema = {
 	user_id: Joi.object(),
-	udid: Joi.string(),	
+	udid: Joi.string(),
+	uname: Joi.string(),
 	registered: Joi.date().raw(),
 	updated: Joi.date().raw(),
 	agent: Joi.string(),

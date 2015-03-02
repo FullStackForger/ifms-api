@@ -29,6 +29,7 @@ data.clients = [];
 data.clients.push({
 	_id: oid('ccccccccccccccccccccccc1'),
 	user_id: oid('2e7eeeeeeeeeeeeeeeeeeee1'),
+	uname: 'KillerMachine',
 	udid: 'aaabbbccc',
 	games: [{
 		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
@@ -41,6 +42,7 @@ data.clients.push({
 });
 data.clients.push({
 	_id: oid('ccccccccccccccccccccccc2'),
+	uname: 'Guest 1',
 	udid: 'zzzxxxyyy-2',
 	games: [{
 		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
@@ -52,6 +54,7 @@ data.clients.push({
 	}]
 },{
 	_id: oid('ccccccccccccccccccccccc3'),
+	uname: 'Guest 2',
 	udid: 'zzzxxxyyy-3',
 	games: [{
 		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
@@ -63,6 +66,7 @@ data.clients.push({
 	}]
 },{
 	_id: oid('ccccccccccccccccccccccc4'),
+	uname: 'Guest 3',
 	udid: 'zzzxxxyyy-4',
 	games: [{
 		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
@@ -74,6 +78,7 @@ data.clients.push({
 	}]
 },{
 	_id: oid('ccccccccccccccccccccccc5'),
+	uname: 'Guest 4',
 	udid: 'xxxyyyzzz',
 	games: [{
 		game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),

@@ -11,10 +11,11 @@ UserRoutes.auth = {
 	}
 };
 
-UserRoutes.profile = {
+UserRoutes.profileGET = {
 	path: '/user/profile',
 	method: 'GET',
 	config: {
+		auth: 'jwt-auth',
 		description: "Returns user profile data object",
 		handler: UsrCtrl.getProfile
 	}

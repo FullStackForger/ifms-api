@@ -12,8 +12,10 @@ server.register(plugins, function (err) {
 		server.auth.strategy("facebook", "bell", false, require('./app/strategies/fb-auth'));
 		server.auth.strategy("mix-auth", "mix-auth", false, require('./app/strategies/mix-auth'));
 		server.auth.strategy("jwt-auth", "bearer-access-token", true, require('./app/strategies/jwt-auth'));
+		
 		server.route(require('./app/routes/user-routes').auth);
-		server.route(require('./app/routes/user-routes').profile);
+		server.route(require('./app/routes/user-routes').profileGET);
+		
 		server.start(function (error) {
 			if (error) {
 				throw new Error(error);
