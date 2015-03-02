@@ -15,8 +15,7 @@ var Code = require('code'),
 
 	// test actors
 	dataRoutes = require('../app/routes/game-routes'),
-	JWTAuth = require('../app/strategies/jwt-auth'),
-	GameData = require('../app/models/game-data');
+	JWTAuth = require('../app/strategies/jwt-auth');
 
 describe('Route \/game\/data\/{key?} - reading data', function () {
 

@@ -99,8 +99,8 @@ data.games.push({
 
 /* ---------[ game data ]-------------------- */
 
-data.game_data = [];
-data.game_data.push({
+data.data = [];
+data.data.push({
 	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
 	client_id: oid('ccccccccccccccccccccccc1'),
 	key: 'save_001',
@@ -115,8 +115,8 @@ data.game_data.push({
 /* ---------[ game score ]-------------------- */
 
 //client 1
-data.game_scores = [];
-data.game_scores.push({
+data.score = [];
+data.score.push({
 	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
 	client_id: oid('ccccccccccccccccccccccc1'),
 	key: 'level_1_1',
@@ -143,7 +143,7 @@ data.game_scores.push({
 });
 
 //more clients with level_1_1
-data.game_scores.push({
+data.score.push({
 	game_id: oid('3e5eeeeeeeeeeeeeeeeeeee1'),
 	client_id: oid('ccccccccccccccccccccccc2'),
 	key: 'level_1_1',

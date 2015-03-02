@@ -1,7 +1,7 @@
 var Moment = require('moment'),
 	Promise = require('mpromise'),
 	Boom = require('boom'),
-	GameScore = require('../models/game-score'),
+	GameScore = require('../models/score'),
 	Config = require('../config'),
 	secret = "environment_scpecific_secret", //todo: move to config
 	Ctrl = module.exports = {},

@@ -114,10 +114,10 @@ internals.prepGames = function () {
 
 internals.prepGamesData = function () {
 	var promise = new Promise(),
-		GamesData = Model.db.get('game_data');
+		GamesData = Model.db.get('data');
 
 	GamesData.remove({}, function () {
-		GamesData.insert(mockData.game_data, function () {
+		GamesData.insert(mockData.data, function () {
 			promise.resolve();
 		});
 	});
@@ -127,10 +127,10 @@ internals.prepGamesData = function () {
 
 internals.prepGamesScores = function () {
 	var promise = new Promise(),
-		GamesData = Model.db.get('game_scores');
+		GamesData = Model.db.get('score');
 
 	GamesData.remove({}, function () {
-		GamesData.insert(mockData.game_scores, function () {
+		GamesData.insert(mockData.score, function () {
 			promise.resolve();
 		});
 	});
