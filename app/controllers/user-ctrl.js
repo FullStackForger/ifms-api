@@ -1,6 +1,5 @@
 var Promise = require('mpromise'),
 	Boom = require('boom'),
-	User = require('../models/user'),
 	Game = require('../models/game'),
 	Config = require('../config'),
 	JWS = require('jws'),

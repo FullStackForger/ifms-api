@@ -3,7 +3,7 @@ var Promise = require('mpromise'),
 	Config = require('../config'),
 	secret = "environment_scpecific_secret", //todo: move to config
 	Ctrl = module.exports = {},
-	RankHelper = require('../models/rank');
+	RankHelper = require('../models/rank'),
 	internals = {};
 
 Ctrl.getRank = function (request, reply) {
