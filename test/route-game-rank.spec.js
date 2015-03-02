@@ -34,7 +34,7 @@ describe('Route \/game\/rank\/{scope}/{key}', {only: true}, function () {
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
 			expect(parsed.scope).to.be.equal('best');
-			expect(parsed.rank).to.be.equal(2);
+			expect(parsed.rank).to.be.equal(3);
 			done();
 		});
 	});
@@ -48,7 +48,7 @@ describe('Route \/game\/rank\/{scope}/{key}', {only: true}, function () {
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
 			expect(parsed.scope).to.be.equal('monthly');
-			expect(parsed.rank).to.be.equal(2);
+			expect(parsed.rank).to.be.equal(3);
 			done();
 		});
 	});
@@ -62,7 +62,7 @@ describe('Route \/game\/rank\/{scope}/{key}', {only: true}, function () {
 			expect(response.statusCode).to.equal(200);
 			expect(parsed).to.be.an.object();
 			expect(parsed.scope).to.be.equal('weekly');
-			expect(parsed.rank).to.be.equal(2);
+			expect(parsed.rank).to.be.equal(3);
 			done();
 		});
 	});

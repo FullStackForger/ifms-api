@@ -20,7 +20,7 @@ Ctrl.getRank = function (request, reply) {
 	rankQueryData = {
 		game_id: credentials.game._id,
 		client_id: credentials.client._id,
-		scope: scope		
+		scope: scope
 	};
 	
 	if (request.params.key) {

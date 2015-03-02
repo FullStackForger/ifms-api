@@ -5,6 +5,7 @@ var RankModel = module.exports = {},
 	Model = require('hapi-app-mongo-model'),
 	ScoreModel = require('../score'),
 	Promise = require('mpromise'),
+	DateHelper = require('../../helpers/date'),
 	internals = {};
 
 
@@ -158,13 +159,13 @@ internals.getScopeFindQuery = function (scope) {
 
 	switch (scope) {
 		case 'daily':
-			scopeQuery.dd = internals.startOfToday;
+			scopeQuery.dd = DateHelper.startOfToday;
 			break;
 		case 'weekly':
-			scopeQuery.wd = internals.startOfTheWeek;
+			scopeQuery.wd = DateHelper.startOfTheWeek;
 			break;
 		case 'monthly':
-			scopeQuery.md = internals.startOfTheMonth;
+			scopeQuery.md = DateHelper.startOfTheMonth;
 			break;
 		case 'best':
 		default:
@@ -181,15 +182,15 @@ internals.getScopeRankQuery = function (scope, score) {
 	switch (scope) {
 		case 'daily':
 			rankQuery.ds = { $gte: score };
-			rankQuery.dd = internals.startOfToday;
+			rankQuery.dd = DateHelper.startOfToday;
 			break;
 		case 'weekly':
 			rankQuery.ws = { $gte: score };
-			rankQuery.wd = internals.startOfTheWeek;
+			rankQuery.wd = DateHelper.startOfTheWeek;
 			break;
 		case 'monthly':
 			rankQuery.ms = { $gte: score };
-			rankQuery.md = internals.startOfTheMonth;
+			rankQuery.md = DateHelper.startOfTheMonth;
 			break;
 		case 'best':
 		default:
