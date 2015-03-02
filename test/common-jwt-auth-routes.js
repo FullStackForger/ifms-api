@@ -9,30 +9,38 @@ var Code = require('code'),
 	helpers = require('./test-helpers/index'),
 
 	// test actors
-	dataRoutes = require('../app/routes/game-routes'),
+	UserRoutes = require('../app/routes/user-routes'),
+	GameRoutes = require('../app/routes/game-routes'),
 	JWTAuth = require('../app/strategies/jwt-auth'),
 	testGroups = [
+		{
+			scope: '\/user\/profile',
+			url: '/user/profile',
+			routes: [
+				UserRoutes.profileGET,
+			]
+		},
 		{
 			scope: '\/game\/data\/{key?}',
 			url: '/game/data',
 			routes: [
-				dataRoutes.dataGET,
-				dataRoutes.dataPOST
+				GameRoutes.dataGET,
+				GameRoutes.dataPOST
 			]
 		},
 		{
 			scope: '\/game\/score\/{key?}',
 			url: '/game/score',
 			routes: [
-				dataRoutes.scoreGET,
-				dataRoutes.scorePOST
+				GameRoutes.scoreGET,
+				GameRoutes.scorePOST
 			]
 		},
 		{
 			scope: '\/game\/rank\/{scope}\/{key?}',
 			url: '/game/rank/best/level_1_1',
 			routes: [
-				dataRoutes.rankGET
+				GameRoutes.rankGET
 			]
 		}
 	];
