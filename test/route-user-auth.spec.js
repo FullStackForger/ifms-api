@@ -85,6 +85,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 	    //authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
 	    helpers.server.inject(request, function (response) {
 		    expect(response.statusCode).to.equal(200);
+		    expect(JSON.parse(response.payload).signature).to.be.string();
 		    done();
 	    });
     });
@@ -100,6 +101,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 		//authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload).signature).to.be.string();
 			done();
 		});
 	});
@@ -167,6 +169,7 @@ describe('Route \/user\/auth - guest authorisation', function () {
 		//authString = 'Guest dWRpZDphYWFiYmJjY2M='
 		helpers.server.inject(request, function(response) {
 			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload).signature).to.be.string();
 			done();
 		});
 	});
@@ -182,6 +185,7 @@ describe('Route \/user\/auth - guest authorisation', function () {
 		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
 		helpers.server.inject(request, function(response) {
 			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload).signature).to.be.string();
 			done();
 		});
 	});
@@ -281,6 +285,7 @@ describe('Route \/user\/auth - social authorisation', function () {
 		helpers.server.inject(request, function(response) {
 			stub.restore();
 			expect(response.statusCode).to.equal(200);
+			expect(JSON.parse(response.payload).signature).to.be.string();
 			done();
 		});
 	});
