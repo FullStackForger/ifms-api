@@ -5,17 +5,18 @@ var Hapi = require('hapi'),
 	Request = require('request'),
 	Good = require('good'),
 	Crypto = require('crypto'),
-	plugins = [];
+	server = new Hapi.Server(),
+	plugins = [],
+	Config;
 
-var server = new Hapi.Server();
 server.connection({ port: 8000 });
 
-var Config = {
+Config = {
 	facebook : {
 		clientId: '792772680815526',
 		clientSecret: 'fc887256bfe59f6150c62c0b7146a4c6'
 	}
-}
+};
 
 plugins.push(Bell, {
 	register: Good,
@@ -33,6 +34,7 @@ server.register(plugins, function (err) {
 		provider: 'facebook',
 		password: 'password',
 		isSecure: false,
+		scope: ['email', 'public_profile', 'user_friends'],
 		clientId: Config.facebook.clientId,
 		clientSecret: Config.facebook.clientSecret,
 		providerParams: {
@@ -46,7 +48,7 @@ server.register(plugins, function (err) {
 		config: {
 			auth: 'facebook',
 			handler: function (request, reply) {
-				reply('<pre>' + JSON.stringify(request.auth, null, 4) + '</pre>');
+				//return reply('<pre>' + JSON.stringify(request.auth, null, 4) + '</pre>');
 
 				var appsecret_proof = Crypto
 					.createHmac('sha256', Config.facebook.clientSecret)

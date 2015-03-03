@@ -1,6 +1,7 @@
 var Code = require('code'),
 	Sinon = require('sinon'),
 	Promise = require('mpromise'),
+	Wreck = require('wreck'),
 
 	// test suite helpers
 	expect = Code.expect,
@@ -268,12 +269,34 @@ describe('Route \/user\/auth - social authorisation', function () {
 		internals.before(done);
 	});
 	
-	it('should reply with token on successful Social authorisation (new)', {skip: true}, function (done) {
-		var authString = 'Oauth ' + (new Buffer('facebook:zz-xx-cc', 'utf8').toString('base64')),
-			request = { method: 'GET', url: '/user/auth', headers: { authorization: authString }};
+	it('should reply with token', function (done) {
+		var fbToken = 'valid_token_111',
+			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
+			signature = 'new-user-UDID:gid01234',
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers },
+			stub = Sinon.stub(Wreck, "get", internals.stubs.wreckGet);
 
 		helpers.server.inject(request, function(response) {
+			stub.restore();
 			expect(response.statusCode).to.equal(200);
+			done();
+		});
+	});
+
+	it('should reply with error', function (done) {
+		var fbToken = 'invalid_token',
+			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
+			signature = 'new-user-UDID:gid01234',
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers },
+			stub = Sinon.stub(Wreck, "get", internals.stubs.wreckGet);
+
+		helpers.server.inject(request, function(response) {
+			stub.restore();
+			expect(response.statusCode).to.equal(401);
 			done();
 		});
 	});
@@ -290,4 +313,36 @@ internals.before = function (done) {
 		}],
 		routes : authRoute
 	}, done);
+};
+
+
+internals.stubs = {};
+internals.stubs.wreckGet = function (url, opts, callback) {
+	var response = {};
+
+	if (url.split('=')[1] === 'valid_token_111') {
+		response.statusCode = 200;
+		return callback(null, response, JSON.stringify({
+			id: '0123456789',
+			email: 'user@gmail.com',
+			first_name: 'John',
+			gender: 'male',
+			last_name: 'Smith',
+			link: 'https://www.facebook.com/app_scoped_user_id/0123456789',
+			locale: 'en_GB',
+			name: 'John Smith',
+			timezone: 0,
+			updated_time: '2014-03-03T16:42:19+0000',
+			verified: true
+		}));
+	}
+
+	response.statusCode = 400;
+	callback(null, response, JSON.stringify({
+		error : {
+			message: 'Invalid OAuth access token.',
+			type: 'OAuthException',
+			code: 190
+		}
+	}));
 };

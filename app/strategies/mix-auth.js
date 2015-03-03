@@ -1,5 +1,6 @@
-var User = require('../models/user'),
-	Client = require('../models/client'),
+var UserModel = require('../models/user'),
+	ClientModel = require('../models/client'),
+	Wreck = require('wreck'),
 	Promise = require('mpromise'),
 	bcrypt = require('bcrypt'),
 	identParse = require('../helpers/ident').parse,
@@ -33,13 +34,13 @@ function validateFunction (method, authData, callback) {
 		
 		case 'basic':			
 			
-			User.findOneAndParse({ $or: [
+			UserModel.findOneAndParse({ $or: [
 					{ uname: authData.username},
 					{ email: authData.username}
 				]})
 				.then(function (user) {
 					credentials.user = user;
-					return internals.confirmUser(credentials);
+					return internals.confirmUserLoginAndPassword(credentials);
 				})
 				.then(internals.confirmUserClient)
 				.then(internals.confirmClient)
@@ -52,13 +53,30 @@ function validateFunction (method, authData, callback) {
 			
 			break;
 
-		/*
 		 // todo: work in progress (find or create user first then update data from FB then callback)
 		 // use wreck to call FB, good example -> https://github.com/yoitsro/hapi-access-token
 		case 'oauth':
-			callback(null, true, {});
+			if (authData.provider === 'facebook') {
+
+				internals.confirmFBToken(credentials)
+					.then(internals.confirmFBUser)
+					.then(internals.confirmUserClient)
+					.then(internals.confirmClient)
+					.then(function (credentials) {
+						callback(null, true, credentials);
+					})
+					.onReject(function (error) {
+						callback(null, false, credentials);
+						
+						// todo: enable errors
+						//callback(error, false, credentials);
+					});
+			} else {
+				// no other providers supported yet
+				callback(null, false, credentials);				
+			}
+
 			break;
-		*/
 		case 'guest':
 
 			internals
@@ -78,7 +96,71 @@ module.exports = {
 	validateFunc : validateFunction
 };
 
-internals.confirmUser = function(credentials) {
+internals.confirmFBToken = function (credentials) {
+	var promise = new Promise(),
+		authData = credentials.auth.data,
+		profileUrl = 'https://graph.facebook.com/me?access_token=',
+		requestOptions = {
+			timeout: 10000,
+			maxBytes: 1048576 // 1 mb - very generous!
+		};
+
+	Wreck.get(profileUrl + encodeURIComponent(authData.token), requestOptions, function(err, res, payload) {
+		var payload = JSON.parse(payload);
+
+		if (err) {
+			promise.reject(error);
+		}
+
+		if (res.statusCode > 299) {
+			promise.reject(payload.error);
+		}
+
+		credentials.social = payload;
+		promise.fulfill(credentials);
+	});
+	return promise;
+};
+
+internals.confirmFBUser = function (credentials) {
+	var promise = new Promise(),
+		authData = credentials.auth.data,
+		fbUser = credentials.social;
+
+	UserModel.findOne({
+		email: fbUser.email
+	}).then(function (userData) {		
+		var date = new Date(),
+			user = new UserModel(userData ? userData : {});
+
+		user.email = fbUser.email;
+		user.fname = fbUser.first_name;
+		user.lname = fbUser.last_name;
+		user.locale = fbUser.locale.toLowerCase();
+		user.created = user.created || date;
+		user.updated = date;
+		user.facebook = {
+			token: authData.token,
+			id: fbUser.id,
+			link: fbUser.link,
+			verified: true
+		};
+		user.clients = user.clients || [];
+		
+		user.save().then(function (user) {
+			credentials.user = user;
+			promise.fulfill(credentials);
+		}).onReject(function (error) {
+			promise.reject(error);
+		});
+	}, function (error) {
+		promise.reject(error);
+	});
+	
+	return promise;	
+};
+
+internals.confirmUserLoginAndPassword = function (credentials) {
 	var promise = new Promise(),
 		password = credentials.auth.data.password,
 		hash = credentials.user.password;
@@ -127,7 +209,7 @@ internals.confirmClient = function (credentials) {
 	var promise = new Promise(),
 		ident = credentials.ident;
 	
-	Client.forceFind({
+	ClientModel.forceFind({
 		udid: ident.udid
 	}).then(function (client) {
 		credentials.client = client;
