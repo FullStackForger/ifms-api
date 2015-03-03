@@ -25,7 +25,8 @@ gameSchema = {
 		id: Joi.string(),
 		name: Joi.string(),
 		company: Joi.string()
-	}
+	},
+	version: Joi.string()
 };
 
 module.exports = gameSchema;

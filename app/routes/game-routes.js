@@ -1,4 +1,5 @@
 var GameDataCtrl = require('../controllers/game-data-ctrl'),
+	GameDetailsCtrl = require('../controllers/game-details-ctrl'),
 	GameScoreCtrl = require('../controllers/game-score-ctrl'),
 	GameScoreRankCtrl = require('../controllers/game-rank-ctrl'),
 	GameRoutes = {};
@@ -41,7 +42,7 @@ GameRoutes.scoreGET = {
 		description: 'Retrieves game single score or all scores for an authorised user',
 		handler: GameScoreCtrl.getScore
 	}
-}
+};
 
 GameRoutes.scorePOST = {
 	path: '/game/score',
@@ -52,4 +53,15 @@ GameRoutes.scorePOST = {
 		handler: GameScoreCtrl.saveScore
 	}
 };
+
+GameRoutes.detailsGET = {
+	path: '/game/details',
+	method: ['GET'],
+	config: {
+		auth: 'jwt-auth',
+		description: 'Retrieves game details',
+		handler: GameDetailsCtrl.getGameDetails
+	}
+};
+
 module.exports = GameRoutes;

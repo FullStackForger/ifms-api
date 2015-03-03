@@ -100,7 +100,8 @@ data.games.push({
 	pkey: 'gid01234',
 	description: 'super killer gangsta game',
 	created: date,
-	updated: date
+	updated: date,
+	version: '0.1.0'
 });
 
 /* ---------[ game data ]-------------------- */
