@@ -8,6 +8,11 @@ if [ "$expLoc" != "$curLoc" ]; then
     exit 1
 fi
 
+echo "stop all node apps"
+pkill node
+
+#extended hook .start
+
 echo "npm update"
 npm update
 
@@ -24,7 +29,9 @@ sudo ln -sf /etc/nginx/sites-available/api.innocentio.com /etc/nginx/sites-enabl
 echo "reloading nginx"
 sudo service nginx restart
 
+#extended hook .end
+
 echo "starting server"
-node index.js
+node index.js &
 
 echo "THAT'S ALL FOLKS!"
