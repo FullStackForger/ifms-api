@@ -1,43 +1,52 @@
 # Bevel Games Environment Configuration
 
-## Local Dev Environment: dev.bevelgames.com (Mac OS) 
+> All scripts should be run from application root folder
+
+## Local Dev Environment: dev.api.innocentio.com (Mac OS) 
 
 ### App configuration
 
 ```
-cp configs/config-dev.json ../app/config/config.json
+cp dev/configs/config-dev.json app/config/config.json
 ```
 
 ### Nginx.conf configuration
 
-**Note:** This is part of public [guide][guide-link] but makes sure main `nginx.conf` loads right configs.
-[guide-link]: https://bitbucket.org/rusticode/rusticode/wiki/installing-nginx-on-osx-with-macports-for-nodejs.md
-
-
-Edit the main `nginx.conf` and in the http section add:
-```
-include node-apps.conf
-```
-
-Copy the files in the dev/nginx directory to the nginx config directory.
+<!-- todo: add link -->
+**Note:** This is part of public innocentio guide: installing-nginx-on-osx-with-macports-for-nodejs.md
 
 ```bash
+# copye nginx config files
 sudo cp -r nginx/* /opt/local/etc/nginx/
-```
-
-Enable innocentio.com
-```
-cd /opt/local/etc/nginx/sites-enabled/
-sudo ln -s ../sites-available/innocentio.com
-```
-
-Reload nginx
-```
+# enable site
+sudo ln -s /opt/local/etc/nginx/sites-available/api.innocentio.com /opt/local/etc/nginx/sites-enabled/dev.api.innocentio.com
+# reload nginx
 sudo port unload nginx && sudo port load nginx
 ```
 ### /etc/hosts entry
 
 Define the dev.innocentio.com host
 ```bash
-sudo sh -c 'printf "\n127.0.0.1\tdev.innocentio.com" >> /private/etc/hosts'
+sudo sh -c 'printf "\n127.0.0.1\tdev.api.innocentio.com" >> /private/etc/hosts'
+```
+
+## Production Environment: api.innocentio.com (Ubuntu 14.04 LTS:HMV)
+ 
+### App configuration
+ 
+```
+cp configs/config-prod.json ../app/config/config.json
+```
+
+### Nginx.conf configuration
+
+<!-- todo: link to docs -->
+
+```bash
+# copye nginx config files
+sudo cp -r nginx/* /etc/nginx/
+# enable site
+sudo ln -s /etc/nginx/sites-available/api.innocentio.com /etc/nginx/sites-enabled/api.innocentio.com
+# reload nginx
+sudo service nginx restart
 ```
