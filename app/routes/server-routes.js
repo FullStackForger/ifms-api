@@ -1,12 +1,15 @@
 module.exports = {
 	statusRoute : {
-		path: '/user/profile',
+		path: '/server/status',
 		method: 'GET',
 		config: {
-			auth: 'jwt-auth',
+			auth: false,
 			description: "Returns user profile data object",
 			handler: function(request, reply) {
-				reply("We are an effective team!")
+				reply({
+					question: "Are we an effective team?",
+					response: "We are an effective team!"
+				});
 			}
 		}
 	}
