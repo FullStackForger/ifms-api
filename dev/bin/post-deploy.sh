@@ -24,5 +24,7 @@ sudo ln -sf /etc/nginx/sites-available/api.innocentio.com /etc/nginx/sites-enabl
 echo "reloading nginx"
 sudo service nginx restart
 
+echo "starting server"
+node index.js
 
 echo "THAT'S ALL FOLKS!"
