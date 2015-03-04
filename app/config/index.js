@@ -1,7 +1,7 @@
 var Hoek = require('hoek'),
 	Joi = require('joi'),
 	defaults = require('./defaults'),
-	configJson = require('./config.json'),
+	configJson = require('../../config/config.json'),
 	schema = require('./schema');
 
 

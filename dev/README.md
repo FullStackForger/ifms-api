@@ -7,7 +7,7 @@
 ### App configuration
 
 ```
-cp dev/configs/config-dev.json app/config/config.json
+cp dev/config/config-dev.json config/config.json
 ```
 
 ### Nginx.conf configuration
@@ -35,7 +35,7 @@ sudo sh -c 'printf "\n127.0.0.1\tdev.api.innocentio.com" >> /private/etc/hosts'
 ### App configuration
  
 ```
-cp configs/config-prod.json ../app/config/config.json
+cp dev/config/config-prod.json config/config.json
 ```
 
 ### Nginx.conf configuration
