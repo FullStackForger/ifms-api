@@ -35,6 +35,7 @@ sudo sh -c 'printf "\n127.0.0.1\tdev.api.innocentio.com" >> /private/etc/hosts'
 ### App configuration
  
 ```
+mkdir -p config
 cp dev/config/config-prod.json config/config.json
 ```
 
@@ -44,9 +45,9 @@ cp dev/config/config-prod.json config/config.json
 
 ```bash
 # copye nginx config files
-sudo cp -r nginx/* /etc/nginx/
+sudo cp -r dev/nginx/* /etc/nginx/
 # enable site
-sudo ln -s /etc/nginx/sites-available/api.innocentio.com /etc/nginx/sites-enabled/api.innocentio.com
+sudo ln -sf /etc/nginx/sites-available/api.innocentio.com /etc/nginx/sites-enabled/api.innocentio.com
 # reload nginx
 sudo service nginx restart
 ```

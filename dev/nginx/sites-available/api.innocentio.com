@@ -3,11 +3,11 @@ include node-upstreams/api.innocentio.com.conf;
 
 server {
     listen       80;
-    server_name  dev.innocentio.com
-                 uat.innocentio.com
-                 innocentio.com;
+    server_name  dev.api.innocentio.com
+                 uat.api.innocentio.com
+                 api.innocentio.com;
                  
-    client_max_body_size 1000M;
+    client_max_body_size 10M;
 
     # Endpoint mappings
     include node-endpoints/api.innocentio.com.conf;
