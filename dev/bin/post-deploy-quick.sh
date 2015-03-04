@@ -15,3 +15,4 @@ echo "starting server"
 node index.js &
 
 echo "THAT'S ALL FOLKS!"
+exit 0
