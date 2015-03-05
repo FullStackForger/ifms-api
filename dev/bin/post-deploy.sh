@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-expLoc='dev/bin/post-deploy-quick.sh'
+expLoc='dev/bin/post-deploy.sh'
 curLoc="${BASH_SOURCE[0]}"
 
 if [[ ! "$curLoc" =~ "$expLoc" ]]; then
@@ -8,8 +8,7 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
-echo "start server"
-./dev/bin/server-start-production.sh
+echo "[post-deploy] start server"
+./dev/bin/server-start.sh
 
-echo "THAT'S ALL FOLKS!"
 exit 0

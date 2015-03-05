@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-expLoc='dev/bin/setup/setup-config.sh'
+expLoc='dev/bin/setup/setup-config-prod.sh'
 curLoc="${BASH_SOURCE[0]}"
 
 if [[ ! "$curLoc" =~ "$expLoc" ]]; then

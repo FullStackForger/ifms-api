@@ -56,6 +56,9 @@ npm install -g pm2@latest
 # generate startup script
 pm2 startup
 
+echo "[env-setup] setting NODE_ENV to 'prod'"
+printf "\nNODE_ENV='prod'\n" >> ~/.bashrc && source ~/.bashrc
+
 echo "[env-setup] adding fingerprints to known_hosts"
 ssh-keygen -R bitbucket.org
 ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
@@ -71,3 +74,4 @@ echo "[env-setup] Use below id_rsa.pub to allow access"
 printf "\n\n"
 cat ~/.ssh/id_rsa.pub
 printf "\n\n"
+

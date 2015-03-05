@@ -20,3 +20,14 @@ read -p "Authorise key and press [enter] to continue when done..."
 deploy prod setup
 # run initial deployment
 deploy -c ./dev/config/deploy-init.conf prod-init
+
+
+# complettion message with prompt
+printf "\n\n"
+printf "\tCONGRATULATIONS! Setup complete."
+printf "\tIs your server set up yet?"
+printf "\n\n"
+read -p "Press [Enter] key reboot the instance..."
+
+# server reboot
+ssh api.innocentio.com "sudo reboot"

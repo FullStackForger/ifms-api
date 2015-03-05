@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-expLoc='dev/bin/server-start-production.sh'
+expLoc='dev/bin/server-start.sh'
 curLoc="${BASH_SOURCE[0]}"
 
 
@@ -12,8 +12,8 @@ fi
 found="$(pm2 list|grep api)"
 
 if [ -n "$found" ]; then
-    pm2 restart api
+    SRV_AUTOSTART='true' pm2 restart api
 else
-    NODE_ENV='production' pm2 start index.js --name api
+    SRV_AUTOSTART='true' pm2 start index.js --name api
 fi
 exit 0
