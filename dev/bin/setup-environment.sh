@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
 
-expLoc='dev/bin/post-deploy-quick.sh'
-curLoc="${BASH_SOURCE[0]}"
-
-if [ "$expLoc" != "$curLoc" ]; then
-    echo 'You can run this script from project root directory only'
-    exit 1
-fi
-
 echo "[env-setup] updating package manager"
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -45,7 +37,9 @@ git --version
 
 echo "[env-setup] installing NVM"
 curl https://raw.githubusercontent.com/creationix/nvm/v0.23.3/install.sh | bash
-source ~/.bashrc
+# load NVM
+export NVM_DIR="/home/ubuntu/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 echo "[env-setup] installing NodeJS"
 nvm install stable
@@ -54,9 +48,27 @@ node -v
 
 echo "[env-setup] installing node packages"
 # install pm2
-npm install -g pm2
+npm install -g pm2@latest
 # generate startup script
 pm2 startup
+
+echo "[env-setup] adding fingerprints to known_hosts"
+ssh-keygen -R bitbucket.org
+ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
+ssh-keygen -R github.com
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+echo "[env-setup] generate new ssh key (auto confirm overwrite)"
+echo -e  'y\n'|ssh-keygen -q -t rsa -N "" -f ~/.ssh/id_rsa
+
+echo "\n\n"
+echo "[env-setup] CONGRATULATIONS! Setup complete."
+echo "\n\n"
+echo "[env-setup] Remember about your deployment GIT configuration"
+echo "[env-setup] Use below id_rsa.pub to allow access"
+cat ~/.ssh/id_rsa.pub
+
+read -p "Press [Enter] key reboot the instance..."
 
 sudo reboot;
 exit 0

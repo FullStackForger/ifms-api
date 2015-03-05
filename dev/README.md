@@ -31,15 +31,23 @@ sudo sh -c 'printf "\n127.0.0.1\tdev.api.innocentio.com" >> /private/etc/hosts'
 ```
 
 ## Production Environment: api.innocentio.com (Ubuntu 14.04 LTS:HMV)
- 
-### App configuration
+
+### Automated
+
+```
+ssh api.innocentio.com "bash -s" < ./dev/bin/setup-environment.sh
+```
+
+### Manual
+
+#### App configuration
  
 ```
 mkdir -p config
 cp dev/config/config-prod.json config/config.json
 ```
 
-### Nginx.conf configuration
+#### Nginx.conf configuration
 
 <!-- todo: link to docs -->
 
