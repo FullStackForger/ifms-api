@@ -8,6 +8,9 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
+echo "[post-deploy] setting up paths"
+export NVM_DIR="/home/ubuntu/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 echo "[post-deploy] start server"
 ./dev/bin/server-start.sh

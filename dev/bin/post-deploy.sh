@@ -9,7 +9,8 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
 fi
 
 echo "[post-deploy] setting up paths"
-./dev/bin/server-paths.sh
+export NVM_DIR="/home/ubuntu/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 echo "npm update"
 rm -Rf node_modules
