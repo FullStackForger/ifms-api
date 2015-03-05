@@ -65,11 +65,9 @@ ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 echo "[env-setup] generate new ssh key (auto confirm overwrite)"
 echo -e  'y\n'|ssh-keygen -q -t rsa -N "" -f ~/.ssh/id_rsa
 
+printf "\n\n"
 echo "[env-setup] To continue setup below ssh key as deployment key in your repository!"
 echo "[env-setup] Use below id_rsa.pub to allow access"
+printf "\n\n"
 cat ~/.ssh/id_rsa.pub
-
-echo "\n\n"
-read -p "Press [Enter] to continue... "
-
-exit 0
+printf "\n\n"

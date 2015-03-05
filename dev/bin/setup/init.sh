@@ -13,6 +13,9 @@ ssh-keygen -R api.innocentio.com
 ssh-keyscan -t rsa api.innocentio.com >> ~/.ssh/known_hosts
 # execute environment setup script remotely
 ssh api.innocentio.com "bash -s" < ./dev/bin/setup/setup-environment.sh
+
+read -p "Authorise key and press [enter] to continue when done..."
+ 
 # setup directories for deploy and clone repository
 deploy prod setup
 # run initial deployment
