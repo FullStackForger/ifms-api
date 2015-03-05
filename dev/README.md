@@ -32,30 +32,12 @@ sudo sh -c 'printf "\n127.0.0.1\tdev.api.innocentio.com" >> /private/etc/hosts'
 
 ## Production Environment: api.innocentio.com (Ubuntu 14.04 LTS:HMV)
 
-### Automated
+### Environment setup
+
+Create empty EC2 instance from 'innocentio-prod' AMI and when ready run
 
 ```
-ssh api.innocentio.com "bash -s" < ./dev/bin/setup-environment.sh
+./dev/bin/setup/init.sh
 ```
 
-### Manual
-
-#### App configuration
- 
-```
-mkdir -p config
-cp dev/config/config-prod.json config/config.json
-```
-
-#### Nginx.conf configuration
-
-<!-- todo: link to docs -->
-
-```bash
-# copye nginx config files
-sudo cp -r dev/nginx/* /etc/nginx/
-# enable site
-sudo ln -sf /etc/nginx/sites-available/api.innocentio.com /etc/nginx/sites-enabled/api.innocentio.com
-# reload nginx
-sudo service nginx restart
-```
+### Deployment

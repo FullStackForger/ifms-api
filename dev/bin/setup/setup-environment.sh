@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+####
+## Ubuntu 14.04 LTS Configuration Script
+####
+
 echo "[env-setup] updating package manager"
 sudo apt-get update
 sudo apt-get upgrade -y
