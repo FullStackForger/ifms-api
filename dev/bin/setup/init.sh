@@ -8,9 +8,14 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
-# update ssh key
-ssh-keygen -R api.innocentio.com
-ssh-keyscan -t rsa api.innocentio.com >> ~/.ssh/known_hosts
+# update ssh keys
+hostName=api.innocentio.com
+hostAddr=$(host $hostName | awk '/address*/{print substr($4,0)}')
+ssh-keygen -R "$hostAddr"
+ssh-keygen -R "$hostName"
+ssh-keyscan -t rsa "$hostAddr" >> ~/.ssh/known_hosts
+ssh-keyscan -t rsa "$hostName" >> ~/.ssh/known_hosts
+
 # execute environment setup script remotely
 ssh api.innocentio.com "bash -s" < ./dev/bin/setup/setup-environment.sh
 
