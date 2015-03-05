@@ -53,8 +53,8 @@ node -v
 echo "[env-setup] installing node packages"
 # install pm2
 npm install -g pm2@latest
-# generate startup script
-pm2 startup
+# generate pm2 startup script
+sudo env PATH=$PATH:/home/ubuntu/.nvm/versions/node/v0.12.0/bin pm2 startup linux -u ubuntu
 
 echo "[env-setup] setting NODE_ENV to 'prod'"
 printf "\nNODE_ENV='prod'\n" >> ~/.bashrc && source ~/.bashrc
