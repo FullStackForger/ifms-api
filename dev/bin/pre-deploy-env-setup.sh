@@ -53,7 +53,10 @@ nvm alias default stable
 node -v
 
 echo "[env-setup] installing node packages"
+# install pm2
 npm install -g pm2
+# generate startup script
+pm2 startup
 
 sudo reboot;
 exit 0
