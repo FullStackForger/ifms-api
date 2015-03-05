@@ -29,7 +29,7 @@ describe('Application configuration', function () {
 				
 		expect(config.env).to.equal('development');
 		expect(config.host).to.equal('127.0.0.1');
-		expect(config.port).to.equal('8000');
+		expect(config.port).to.equal('8001');
 		
 		done();
 	});
@@ -37,15 +37,13 @@ describe('Application configuration', function () {
 	it ('should detect environment params', function (done) {
 		var config;
 		
-		process.env.NODE_ENV = 'testing';
+		process.env.NODE_ENV = 'staging';
 		process.env.NODE_HOST = 'localhost';
-		process.env.NODE_PORT = '3000';
 
 		config = require('../app/config').init();
 		
-		expect(config.env).to.equal('testing');
+		expect(config.env).to.equal('staging');
 		expect(config.host).to.equal('localhost');
-		expect(config.port).to.equal('3000');
 		
 		done();
 	});
