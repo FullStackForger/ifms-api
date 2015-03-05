@@ -16,4 +16,4 @@ ssh api.innocentio.com "bash -s" < ./dev/bin/setup/setup-environment.sh
 # setup directories for deploy and clone repository
 deploy prod setup
 # run initial deployment
-deploy -c ./dev/config/deploy-init prod-init
+deploy -c ./dev/config/deploy-init.conf prod-init

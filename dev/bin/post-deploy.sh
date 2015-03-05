@@ -8,11 +8,8 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
-echo "stop all node apps"
-pkill node
-
-echo "starting server"
-pm2 index.js
+echo "start server"
+./dev/bin/server-start-production.sh
 
 echo "THAT'S ALL FOLKS!"
 exit 0
