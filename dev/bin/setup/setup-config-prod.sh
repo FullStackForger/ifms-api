@@ -8,6 +8,9 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
+echo "sourcing ~/.bashrc"
+source ~/.bashrc
+
 echo "npm update"
 npm update
 
