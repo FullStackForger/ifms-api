@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-expLoc='dev/bin/post-deploy.sh'
+expLoc='dev/bin/post-deploy-quick.sh'
 curLoc="${BASH_SOURCE[0]}"
 
 if [ "$expLoc" != "$curLoc" ]; then

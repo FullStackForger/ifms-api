@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-expLoc='dev/bin/post-deploy.sh'
+expLoc='dev/bin/server-start-production.sh'
 curLoc="${BASH_SOURCE[0]}"
 
 
