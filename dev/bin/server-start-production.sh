@@ -4,7 +4,7 @@ expLoc='dev/bin/server-start-production.sh'
 curLoc="${BASH_SOURCE[0]}"
 
 
-if [ "$expLoc" != "$curLoc" ]; then
+if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     echo 'You can run this script from project root directory only'
     exit 1
 fi
