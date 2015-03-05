@@ -9,7 +9,7 @@ var routes = module.exports = {},
 		}
 	};
 
-routes.serviceStatus = {
+routes.root = {
 	path: '/',
 	method: 'GET',
 	config: statusConfig
