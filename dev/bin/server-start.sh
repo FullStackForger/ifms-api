@@ -9,6 +9,8 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
+./dev/bin/server-paths.sh
+
 found="$(pm2 list|grep api)"
 
 if [ -n "$found" ]; then

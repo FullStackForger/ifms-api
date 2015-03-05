@@ -8,8 +8,6 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
-echo "[post-deploy] setting up paths"
-./dev/bin/server-paths.sh
 
 echo "[post-deploy] start server"
 ./dev/bin/server-start.sh
