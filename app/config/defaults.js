@@ -1,7 +1,7 @@
 module.exports = function () {
 	var env = process.env.NODE_ENV || 'development',
 		host = process.env.NODE_HOST || '127.0.0.1',
-		port = process.env.NODE_PORT || '8000';
+		port = process.env.NODE_PORT || '8001';
 	
 	return {
 		env: env,

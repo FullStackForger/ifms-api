@@ -12,7 +12,7 @@ echo "stop all node apps"
 pkill node
 
 echo "starting server"
-node index.js &
+pm2 index.js
 
 echo "THAT'S ALL FOLKS!"
 exit 0

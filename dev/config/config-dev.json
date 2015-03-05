@@ -1,6 +1,5 @@
 {
 	"url": "http://dev.api.innocentio.com",
-	"port": "8001",
 	"facebook": {
 		"clientId": "792772680815526",
 		"clientSecret": "fc887256bfe59f6150c62c0b7146a4c6"
