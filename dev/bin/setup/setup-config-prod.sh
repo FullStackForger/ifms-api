@@ -8,14 +8,6 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
-echo "loading nvm"
-export NVM_DIR="/home/ubuntu/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-
-echo "npm update"
-rm -Rf node_modules
-npm install
-
 echo "updating config.json"
 mkdir -p config
 cp dev/config/config-prod.json config/config.json
