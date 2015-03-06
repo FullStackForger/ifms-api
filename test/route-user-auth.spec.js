@@ -146,6 +146,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 		//authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
+			expect(JSON.parse(response.payload).message).to.equal('Missing identification');
 			done();
 		});
 	});
@@ -186,6 +187,20 @@ describe('Route \/user\/auth - guest authorisation', function () {
 		helpers.server.inject(request, function(response) {
 			expect(response.statusCode).to.equal(200);
 			expect(JSON.parse(response.payload).signature).to.be.string();
+			done();
+		});
+	});
+	
+	it('should not authorise Guest client without identification', function (done) {
+		var authSignature = 'udid:zzz-xxx-yyy',
+			authString = 'Guest ' + (new Buffer(authSignature, 'utf8').toString('base64')),
+			headers = { authorization: authString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
+		helpers.server.inject(request, function(response) {
+			expect(response.statusCode).to.equal(401);
+			expect(JSON.parse(response.payload).message).to.equal('Missing identification');
 			done();
 		});
 	});
@@ -290,6 +305,22 @@ describe('Route \/user\/auth - social authorisation', function () {
 		});
 	});
 
+	it('should not authorise request without identification signature', function (done) {
+		var fbToken = 'valid_token_111',
+			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
+			headers = { authorization: authString },
+			request = { method: 'GET', url: '/user/auth', headers: headers },
+			stub = Sinon.stub(Wreck, "get", internals.stubs.wreckGet);
+
+		helpers.server.inject(request, function(response) {
+			stub.restore();
+			expect(response.statusCode).to.equal(401);
+			expect(JSON.parse(response.payload).message).to.equal('Missing identification');
+			done();
+		});
+
+	});
+	
 	it('should reply with error', function (done) {
 		var fbToken = 'invalid_token',
 			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),

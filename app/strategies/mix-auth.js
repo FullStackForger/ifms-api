@@ -1,6 +1,7 @@
 var UserModel = require('../models/user'),
 	ClientModel = require('../models/client'),
 	Wreck = require('wreck'),
+	Boom = require('boom'),
 	Promise = require('mpromise'),
 	bcrypt = require('bcrypt'),
 	identParse = require('../helpers/ident').parse,
@@ -23,7 +24,7 @@ function validateFunction (method, authData, callback) {
 	credentials.ident = identParse(request.headers.identification);
 	if (!credentials.ident) {
 		// unauthorised
-		return callback(null, false, credentials);
+		return callback(Boom.unauthorized('Missing identification'), false, credentials);
 	}
 	if (authData.udid && authData.udid != credentials.ident.udid) {
 		// unauthorised guest (inconsistent signatures)
