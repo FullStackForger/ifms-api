@@ -106,6 +106,24 @@ describe('Route \/user\/auth - basic authorisation', function () {
 		});
 	});
 
+	it('should not authorise for invalid game public key', function (done) {
+		var credentials = 'KillerMachine:password123',
+			signature = 'new-user-UDID:invalid_game_key',
+			authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+		//authString = 'Basic S2lsbGVyTWFjaGluZTpwYXNzd29yZDEyMw=='
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(401);
+			expect(JSON.parse(response.payload)).to.include({
+				error: "Unauthorized",
+				message: "Invalid game public key"
+			});
+			done();
+		});
+	});
 
 	it('should not authorise with invalid password', function (done) {
 		var credentials = 'KillerMachine:invalid_password',
@@ -220,6 +238,25 @@ describe('Route \/user\/auth - guest authorisation', function () {
 		});
 	});
 
+	it('should not authorise for invalid game public key', function (done) {
+		var authSignature = 'udid:zzz-xxx-yyy',
+			indentSignature = 'zzz-xxx-yyy:invalid_key',
+			authString = 'Guest ' + (new Buffer(authSignature, 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(indentSignature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+		//authString = 'Guest dWRpZDp6enoteHh4LWNjYw=='
+		helpers.server.inject(request, function(response) {
+			expect(response.statusCode).to.equal(401);
+			expect(JSON.parse(response.payload)).to.include({
+				error: "Unauthorized",
+				message: "Invalid game public key"
+			});
+			done();
+		});
+	});
+
 	it('should not authorise for invalid signature', function (done) {
 		var signature = 'zzz-xxx-yyy:INVALID_GAME_ID',
 			authString = 'Guest ' + (new Buffer('udid:aaabbbccc', 'utf8').toString('base64')),
@@ -319,6 +356,26 @@ describe('Route \/user\/auth - social authorisation', function () {
 			done();
 		});
 
+	});
+
+	it('should not authorise for invalid game public key', function (done) {
+		var fbToken = 'valid_token_111',
+			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
+			signature = 'new-user-UDID:invalid_game_key',
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers },
+			stub = Sinon.stub(Wreck, "get", internals.stubs.wreckGet);
+
+		helpers.server.inject(request, function(response) {
+			stub.restore();
+			expect(response.statusCode).to.equal(401);
+			expect(JSON.parse(response.payload)).to.include({
+				error: "Unauthorized",
+				message: "Invalid game public key"
+			});
+			done();
+		});
 	});
 	
 	it('should reply with error', function (done) {

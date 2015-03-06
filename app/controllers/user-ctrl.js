@@ -14,7 +14,7 @@ Ctrl.authorise = function (request, reply) {
 
 	credentials.client.agent = request.headers["user-agent"];
 	credentials.client.updated = new Date();
-	
+
 	internals.verifyGame(credentials)
 		.then(internals.verifyClientGame)
 		.then(internals.generateToken)
@@ -23,6 +23,9 @@ Ctrl.authorise = function (request, reply) {
 			reply(credentials.token);
 		})
 		.onReject(function (error) {
+			if (typeof error === 'string') {
+				return reply(Boom.unauthorized(error), false, credentials);
+			}
 			reply(Boom.badImplementation(error));
 		});
 };
@@ -41,6 +44,9 @@ internals.verifyGame = function (credentials) {
 	Game.findOneAndParse({
 		pkey: credentials.ident.pkey
 	}).then(function (game) {
+		if (!game) {
+			promise.reject("Invalid game public key");
+		}
 		credentials.game = game;
 		promise.fulfill(credentials);
 	}, function (error) {
