@@ -17,10 +17,10 @@ externals.initServer = function (serverData, cb) {
 	externals.server.connection();
 	externals.server.register(internals.getPlugins(), function (err) {
 
-		if (!Array.isArray(serverData.routes)) {
+		if (serverData.routes && !Array.isArray(serverData.routes)) {
 			serverData.routes = [serverData.routes];
 		}
-		if (!Array.isArray(serverData.strategies)) {
+		if (serverData.strategies && !Array.isArray(serverData.strategies)) {
 			serverData.strategies = [serverData.strategies];
 		}
 
@@ -140,12 +140,14 @@ internals.prepGamesScores = function () {
 
 
 internals.startServer = function (serverData) {
-	var promise = new Promise();
+	var promise = new Promise(),
+		strategies = serverData.strategies || [];
 
-	serverData.strategies.forEach(function(strategy) {
+	strategies.forEach(function(strategy) {2
 		var mode = strategy.mode || false;
 		externals.server.auth.strategy(strategy.name, strategy.scheme, mode, strategy.options);
-	});
+	});			
+
 	
 	serverData.routes.forEach(function (route) {
 		externals.server.route(route);
