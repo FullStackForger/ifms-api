@@ -1,9 +1,9 @@
 var UsrCtrl = require('../controllers/user-ctrl'),
-	UserRoutes = {};
+	UserRoutes = module.exports = {};
 
 UserRoutes.auth = {
 	path: '/user/auth',
-	method: ['GET', 'POST'],
+	method: ['GET'],
 	config: {
 		auth: 'mix-auth',
 		description: 'Authenticates user or client returning Access Token',
@@ -20,5 +20,3 @@ UserRoutes.profileGET = {
 		handler: UsrCtrl.getProfile
 	}
 };
-
-module.exports = UserRoutes;
