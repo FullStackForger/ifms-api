@@ -16,7 +16,7 @@ var Code = require('code'),
 	gameRoutes = require('../app/routes/game-routes'),
 	JWTAuth = require('../app/strategies/jwt-auth');
 
-describe('Route \/game\/details', function () {
+describe('Route \/game\/meta', function () {
 
 	before(function (done) {
 		internals.before(done);
@@ -40,7 +40,7 @@ describe('Route \/game\/details', function () {
 	});
 });
 
-internals.url = '/game/details';
+internals.url = '/game/meta';
 
 internals.before = function (done) {
 	helpers.initServer({
@@ -51,7 +51,7 @@ internals.before = function (done) {
 			options: JWTAuth
 		}],
 		routes : [
-			gameRoutes.detailsGET
+			gameRoutes.metaGET
 		]
 	}, done);
 };

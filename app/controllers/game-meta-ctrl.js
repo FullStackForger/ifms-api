@@ -3,7 +3,7 @@ var Promise = require('mpromise'),
 	Ctrl = module.exports = {},
 	internals = {};
 
-Ctrl.getGameDetails = function (request, reply) {
+Ctrl.getGameMeta = function (request, reply) {
 	var game = request.auth.credentials.game,
 		details = {
 			title: game.title,

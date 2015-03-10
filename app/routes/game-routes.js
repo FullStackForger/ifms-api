@@ -1,8 +1,8 @@
 var GameDataCtrl = require('../controllers/game-data-ctrl'),
-	GameDetailsCtrl = require('../controllers/game-details-ctrl'),
+	GameMetaCtrl = require('../controllers/game-meta-ctrl'),
 	GameScoreCtrl = require('../controllers/game-score-ctrl'),
 	GameScoreRankCtrl = require('../controllers/game-rank-ctrl'),
-	GameRoutes = {};
+	GameRoutes = module.exports = {};
 
 GameRoutes.dataGET = {
 	path: '/game/data/{key?}',
@@ -54,14 +54,12 @@ GameRoutes.scorePOST = {
 	}
 };
 
-GameRoutes.detailsGET = {
-	path: '/game/details',
+GameRoutes.metaGET = {
+	path: '/game/meta',
 	method: ['GET'],
 	config: {
 		auth: 'jwt-auth',
 		description: 'Retrieves game details',
-		handler: GameDetailsCtrl.getGameDetails
+		handler: GameMetaCtrl.getGameMeta
 	}
 };
-
-module.exports = GameRoutes;
