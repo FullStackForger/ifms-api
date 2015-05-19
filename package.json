@@ -10,7 +10,7 @@
   "engine": "node 0.12.0",
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:innocentio/innocentio.com.git"
+    "url": "git@bitbucket.org:indieforger/api.indieforger.com.git"
   },
   "author": "Mark Bevels",
   "license": "ISC",

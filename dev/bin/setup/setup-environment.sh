@@ -22,14 +22,14 @@ sudo apt-get update
 sudo apt-get install -y mongodb-org
 
 echo "[env-setup] configuring MongoDB"
-sudo wget -O /etc/rc.local https://gist.githubusercontent.com/innocentio/2bc64ba3c7e98daf955e/raw
+sudo wget -O /etc/rc.local https://gist.githubusercontent.com/indieforger/2bc64ba3c7e98daf955e/raw
 
 echo "[env-setup] installing NginX"
 sudo apt-get install nginx -y
 #sudo update-rc.d nginx defaults
 
 echo "[env-setup] configuring NginX"
-sudo wget -O /etc/nginx/nginx.conf https://gist.githubusercontent.com/innocentio/ade7a21aacfcefce8fbd/raw
+sudo wget -O /etc/nginx/nginx.conf https://gist.githubusercontent.com/indieforger/ade7a21aacfcefce8fbd/raw
 
 
 echo "[env-setup] installing Git"

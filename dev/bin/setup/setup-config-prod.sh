@@ -23,7 +23,7 @@ sudo cp -r dev/nginx/* /etc/nginx/
 
 
 echo "forcing site enabling symplink"
-sudo ln -sf /etc/nginx/sites-available/api.innocentio.com /etc/nginx/sites-enabled/api.innocentio.com
+sudo ln -sf /etc/nginx/sites-available/api.indieforger.com /etc/nginx/sites-enabled/api.indieforger.com
 
 echo "reloading nginx"
 sudo service nginx restart

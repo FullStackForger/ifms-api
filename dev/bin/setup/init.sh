@@ -9,7 +9,7 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
 fi
 
 # update ssh keys
-hostName=api.innocentio.com
+hostName=api.indieforger.com
 hostAddr=$(host $hostName | awk '/address*/{print substr($4,0)}')
 ssh-keygen -R "$hostAddr"
 ssh-keygen -R "$hostName"
@@ -17,7 +17,7 @@ ssh-keyscan -t rsa "$hostAddr" >> ~/.ssh/known_hosts
 ssh-keyscan -t rsa "$hostName" >> ~/.ssh/known_hosts
 
 # execute environment setup script remotely
-ssh api.innocentio.com "bash -s" < ./dev/bin/setup/setup-environment.sh
+ssh api.indieforger.com "bash -s" < ./dev/bin/setup/setup-environment.sh
 
 read -p "Authorise key and press [enter] to continue when done..."
  
@@ -35,4 +35,4 @@ printf "\n\n"
 read -p "Press [Enter] key reboot the instance..."
 
 # server reboot
-ssh api.innocentio.com "sudo reboot"
+ssh api.indieforger.com "sudo reboot"
