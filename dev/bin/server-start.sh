@@ -9,6 +9,9 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
     exit 1
 fi
 
+echo '[server-start]: Local directory'
+pwd
+
 found="$(pm2 list|grep api)"
 
 if [ -n "$found" ]; then

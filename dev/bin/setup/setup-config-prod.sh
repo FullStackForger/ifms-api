@@ -15,7 +15,7 @@ cp dev/config/config-prod.json config/config.json
 
 if [ -e /etc/nginx/sites-enabled/default ]; then
 	sudo echo "deleting: /etc/nginx/sites-enabled/default"
-	rm /etc/nginx/sites-enabled/default
+	#sudo rm /etc/nginx/sites-enabled/default
 fi
 
 echo "updating nginx config files"
