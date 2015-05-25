@@ -9,7 +9,7 @@ if [[ ! "$curLoc" =~ "$expLoc" ]]; then
 fi
 
 # update ssh keys
-echo "[init] generating keys"
+echo "[env-init] authorising api.indieforger.com"
 hostName=api.indieforger.com
 hostAddr=$(host $hostName | awk '/address*/{print substr($4,0)}')
 ssh-keygen -R "$hostAddr"
@@ -17,7 +17,7 @@ ssh-keygen -R "$hostName"
 ssh-keyscan -t rsa "$hostAddr" >> ~/.ssh/known_hosts
 ssh-keyscan -t rsa "$hostName" >> ~/.ssh/known_hosts
 
-echo "[init] setting up environment"
+echo "[env-init] setting up environment"
 
 # execute environment setup script remotely
 ssh api.indieforger.com "bash -s" < ./dev/bin/setup/setup-environment.sh
