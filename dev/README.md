@@ -8,6 +8,7 @@
 
 First copy appropriate environment config into `./config` folder.
 ```
+mkd
 cp dev/config/config-dev.json config/config.json
 ```
 Then update facebook clientId and clientSecret keys. 

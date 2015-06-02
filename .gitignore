@@ -27,7 +27,6 @@ npm-debug.log
 *~
 *.lock
 *.DS_Store
-*.swp
 *.out
 ._*
 *.swp
@@ -35,4 +34,4 @@ npm-debug.log
 *.swn
 
 # configuration
-./config
+.config/

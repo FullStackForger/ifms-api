@@ -1,5 +1,8 @@
 {
 	"url": "http://uat.api.indieforger.com",
+	"mongodb": {
+		"url": "mongodb://localhost:27017/if-api"
+	},
 	"facebook": {
 		"clientId": "xxxxxxxxxxxxxxx",
 		"clientSecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
