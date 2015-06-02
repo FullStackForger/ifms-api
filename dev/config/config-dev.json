@@ -1,8 +1,11 @@
 {
 	"url": "http://dev.api.indieforger.com",
+	"mongodb": {
+		"url": "mongodb://localhost:27017/if_api_dev"
+	},
 	"facebook": {
-		"clientId": "792772680815526",
-		"clientSecret": "fc887256bfe59f6150c62c0b7146a4c6"
+		"clientId": "xxxxxxxxxxxxxxx",
+		"clientSecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 	},
 	"auth": {
 		"secret": "development secret key"
