@@ -34,4 +34,4 @@ npm-debug.log
 *.swn
 
 # configuration
-.config/
+config/
