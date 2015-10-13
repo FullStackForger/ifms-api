@@ -21,7 +21,7 @@ Then update facebook clientId and clientSecret keys.
 
 ```bash
 # copy nginx config files  
-sudo cp -r nginx/* /opt/local/etc/nginx/
+sudo cp -r dev/nginx/* /opt/local/etc/nginx/
 # enable site  
 sudo ln -s /opt/local/etc/nginx/sites-available/api.indieforger.com /opt/local/etc/nginx/sites-enabled/dev.api.indieforger.com
 # reload nginx  
