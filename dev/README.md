@@ -34,6 +34,11 @@ Define the dev.indieforger.com host
 sudo sh -c 'printf "\n127.0.0.1\tdev.api.indieforger.com" >> /private/etc/hosts'
 ```
 
+## DB Configuration
+
+Install MongoDB and create collections
+./dev/db/*
+
 ## Production Environment: api.indieforger.com (Ubuntu 14.04 LTS:HMV)
 
 ### Environment setup
