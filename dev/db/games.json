@@ -1,11 +1,11 @@
 [{
 	"title": "Jewelines",
-	"pkey": "if-jewelines-2015",
+	"pkey": "indieforger/jewelines",
 	"description": "Color matching puzzle game",
 	"version": "0.1.0"
 },{
 	"title": "HexTrex",
-	"pkey": "if-hextrex-2015",
+	"pkey": "indieforger/hextrex",
 	"description": "Fast pace puzzle game",
 	"version": "0.1.0"
 }]

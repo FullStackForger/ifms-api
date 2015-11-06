@@ -21,7 +21,7 @@ Then update facebook clientId and clientSecret keys.
 
 ```bash
 # copy nginx config files  
-sudo cp -r nginx/* /opt/local/etc/nginx/
+sudo cp -r dev/nginx/* /opt/local/etc/nginx/
 # enable site  
 sudo ln -s /opt/local/etc/nginx/sites-available/api.indieforger.com /opt/local/etc/nginx/sites-enabled/dev.api.indieforger.com
 # reload nginx  
@@ -33,6 +33,11 @@ Define the dev.indieforger.com host
 ```bash
 sudo sh -c 'printf "\n127.0.0.1\tdev.api.indieforger.com" >> /private/etc/hosts'
 ```
+
+## DB Configuration
+
+Install MongoDB and create collections
+./dev/db/*
 
 ## Production Environment: api.indieforger.com (Ubuntu 14.04 LTS:HMV)
 
