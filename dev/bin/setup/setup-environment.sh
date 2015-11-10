@@ -36,6 +36,7 @@ echo "[env-setup] installing Git"
 sudo add-apt-repository ppa:git-core/ppa -y
 sudo apt-get update
 sudo apt-get install git -y
+git config --global core.autocrlf true
 git --version
 
 
