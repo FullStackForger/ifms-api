@@ -131,7 +131,7 @@ data.score.push({
 	// yesterday
 	dd: parseInt(moment().startOf('today').subtract(1, 'd').format('YYMMDD')),
 	ws: 222,
-	// week starts form Monday!
+	// week starts from Monday!
 	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 333,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
@@ -158,7 +158,7 @@ data.score.push({
 	// yesterday
 	dd: parseInt(moment().startOf('today').format('YYMMDD')),
 	ws: 10,
-	// week starts form Monday!
+	// week starts from Monday!
 	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 10,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
@@ -171,7 +171,7 @@ data.score.push({
 	// yesterday
 	dd: parseInt(moment().startOf('today').format('YYMMDD')),
 	ws: 20,
-	// week starts form Monday!
+	// week starts from Monday!
 	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 20,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
@@ -184,7 +184,7 @@ data.score.push({
 	// yesterday
 	dd: parseInt(moment().startOf('today').format('YYMMDD')),
 	ws: 1000,
-	// week starts form Monday!
+	// week starts from Monday!
 	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 1000,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
@@ -197,7 +197,7 @@ data.score.push({
 	// yesterday
 	dd: parseInt(moment().startOf('today').format('YYMMDD')),
 	ws: 2000,
-	// week starts form Monday!
+	// week starts from Monday!
 	wd: parseInt(moment().startOf('week').format('YYMMDD')),
 	ms: 2000,
 	md: parseInt(moment().startOf('month').format('YYMMDD')),
