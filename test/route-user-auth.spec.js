@@ -326,7 +326,7 @@ describe('Route \/user\/auth - social authorisation', function () {
 	});
 	
 	it('should reply with token', function (done) {
-		var fbToken = 'valid_token_111',
+		var fbToken = 'fb_valid_token_111',
 			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
 			signature = 'new-user-UDID:gid01234',
 			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
@@ -343,7 +343,7 @@ describe('Route \/user\/auth - social authorisation', function () {
 	});
 
 	it('should not authorise request without identification signature', function (done) {
-		var fbToken = 'valid_token_111',
+		var fbToken = 'fb_valid_token_111',
 			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
 			headers = { authorization: authString },
 			request = { method: 'GET', url: '/user/auth', headers: headers },
@@ -359,7 +359,7 @@ describe('Route \/user\/auth - social authorisation', function () {
 	});
 
 	it('should not authorise for invalid game public key', function (done) {
-		var fbToken = 'valid_token_111',
+		var fbToken = 'fb_valid_token_111',
 			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
 			signature = 'new-user-UDID:invalid_game_key',
 			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
@@ -413,7 +413,8 @@ internals.stubs = {};
 internals.stubs.wreckGet = function (url, opts, callback) {
 	var response = {};
 
-	if (url.split('=')[1] === 'valid_token_111') {
+	//if (url.split('=')[1] === 'fb_valid_token_111') {
+	if (url.split('=')[1] === require('./test-mocks/mockData').users[0].facebook.token) {
 		response.statusCode = 200;
 		return callback(null, response, JSON.stringify({
 			id: '0123456789',
