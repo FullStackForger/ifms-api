@@ -60,6 +60,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 	    });
     });
 
+
 	it('should reply with token for new client of registered user', function (done) {
 		var credentials = 'KillerMachine:password123',
 			signature = 'new-user-UDID:gid01234',
