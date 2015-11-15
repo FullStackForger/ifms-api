@@ -2,7 +2,9 @@ module.exports = {
 	addOrUpdateGame : addOrUpdateGame
 };
 
+//todo: unit test it
 function addOrUpdateGame(game) {
+
 	var updated = false;
 
 	if (!this.games) {
