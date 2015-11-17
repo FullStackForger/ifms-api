@@ -50,3 +50,13 @@ Create empty EC2 instance from 'indieforger-prod' AMI and when ready run
 ```
 
 ### Deployment
+
+# deploys to production (with setup)
+deploy prod-setup
+
+# copies ./config/config-prod.json over ssh
+scp ./config/config-prod.json api.indieforger.com:/home/ubuntu/webapps/api.indieforger.com/source/config/config.json
+
+# deploys to production (update only)
+deploy prod
+
