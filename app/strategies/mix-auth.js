@@ -158,7 +158,7 @@ internals.confirmFBUser = function (credentials) {
 			user.gender = fbUser.gender;
 		}
 		if (fbUser.picture && fbUser.picture.data && fbUser.picture.data.url) {
-			user.picture = fbUser.picture.data.url;
+			user.facebook.picture = fbUser.picture.data.url;
 		}
 		if (fbUser.birthday) {
 			user.birthday = fbUser.birthday
