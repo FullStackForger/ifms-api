@@ -18,7 +18,7 @@ data.users.push({
 	created: date,
 	updated: date,
 	facebook: {
-		token: 'fb-secret-hash'
+		token: 'fb_valid_token_111'
 	},
 	clients: ['aaabbbccc']
 });

@@ -90,7 +90,7 @@ internals.verifyClientGame = function (credentials) {
 internals.generateToken = function (credentials) {
 	var promise = new Promise(),
 		client = credentials.client,
-		signature, expiry, token;
+		signature, expiry, token, game;
 
 	expiry = Moment().add(60, 'minutes').toDate();
 	
@@ -104,12 +104,14 @@ internals.generateToken = function (credentials) {
 		signature: signature,
 		expiry: expiry
 	};
-	
-	client.games.push({
+
+	game = {
 		game_id: credentials.game._id,
 		title: credentials.game.title,
-		token: token	
-	});
+		token: token
+	};
+
+	client.addOrUpdateGame(game);
 	
 	client
 		.save()

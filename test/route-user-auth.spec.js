@@ -21,7 +21,6 @@ var Code = require('code'),
 	authRoute = require('../app/routes/user-routes').auth;
 
 
-
 describe('Route \/user\/auth', function () {
 
 	before(function (done) {
@@ -33,35 +32,6 @@ describe('Route \/user\/auth', function () {
 
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
-			done();
-		});
-	});
-	
-});
-
-describe('Route \/user\/auth - basic authorisation', function () {
-
-	before(function (done) {
-		internals.before(done);
-	});
-
-	// note: this test has been moved outside as it was logging errors
-	it('should reply with bad implementation for new client of registered user', function (done) {
-		var credentials = 'KillerMachine:password123',
-			signature = 'new-user-UDID:gid01234',
-			authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
-			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
-			headers = { authorization: authString, identification: identString },
-			request = { method: 'GET', url: '/user/auth', headers: headers },
-
-			saveStub = Sinon.stub(UserModel.prototype.__proto__, "save", function () {
-				//throw new Error('something cracked!');
-				return (new Promise()).reject(new Error('kabbooooom'));
-			});
-
-		helpers.server.inject(request, function (response) {
-			expect(response.statusCode).to.equal(500);
-			saveStub.restore();
 			done();
 		});
 	});
@@ -89,6 +59,7 @@ describe('Route \/user\/auth - basic authorisation', function () {
 		    done();
 	    });
     });
+
 
 	it('should reply with token for new client of registered user', function (done) {
 		var credentials = 'KillerMachine:password123',
@@ -165,6 +136,28 @@ describe('Route \/user\/auth - basic authorisation', function () {
 		helpers.server.inject(request, function (response) {
 			expect(response.statusCode).to.equal(401);
 			expect(JSON.parse(response.payload).message).to.equal('Missing identification');
+			done();
+		});
+	});
+
+	// reference: https://github.com/hapijs/boom#http-5xx-errors
+	it('should reply with bad implementation if code is doing something wrong', function (done) {
+		var credentials = 'KillerMachine:password123',
+			signature = 'new-user-UDID:gid01234',
+			authString = 'Basic ' + (new Buffer(credentials, 'utf8').toString('base64')),
+			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
+			headers = { authorization: authString, identification: identString },
+			request = { method: 'GET', url: '/user/auth', headers: headers };
+
+
+		// we simulating behaviour of broken database
+		var saveStub = Sinon.stub(UserModel.prototype.__proto__, "save", function () {
+			return (new Promise()).reject(new Error('this is EXPECTED bad implementation (5.x.x) error'));
+		});
+
+		helpers.server.inject(request, function (response) {
+			expect(response.statusCode).to.equal(500);
+			saveStub.restore();
 			done();
 		});
 	});
@@ -306,7 +299,7 @@ describe('Route \/user\/auth - guest authorisation', function () {
 			request = { method: 'GET', url: '/user/auth', headers: headers },
 
 			findAndModifyStub = Sinon.stub(ClientModel, "findAndModify", function (query, opts, cb) {
-				cb(new Error('boom bara boom'), null);
+				cb(new Error('this is EXPECTED bad implementation (5.x.x) error'), null);
 			});
 
 		helpers.server.inject(request, function (response) {
@@ -326,7 +319,7 @@ describe('Route \/user\/auth - social authorisation', function () {
 	});
 	
 	it('should reply with token', function (done) {
-		var fbToken = 'valid_token_111',
+		var fbToken = 'fb_valid_token_111',
 			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
 			signature = 'new-user-UDID:gid01234',
 			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
@@ -343,7 +336,7 @@ describe('Route \/user\/auth - social authorisation', function () {
 	});
 
 	it('should not authorise request without identification signature', function (done) {
-		var fbToken = 'valid_token_111',
+		var fbToken = 'fb_valid_token_111',
 			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
 			headers = { authorization: authString },
 			request = { method: 'GET', url: '/user/auth', headers: headers },
@@ -359,7 +352,7 @@ describe('Route \/user\/auth - social authorisation', function () {
 	});
 
 	it('should not authorise for invalid game public key', function (done) {
-		var fbToken = 'valid_token_111',
+		var fbToken = 'fb_valid_token_111',
 			authString = 'Oauth ' + (new Buffer('facebook:' + fbToken, 'utf8').toString('base64')),
 			signature = 'new-user-UDID:invalid_game_key',
 			identString = 'Ident ' + (new Buffer(signature, 'utf8').toString('base64')),
@@ -411,9 +404,11 @@ internals.before = function (done) {
 
 internals.stubs = {};
 internals.stubs.wreckGet = function (url, opts, callback) {
-	var response = {};
+	var response = {},
+		parts = url.split('='),
+		accessToken = parts[parts.length - 1];
 
-	if (url.split('=')[1] === 'valid_token_111') {
+	if (accessToken === require('./test-mocks/mockData').users[0].facebook.token) {
 		response.statusCode = 200;
 		return callback(null, response, JSON.stringify({
 			id: '0123456789',

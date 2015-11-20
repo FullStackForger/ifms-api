@@ -20,7 +20,7 @@ function validateFunction (method, authData, callback) {
 			user: null,
 			client: null
 		};
-	
+
 	credentials.ident = identParse(request.headers.identification);
 	if (!credentials.ident) {
 		// unauthorised
@@ -33,8 +33,7 @@ function validateFunction (method, authData, callback) {
 	
 	switch (method) {
 		
-		case 'basic':			
-			
+		case 'basic':
 			UserModel.findOneAndParse({ $or: [
 					{ uname: authData.username},
 					{ email: authData.username}
@@ -49,8 +48,9 @@ function validateFunction (method, authData, callback) {
 					callback(null, true, credentials);
 				})
 				.onReject(function (error) {
-					callback(error, false, credentials);
+					return callback(error, false, credentials);
 				});
+
 			
 			break;
 
@@ -100,7 +100,10 @@ module.exports = {
 internals.confirmFBToken = function (credentials) {
 	var promise = new Promise(),
 		authData = credentials.auth.data,
-		profileUrl = 'https://graph.facebook.com/me?access_token=',
+		//profileUrl = 'https://graph.facebook.com/me?access_token=',
+		profileUrl = 'https://graph.facebook.com/me' +
+			'?fields=id,first_name,last_name,name,email,picture.type(large),gender,birthday,locale' +
+			'&access_token=',
 		requestOptions = {
 			timeout: 10000,
 			maxBytes: 1048576 // 1 mb - very generous!
@@ -134,19 +137,32 @@ internals.confirmFBUser = function (credentials) {
 		var date = new Date(),
 			user = new UserModel(userData ? userData : {});
 
+		user.id = fbUser.id;
 		user.email = fbUser.email;
+		user.name = fbUser.name;
 		user.fname = fbUser.first_name;
 		user.lname = fbUser.last_name;
-		user.locale = fbUser.locale.toLowerCase();
 		user.created = user.created || date;
 		user.updated = date;
 		user.facebook = {
 			token: authData.token,
 			id: fbUser.id,
-			link: fbUser.link,
-			verified: true
+			link: fbUser.link
 		};
 		user.clients = user.clients || [];
+
+		if (fbUser.locale) {
+			user.locale = fbUser.locale.toLowerCase();
+		}
+		if (fbUser.gender) {
+			user.gender = fbUser.gender;
+		}
+		if (fbUser.picture && fbUser.picture.data && fbUser.picture.data.url) {
+			user.picture = fbUser.picture.data.url;
+		}
+		if (fbUser.birthday) {
+			user.birthday = fbUser.birthday
+		}
 		
 		user.save().then(function (user) {
 			credentials.user = user;
@@ -155,7 +171,7 @@ internals.confirmFBUser = function (credentials) {
 			promise.reject(error);
 		});
 	}, function (error) {
-		promise.reject(error);
+		return promise.reject(Boom.badImplementation(error));;
 	});
 	
 	return promise;	
@@ -169,7 +185,7 @@ internals.confirmUserLoginAndPassword = function (credentials) {
 	// verify password
 	bcrypt.compare(password, hash, function (err, match) {
 		if (match === false) {
-			return promise.reject(err);
+			return promise.reject(Boom.unauthorized(err));
 		}
 		promise.fulfill(credentials);
 	});
@@ -199,7 +215,7 @@ internals.confirmUserClient = function(credentials) {
 			credentials.user = user;
 			promise.fulfill(credentials);
 		}).onReject(function (error) {
-			promise.reject(error);
+			promise.reject(Boom.badImplementation(error));
 		});
 	} 	
 	
@@ -216,7 +232,7 @@ internals.confirmClient = function (credentials) {
 		credentials.client = client;
 		promise.fulfill(credentials);
 	}, function (error) {
-		promise.reject(error);
+		return promise.reject(Boom.badImplementation(error));
 	});
 
 	return promise;
