@@ -1,4 +1,5 @@
 var Client = require('../models/client'),
+	UserModel = require('../models/user'),
 	Game = require('../models/game'),
 	Promise = require('mpromise'),
 	identParse = require('../helpers/ident').parse,
@@ -22,9 +23,8 @@ function validateFunc (token, callback) {
 	
 	internals
 		.confirmGame(credentials)
-		.then(function(credentials) {
-			return internals.confirmClientAndToken(credentials)
-		})
+		.then(internals.confirmClientAndToken)
+		.then(internals.lookupUser)
 		.then(function(credentials) {
 			callback(null, true, credentials);
 		})
@@ -80,5 +80,25 @@ internals.confirmClientAndToken = function (credentials) {
 		promise.reject(error);
 	});
 
+	return promise;
+};
+
+internals.lookupUser = function (credentials) {
+	var promise = new Promise();
+	if (credentials.client.user_id) {
+		UserModel
+			.findOneAndParse({_id: credentials.client.user_id})
+			.then(function (user) {
+				credentials.user = user;
+				promise.fulfill(credentials);
+			})
+			.onReject(function (error) {
+				promise.reject(error);
+			});
+	} else {
+		process.nextTick(function() {
+			promise.fulfill(credentials);
+		});
+	}
 	return promise;
 };

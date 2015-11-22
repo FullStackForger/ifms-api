@@ -29,14 +29,24 @@ describe('Request to \/user\/profile', function () {
 			var profile = JSON.parse(response.payload);
 			expect(response.statusCode).to.equal(200);
 			expect(profile).to.be.an.object();
-			expect(profile).to.include({
-				username: 'KillerMachine',
-				type: 'registered',
-				name: 'John Smith',
-				first_name: 'John',
-				last_name: 'Smith',
-				locale: 'en-gb'
-			});
+
+			expect(profile).to.include(['username']);
+			expect(profile.username).to.only.include('KillerMachine');
+
+			expect(profile).to.include(['type']);
+			expect(profile.type).to.only.include('registered');
+
+			expect(profile).to.include(['name']);
+			expect(profile.name).to.only.include('John Smith');
+
+			expect(profile).to.include(['first_name']);
+			expect(profile.first_name).to.only.include('John');
+
+			expect(profile).to.include(['last_name']);
+			expect(profile.last_name).to.only.include('Smith');
+
+			expect(profile).to.include(['locale']);
+			expect(profile.locale).to.only.include('en-gb');
 			done();
 		});
 		
@@ -58,7 +68,7 @@ describe('Request to \/user\/profile', function () {
 			expect(response.statusCode).to.equal(200);
 			expect(profile).to.be.an.object();
 			expect(profile).to.include({
-				uname: 'Guest 1',
+				username: 'Guest 1',
 				type: 'guest'
 			});
 			done();

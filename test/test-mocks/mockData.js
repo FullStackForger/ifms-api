@@ -10,6 +10,7 @@ data.users = [];
 data.users.push({
 	_id: oid('2e7eeeeeeeeeeeeeeeeeeee1'),
 	uname: 'KillerMachine',
+	name: 'John Smith',
 	fname: 'John',
 	lname: 'Smith',
 	locale: 'en-gb',

@@ -31,15 +31,21 @@ Ctrl.authorise = function (request, reply) {
 };
 
 Ctrl.getProfile = function(request, reply) {
-	var client = request.auth.credentials.client;
-	reply({
-		username: client.uname,
-		type: client.user_id ? 'registered' : 'guest',
-		name: 'John Smith',
-		first_name: 'John',
-		last_name: 'Smith',
-		locale: 'en-gb'
-	});
+	var client = request.auth.credentials.client,
+		user = request.auth.credentials.user,
+		profile = {};
+
+	profile.username = client.uname;
+	profile.type = client.user_id ? 'registered' : 'guest';
+
+	if (user) {
+		profile.name = user.name;
+		profile.first_name = user.fname;
+		profile.last_name = user.lname;
+		profile.locale = user.locale;
+	}
+
+	reply(profile);
 };
 
 internals.verifyGame = function (credentials) {
