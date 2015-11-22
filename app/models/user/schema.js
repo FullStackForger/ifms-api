@@ -3,7 +3,7 @@ var Joi = require('joi'),
 
 userSchema = {
 	id: Joi.string().regex(/.[0-9]*/),
-	uname: Joi.string(), // user name
+	uname: Joi.string(), // user name (not set by default)
 	name: Joi.string(), // full name
 	fname: Joi.string(), // first name
 	lname: Joi.string(), // last name

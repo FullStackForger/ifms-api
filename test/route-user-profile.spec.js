@@ -30,8 +30,12 @@ describe('Request to \/user\/profile', function () {
 			expect(response.statusCode).to.equal(200);
 			expect(profile).to.be.an.object();
 			expect(profile).to.include({
-				uname: 'KillerMachine',
-				type: 'registered'
+				username: 'KillerMachine',
+				type: 'registered',
+				name: 'John Smith',
+				first_name: 'John',
+				last_name: 'Smith',
+				locale: 'en-gb'
 			});
 			done();
 		});
@@ -44,7 +48,7 @@ describe('Request to \/user\/profile', function () {
 				method: 'GET',
 				headers: {
 					authorization: 'Bearer zzzxxxyyy-token-2',
-					identification: 'Ident ' + identSignature					
+					identification: 'Ident ' + identSignature
 				},
 				url: internals.url
 			};

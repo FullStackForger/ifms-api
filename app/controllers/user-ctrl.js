@@ -33,8 +33,12 @@ Ctrl.authorise = function (request, reply) {
 Ctrl.getProfile = function(request, reply) {
 	var client = request.auth.credentials.client;
 	reply({
-		uname: client.uname,
-		type: client.user_id ? 'registered' : 'guest'
+		username: client.uname,
+		type: client.user_id ? 'registered' : 'guest',
+		name: 'John Smith',
+		first_name: 'John',
+		last_name: 'Smith',
+		locale: 'en-gb'
 	});
 };
 
