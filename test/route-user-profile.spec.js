@@ -52,7 +52,7 @@ describe('Request to \/user\/profile', function () {
 		
 	});
 
-	it('should respond with anonymous user profile', function (done) {
+	it('should respond with guest user profile', function (done) {
 		var identSignature = (new Buffer('zzzxxxyyy-2:gid01234', 'utf8').toString('base64')),
 			request = {
 				method: 'GET',
