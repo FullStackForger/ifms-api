@@ -33,8 +33,8 @@ describe('Request to \/user\/profile', function () {
 			expect(profile).to.include(['username']);
 			expect(profile.username).to.only.include('KillerMachine');
 
-			expect(profile).to.include(['type']);
-			expect(profile.type).to.only.include('registered');
+			expect(profile).to.include(['status']);
+			expect(profile.status).to.only.include('registered');
 
 			expect(profile).to.include(['name']);
 			expect(profile.name).to.only.include('John Smith');
@@ -69,7 +69,7 @@ describe('Request to \/user\/profile', function () {
 			expect(profile).to.be.an.object();
 			expect(profile).to.include({
 				username: 'Guest 1',
-				type: 'guest'
+				status: 'guest'
 			});
 			done();
 		});

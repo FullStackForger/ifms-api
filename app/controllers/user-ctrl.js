@@ -36,7 +36,7 @@ Ctrl.getProfile = function(request, reply) {
 		profile = {};
 
 	profile.username = client.uname;
-	profile.type = client.user_id ? 'registered' : 'guest';
+	profile.status = client.user_id ? 'registered' : 'guest';
 
 	if (user) {
 		profile.name = user.name;
