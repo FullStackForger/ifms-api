@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=development nodemon index.js",
-    "test": "NODE_ENV=development make test-cov"
+    "test": "NODE_ENV=development lab"
   },
   "engines": {
     "node": ">=4.2.1"
