@@ -1,13 +1,22 @@
-var Hoek = require('hoek'),
+'use strict';
+const
+	Hoek = require('hoek'),
 	Joi = require('joi'),
+	path = require('path'),
 	defaults = require('./defaults'),
-	configJson = require('../../config/config.json'),
-	schema = require('./schema');
+	schema = require('./schema'),
+	configPath = '../../config/config.json';
 
 
 // init() is used for testing specs
 function init() {
-	var config = Hoek.applyToDefaults(defaults(), configJson),
+	let configJson = {};
+	try {
+		configJson = require(configPath)
+	} catch (e) {
+		console.warn('Configuration file is missing: ' + path.resolve(__dirname, configPath))
+	}
+	let config = Hoek.applyToDefaults(defaults(), configJson),
 		validated = Joi.validate(config, schema);
 
 	if (validated.error) {

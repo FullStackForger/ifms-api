@@ -9,8 +9,8 @@ module.exports = function () {
 		port: port,
 		url: "http://" + host + ":" + port,
 		facebook : {
-			clientId: null,
-			clientSecret: null
+			clientId: '000000000',
+			clientSecret: 'ClientSecretToken'
 		},
 		mongodb: {
 			url: "mongodb://localhost:27017/test",
