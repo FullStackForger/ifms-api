@@ -21,7 +21,7 @@ userSchema = {
 		picture: Joi.string()
 	}),
 	// array of UDIDs
-	clients: Joi.array().includes(Joi.string()).min(0).required()
+	clients: Joi.array().items(Joi.string()).min(0).required()
 };
 
 module.exports = userSchema;

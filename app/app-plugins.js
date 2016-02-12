@@ -11,17 +11,6 @@ plugins.push({
 	register: require('lout')
 });
 
-// Hapi process monitoring
-plugins.push({
-	register: require('good'),
-	options: {
-		reporters: [{
-			reporter: require('good-console'),
-			args: [{ log: '*', response: '*', request: '*', error: '*' }]
-		}]
-	}
-});
-
 // Hapi Models
 plugins.push({
 	register: require('hapi-app-mongo-model').plugin,
