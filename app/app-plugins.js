@@ -7,6 +7,8 @@ plugins.push({
 });
 
 // API document generator
+plugins.push(require('vision'));
+plugins.push(require('inert'));
 plugins.push({
 	register: require('lout')
 });
