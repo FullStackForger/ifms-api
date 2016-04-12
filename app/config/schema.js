@@ -6,7 +6,7 @@ module.exports = Joi.object().keys({
 	port : Joi.string().required(),
 	url : Joi.string().required(), // todo: implement regex url validation: https://gist.github.com/dperini/729294
 	facebook : {
-		clientId: Joi.string().min(0).max(15).regex(/^.[0-9]*$/),
+		clientId: Joi.string().regex(/^.[0-9]*$/),
 		clientSecret: Joi.string().alphanum().min(0).max(32)
 	},
 	mongodb : {
