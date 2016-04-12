@@ -4,8 +4,8 @@
   "description": "IndieForger API",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development nodemon index.js",
-    "test": "NODE_ENV=development lab"
+    "start": "nodemon index.js",
+    "test": "lab"
   },
   "engines": {
     "node": ">=4.2.1"
@@ -35,6 +35,7 @@
     "lab": "^10.3.1",
     "lout": "^9.0.0",
     "moment": "^2.12.0",
+    "nodemon": "^1.9.1",
     "querystring": "^0.2.0",
     "request": "^2.70.0",
     "vision": "^4.1.0",
